@@ -90,7 +90,7 @@ namespace Archi.Service
             if (data.id == default) data.id = GetUniqueIdentifier();
 
             string path = $"{levelPath}{data.id}.json";
-            File.WriteAllText(path,json);
+            File.WriteAllText(path,(string)data);
 
             var settings = AddressableAssetSettingsDefaultObject.Settings;
             AddressableAssetGroup g = settings.FindGroup("Levels");

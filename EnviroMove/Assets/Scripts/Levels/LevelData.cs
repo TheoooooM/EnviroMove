@@ -25,16 +25,9 @@ namespace Levels
             return null;
         }
 
-        public static implicit operator string(LevelData levelData)
+        public static explicit operator string(LevelData levelData)
         {
-            var dict = new Dictionary<string, object>
-            {
-                {"id", levelData.id},
-                {"size", levelData.size},
-                {"blockGrid", levelData.blockGrid},
-                {"blocksUse", levelData.blocksUse}
-            };
-            return Json.Serialize(dict);
+            return JsonUtility.ToJson(levelData);
         }
     
         public static explicit operator LevelData(string levelData)
