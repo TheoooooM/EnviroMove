@@ -14,18 +14,17 @@ using UnityEngine.EventSystems;
 using JsonUtility = UnityEngine.JsonUtility;
 #endif
 
-public class SceneEditor : MonoBehaviour
+public class SceneEditor
 {
     public IDataBaseService m_Data;
     
-    [SerializeField] private List<GameObject> prefabs;
+    private GameObject[] prefabs;
 
     private GameObject selectedPrefab;
     public int selectedPrefabIndex;
 
     [SerializeField] private int sizeOfGridSpace = 1;
 
-    private int[] screenSize;
     private Camera _camera;
 
     private GameObject parent;
@@ -34,12 +33,15 @@ public class SceneEditor : MonoBehaviour
     [SerializeField] private TMP_InputField inputField;
 
     public bool isMoveCamera = true;
-
-
+    
     //LevelData
-    private Vector3Int size;
+    public Vector3Int size;
+    public Vector3Int defaultSize = new Vector3Int(10, 10, 10);
+    // public List<List<List<int>>> blockGrid;
     public int[,,] blockGrid;
-    public int[] blocksUsed;
+    public List<string> blocksUsed;
+    public LevelData data;
+    private Blocks blocks;
 
 
     private enum EditorMode
@@ -50,32 +52,41 @@ public class SceneEditor : MonoBehaviour
 
     [SerializeField] private EditorMode Mode = EditorMode.create;
 
-    private void Start()
+    public void Start()
     {
-
-        prefabs = new GameObject[Blocks.strings.Count];
-        foreach (var blockAddress in Blocks.strings)
+        size = defaultSize;
+        blocks = new Blocks();
+        // blockGrid = new List<List<List<int>>>();
+        blockGrid = new int[size.x, size.y, size.z];
+        prefabs = new GameObject[Blocks.BlockType.Count];
+        foreach (var blockAddress in Blocks.BlockType)
         {
-            Addressables.LoadAssetAsync<GameObject>(blockAddress.Value, (GameObject o) => prefabs.Add(o));
-            Addressables.LoadAssetAsync<GameObject>();
-        }
-        if (inputField.text == "")
-        {
-            inputField.text = "newScene";
+            if (blockAddress.Key == Enums.blockType.empty) continue;
+            var block = Addressables.LoadAssetAsync<GameObject>(blockAddress.Value).WaitForCompletion();
+            prefabs[(int)blockAddress.Key] = block;
         }
 
         _camera = Camera.main;
-        parent = new GameObject(name);
+        parent = new GameObject();
         path = "Assets/SavedPrefab/" + parent.name + ".prefab";
+        PlaceDefaultGround();
     }
 
-    private void Update()
+    private void PlaceDefaultGround()
     {
-        path = "Assets/SavedPrefab/" + parent.name + ".prefab";
-        parent.name = inputField.text;
-        screenSize = new int[2];
-        screenSize[0] = Screen.width;
-        screenSize[1] = Screen.height;
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int z = 0; z < size.z; z++)
+            {
+                var block = UnityEngine.Object.Instantiate(prefabs[1], new Vector3(x, 0, z), Quaternion.identity);
+                block.transform.parent = parent.transform;
+                blockGrid[x, 0, z] = 1;
+            }
+        }
+    }
+
+    public void Update()
+    {
         selectedPrefab = prefabs[selectedPrefabIndex];
         if (Input.touchCount <= 0) return;
         if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) return;
@@ -141,8 +152,11 @@ public class SceneEditor : MonoBehaviour
         position.x = Mathf.Round(position.x / sizeOfGridSpace) * sizeOfGridSpace;
         position.y = Mathf.Round(position.y / sizeOfGridSpace) * sizeOfGridSpace;
         position.z = Mathf.Round(position.z / sizeOfGridSpace) * sizeOfGridSpace;
-        var newGo = Instantiate(selectedPrefab, position, Quaternion.identity);
+        var blockPlacedAdress = Blocks.BlockType[(Enums.blockType)selectedPrefabIndex];
+        if(!blocksUsed.Contains(blockPlacedAdress)) blocksUsed.Add(blockPlacedAdress);
+        var newGo = UnityEngine.Object.Instantiate(selectedPrefab, position, Quaternion.identity);
         newGo.transform.parent = parent.transform;
+        blockGrid[(int)position.x, (int)position.y, (int)position.z] = blocksUsed.IndexOf(blockPlacedAdress);
     }
 
     private void Delete()
@@ -152,42 +166,34 @@ public class SceneEditor : MonoBehaviour
         Ray ray = _camera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out hitRay))
         {
-            Destroy(hitRay.transform.gameObject);
-        }
-    }
-
-    private void UpdateGrid()
-    {
-        foreach (Transform child in parent.transform)
-        {
-            var position = child.position;
-            size = new Vector3Int(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y),
-                Mathf.RoundToInt(position.z));
-            blockGrid = new int[size.x,size.y,size.z];
-            for (int x = 0; x < size.x; x++)
-            {
-                for (int y = 0; y < size.y; y++)
-                {
-                    for (int z = 0; z < size.z; z++)
-                    {
-                        blockGrid[x, y, z] = -1;
-                    }
-                }
-            }
-            foreach (Transform block in parent.transform)
-            {
-                var blockPosition = block.position;
-                blockGrid[Mathf.RoundToInt(blockPosition.x), Mathf.RoundToInt(blockPosition.y),
-                    Mathf.RoundToInt(blockPosition.z)] = Array.IndexOf(prefabs, block.gameObject);
-            }
+            UnityEngine.Object.Destroy(hitRay.transform.gameObject);
         }
     }
 
     public void SaveData()
-    {
-       // m_Data.GenerateDataLevel(data);
+    { 
+        // var blockGridIntArray = TripleListToIntArray(blockGrid);
+        data = new LevelData(blockGrid, blocksUsed);
+        m_Data.GenerateDataLevel(data);
     }
-    
+
+    private int[,,] TripleListToIntArray(List<List<List<int>>> list)
+    {
+        var size = new int[list.Count, list[0].Count, list[0][0].Count];
+        for (int i = 0; i < list.Count; i++)
+        {
+            for (int j = 0; j < list[i].Count; j++)
+            {
+                for (int k = 0; k < list[i][j].Count; k++)
+                {
+                    size[i, j, k] = list[i][j][k];
+                }
+            }
+        }
+
+        return size;
+    }
+
     public void LoadData(LevelData dataToLoad)
     {
         
@@ -198,7 +204,7 @@ public class SceneEditor : MonoBehaviour
         parent = GameObject.Find(inputField.text);
         foreach (Transform child in parent.transform)
         {
-            Destroy(child.gameObject);
+            UnityEngine.Object.Destroy(child.gameObject);
         }
     }
 
