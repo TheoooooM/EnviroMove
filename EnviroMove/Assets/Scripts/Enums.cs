@@ -5,6 +5,11 @@
     top, left, right, back
   }
 
+  public enum blockType
+  {
+    ground, wall, moveBlock
+  }
+
   public enum MajorCanvas
   {
     menu, inGame, tool, level

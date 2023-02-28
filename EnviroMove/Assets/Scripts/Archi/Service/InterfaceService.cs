@@ -41,11 +41,8 @@ namespace Archi.Service
         {
             Debug.Log(canvas);
             var go = Object.Instantiate(canvas);
-            Debug.Log(go);
             var canvasUtilities = go.GetComponent<CanvasUtilities>();
-            Debug.Log(canvasUtilities);
             if(!canvasUtilities) canvasUtilities = go.GetComponentInChildren<CanvasUtilities>();
-            Debug.Log(canvasUtilities);
             SetObjectDependencies(canvasUtilities);
         }
 

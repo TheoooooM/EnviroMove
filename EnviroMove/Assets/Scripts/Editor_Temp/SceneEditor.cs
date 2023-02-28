@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Archi.Service.Interface;
 using Interfaces;
@@ -6,6 +7,7 @@ using Levels;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 
 #if UNITY_STANDALONE && !UNITY_EDITOR
@@ -16,7 +18,7 @@ public class SceneEditor : MonoBehaviour
 {
     public IDataBaseService m_Data;
     
-    [SerializeField] private GameObject[] prefabs;
+    [SerializeField] private List<GameObject> prefabs;
 
     private GameObject selectedPrefab;
     public int selectedPrefabIndex;
@@ -50,6 +52,13 @@ public class SceneEditor : MonoBehaviour
 
     private void Start()
     {
+
+        prefabs = new GameObject[Blocks.strings.Count];
+        foreach (var blockAddress in Blocks.strings)
+        {
+            Addressables.LoadAssetAsync<GameObject>(blockAddress.Value, (GameObject o) => prefabs.Add(o));
+            Addressables.LoadAssetAsync<GameObject>();
+        }
         if (inputField.text == "")
         {
             inputField.text = "newScene";
