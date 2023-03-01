@@ -13,14 +13,24 @@ namespace Archi.Service
     {
         [DependeOnService] private IInterfaceService m_Interface;
         [DependeOnService] private IDataBaseService m_Data;
+        [DependeOnService] private ITickService m_Tick; //TODO
         private SceneEditor sceneEditor;
         protected override void Initialize()
         { }
 
         public void ShowTool()
         {
+            SceneManager.LoadScene("Tool");
+            SceneManager.sceneLoaded += OnLoadSceneCompleted;
+        }
+
+        private void OnLoadSceneCompleted(Scene scene, LoadSceneMode mode)
+        {
             m_Interface.DrawCanvas(Enums.MajorCanvas.tool);
-            LoadAssetWithCallback<GameObject>("EditorManager", GenerateEditorHandler);
+            sceneEditor = new SceneEditor();
+            m_Tick.OnUpdate += sceneEditor.Update;
+            sceneEditor.Start();
+            SceneManager.sceneLoaded -= OnLoadSceneCompleted;
         }
 
         private void GenerateEditorHandler(GameObject editor)
@@ -63,6 +73,11 @@ namespace Archi.Service
 
         public void PlaceBlock(int indexBlock)
         {
+        }
+
+        public void SaveData()
+        {
+            sceneEditor.SaveData();
         }
 
         #endregion

@@ -39,7 +39,6 @@ namespace Archi.Service
 
         void DrawCanvasAsync(GameObject canvas)
         {
-            Debug.Log(canvas);
             var go = Object.Instantiate(canvas);
             var canvasUtilities = go.GetComponent<CanvasUtilities>();
             if(!canvasUtilities) canvasUtilities = go.GetComponentInChildren<CanvasUtilities>();
