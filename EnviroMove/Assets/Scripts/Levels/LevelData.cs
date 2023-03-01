@@ -5,7 +5,7 @@ using UnityEngine.AddressableAssets;
 
 namespace Levels
 {
-    public class LevelData : MonoBehaviour
+    public class LevelData
     {
         public string id;
 
@@ -13,9 +13,31 @@ namespace Levels
         public int[,,] blockGrid; //Grid by index of blocksUse
         public string[] blocksUse;
 
-        public LevelData(Vector3Int levelSize, int[,,] levelBlockGrid, GameObject[] levelBlocksUse)
+        public LevelData( int[,,] levelBlockGrid, string[] levelBlocksUse)
         {
+            blocksUse = levelBlocksUse;
+            blockGrid = levelBlockGrid;
+            size = new Vector3Int(blockGrid.GetLength(0), blockGrid.GetLength(1), blockGrid.GetLength(2));
 
+        }
+
+        public LevelData(bool random)
+        {
+            if (random)
+            {
+                blocksUse = new[] {Blocks.strings[(Enums.blockType)Random.Range(0,Blocks.strings.Count-1)],Blocks.strings[(Enums.blockType)Random.Range(0,Blocks.strings.Count-1)],Blocks.strings[(Enums.blockType)Random.Range(0,Blocks.strings.Count-1)] };
+                blockGrid = new int[Random.Range(0, 10), Random.Range(0, 10), Random.Range(0, 10)];
+                for (int x = 0; x < blockGrid.GetLength(0); x++)
+                {
+                    for (int y = 0; y < blockGrid.GetLength(1); y++)
+                    {
+                        for (int z = 0; z < blockGrid.GetLength(0); z++)
+                        {
+                            blockGrid[x, y, z] = Random.Range(0, blocksUse.Length);
+                        }
+                    }
+                }
+            }
         }
 
         GameObject[] GetBlocksUse()
