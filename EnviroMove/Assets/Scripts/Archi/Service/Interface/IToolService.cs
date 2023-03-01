@@ -4,9 +4,13 @@ namespace Archi.Service.Interface
 {
     public interface IToolService : IService
     {
-        void ShowTool();
+        public void ShowLevels();
+        
+        public void ShowTool();
         
         LevelData GetDataCreation();
+
+        public void OpenLevel(LevelData data);
 
         public void CleanScene();
         

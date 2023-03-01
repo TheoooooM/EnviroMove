@@ -12,6 +12,7 @@ namespace Archi.Service
     {
         [DependeOnService] private IGameService m_Game;
         [DependeOnService] private IToolService m_Tool;
+        [DependeOnService] private IDataBaseService m_data;
         
         protected override void Initialize()
         { }
@@ -31,6 +32,9 @@ namespace Archi.Service
                     break;
                 case Enums.MajorCanvas.level:
                     break;
+                case Enums.MajorCanvas.levelSelector:
+                    address = "LevelSelectorCanvas";
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(canvas), canvas, null);
             }
@@ -43,6 +47,7 @@ namespace Archi.Service
             var canvasUtilities = go.GetComponent<CanvasUtilities>();
             if(!canvasUtilities) canvasUtilities = go.GetComponentInChildren<CanvasUtilities>();
             SetObjectDependencies(canvasUtilities);
+            canvasUtilities.Init();
         }
 
         public void GeneratePopUp(string title, string message, Sprite icon = null)

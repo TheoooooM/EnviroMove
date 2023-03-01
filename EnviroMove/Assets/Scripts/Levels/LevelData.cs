@@ -11,6 +11,7 @@ namespace Levels
 
         public Vector3Int size;
         public int[,,] blockGrid; //Grid by index of blocksUse
+        public Dictionary<Vector3, int> blockDict = new (); //Grid by index of blocksUse
         public string[] blocksUse;
 
         public LevelData( int[,,] levelBlockGrid, string[] levelBlocksUse)
@@ -26,14 +27,20 @@ namespace Levels
             if (random)
             {
                 blocksUse = new[] {Blocks.BlockType[(Enums.blockType)Random.Range(0,Blocks.BlockType.Count-1)],Blocks.BlockType[(Enums.blockType)Random.Range(0,Blocks.BlockType.Count-1)],Blocks.BlockType[(Enums.blockType)Random.Range(0,Blocks.BlockType.Count-1)] };
-                blockGrid = new int[Random.Range(0, 10), Random.Range(0, 10), Random.Range(0, 10)];
-                for (int x = 0; x < blockGrid.GetLength(0); x++)
+                var x = Random.Range(0, 10);
+                var y = Random.Range(0, 10);
+                var z = Random.Range(0, 10);
+                blockGrid = new int[x,y,z];
+                size = new Vector3Int(x, y, z);
+                for (int _x= 0; _x <x; _x++)
                 {
-                    for (int y = 0; y < blockGrid.GetLength(1); y++)
+                    for (int _y = 0; _y < y; _y++)
                     {
-                        for (int z = 0; z < blockGrid.GetLength(0); z++)
+                        for (int _z = 0; _z < z; _z++)
                         {
-                            blockGrid[x, y, z] = Random.Range(0, blocksUse.Length);
+                            blockGrid[_x, _y, _z] = Random.Range(0, blocksUse.Length);
+                            //Debug.Log(new Vector3Int(_x,_y,_z) + "=" + blockGrid[_x, _y, _z]);
+                            blockDict.Add(new Vector3Int(_x,_y,_z), Random.Range(0, blocksUse.Length));
                         }
                     }
                 }

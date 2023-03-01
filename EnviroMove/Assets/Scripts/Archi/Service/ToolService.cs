@@ -18,6 +18,19 @@ namespace Archi.Service
         protected override void Initialize()
         { }
 
+        public void ShowLevels()
+        {
+            SceneManager.LoadScene("LevelSelector");
+            SceneManager.sceneLoaded += OnLevelSelectorLoad;
+        }
+
+        void OnLevelSelectorLoad(Scene scene, LoadSceneMode mode)
+        {
+            m_Interface.DrawCanvas(Enums.MajorCanvas.levelSelector);
+            SceneManager.sceneLoaded -= OnLevelSelectorLoad;
+        }
+        
+
         public void ShowTool()
         {
             SceneManager.LoadScene("Tool");
@@ -43,6 +56,11 @@ namespace Archi.Service
         public LevelData GetDataCreation()
         {
             throw new System.NotImplementedException();
+        }
+
+        public void OpenLevel(LevelData data)
+        {
+            Debug.Log($"Open {(string)data}, id:{data.id}");
         }
 
 
