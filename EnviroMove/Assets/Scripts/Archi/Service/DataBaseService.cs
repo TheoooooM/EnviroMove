@@ -132,7 +132,6 @@ namespace Archi.Service
             
             string currentInfoPath =  $"{infoPath}{data.id}.json";
             var currentInfo = new LevelInfo(levelName, PlayerPrefs.GetString("Username"), currentLevelPath);
-            Debug.Log($"info.json : {JsonUtility.ToJson(currentInfo)}");
             FileStream ftInfo = File.Create(currentInfoPath);
             ftInfo.Close();
             TextWriter twInfo = new StreamWriter($"{infoPath}{data.id}.json");
