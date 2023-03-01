@@ -30,9 +30,9 @@ namespace Archi.Service
                 case Enums.MajorCanvas.tool:
                     address = "ToolCanvas";
                     break;
-                case Enums.MajorCanvas.level:
+                case Enums.MajorCanvas.levels:
                     break;
-                case Enums.MajorCanvas.levelSelector:
+                case Enums.MajorCanvas.toolLevels:
                     address = "LevelSelectorCanvas";
                     break;
                 default:

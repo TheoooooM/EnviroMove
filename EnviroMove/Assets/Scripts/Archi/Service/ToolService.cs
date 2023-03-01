@@ -26,7 +26,7 @@ namespace Archi.Service
 
         void OnLevelSelectorLoad(Scene scene, LoadSceneMode mode)
         {
-            m_Interface.DrawCanvas(Enums.MajorCanvas.levelSelector);
+            m_Interface.DrawCanvas(Enums.MajorCanvas.toolLevels);
             SceneManager.sceneLoaded -= OnLevelSelectorLoad;
         }
         

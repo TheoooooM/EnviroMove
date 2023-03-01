@@ -12,7 +12,7 @@
 
   public enum MajorCanvas
   {
-    menu, inGame, tool, levelSelector, level
+    menu, inGame, tool, toolLevels, levels
   }
 
   public enum SceneType

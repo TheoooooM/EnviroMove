@@ -28,9 +28,9 @@ namespace Levels
             if (random)
             {
                 blocksUse = new[] {Blocks.BlockType[(Enums.blockType)Random.Range(0,Blocks.BlockType.Count-1)],Blocks.BlockType[(Enums.blockType)Random.Range(0,Blocks.BlockType.Count-1)],Blocks.BlockType[(Enums.blockType)Random.Range(0,Blocks.BlockType.Count-1)] };
-                var x = Random.Range(0, 10);
-                var y = Random.Range(0, 10);
-                var z = Random.Range(0, 10);
+                var x = Random.Range(1, 10);
+                var y = Random.Range(1, 10);
+                var z = Random.Range(1, 10);
                 blockGrid = new int[x,y,z];
                 blockEnumerable = new int[x * y * z];
                 Debug.Log(blockEnumerable.Length);
@@ -54,7 +54,7 @@ namespace Levels
             }
         }
 
-        int[,,] BlockEnumerable(IEnumerable<int> sequenceToRead,Vector3Int arraySize)
+        static int[,,] BlockEnumerable(IEnumerable<int> sequenceToRead,Vector3Int arraySize)
         {
             IEnumerator<int> sequenceEnumerator = sequenceToRead.GetEnumerator();
             Vector3Int position = Vector3Int.zero;
@@ -95,6 +95,7 @@ namespace Levels
         public static explicit operator LevelData(string levelData)
         {
             var level = JsonUtility.FromJson<LevelData>(levelData);
+            level.blockGrid = BlockEnumerable(level.blockEnumerable, level.size);
             // var dict = Json.Deserialize(levelData) as Dictionary<string, object>;
             // var level = new LevelData(
             //     (Vector3Int) dict["size"],
