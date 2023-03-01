@@ -8,15 +8,18 @@ namespace Archi.Service.Interface
     public interface IDataBaseService : IService
     {
         public string LevelPath();
+        public string InfoPath();
         
-        string[] GetUserLevels(string id);
         string[] GetAllLevels();
-
-        void CreateData(LevelData data, string id, string userName);
+        LevelInfo[] GetAllLevelInfos();
+        string[] GetUserLevels(string id);
+        LevelData GetLevel(string path);
+        
+        void CreateData(string data, string id);
         void DeleteData(string id);
         void UpdateData();
         
-        void GenerateDataLevel(LevelData data, string key = null);
+        void GenerateDataLevel(LevelData data, string levelName = "unnamed Level");
         void UpdateDataLevel(string jsonData, string dataId);
         void RemovedataLevel(string key);
         

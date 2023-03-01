@@ -15,7 +15,7 @@ public class SaveTester : MonoBehaviour
         {
             Debug.Log("Try save");
             var data = new LevelData(true);
-            m_Database.GenerateDataLevel(data);
+            m_Database.GenerateDataLevel(data, "Nom de fou");
         }
     }
 }
