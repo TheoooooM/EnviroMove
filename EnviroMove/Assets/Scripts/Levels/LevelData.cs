@@ -25,7 +25,7 @@ namespace Levels
         {
             if (random)
             {
-                blocksUse = new[] {Blocks.strings[(Enums.blockType)Random.Range(0,Blocks.strings.Count-1)],Blocks.strings[(Enums.blockType)Random.Range(0,Blocks.strings.Count-1)],Blocks.strings[(Enums.blockType)Random.Range(0,Blocks.strings.Count-1)] };
+                blocksUse = new[] {Blocks.BlockType[(Enums.blockType)Random.Range(0,Blocks.BlockType.Count-1)],Blocks.BlockType[(Enums.blockType)Random.Range(0,Blocks.BlockType.Count-1)],Blocks.BlockType[(Enums.blockType)Random.Range(0,Blocks.BlockType.Count-1)] };
                 blockGrid = new int[Random.Range(0, 10), Random.Range(0, 10), Random.Range(0, 10)];
                 for (int x = 0; x < blockGrid.GetLength(0); x++)
                 {

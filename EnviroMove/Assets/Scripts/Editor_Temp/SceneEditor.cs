@@ -173,7 +173,7 @@ public class SceneEditor
     public void SaveData()
     { 
         // var blockGridIntArray = TripleListToIntArray(blockGrid);
-        data = new LevelData(blockGrid, blocksUsed);
+        data = new LevelData(blockGrid, blocksUsed.ToArray());
         m_Data.GenerateDataLevel(data);
     }
 
