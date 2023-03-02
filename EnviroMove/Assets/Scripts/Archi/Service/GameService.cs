@@ -1,6 +1,7 @@
 ﻿using System;
 using Archi.Service.Interface;
 using Attributes;
+using Levels;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -23,32 +24,18 @@ namespace Archi.Service
                 go.GetComponent<SaveTester>().m_Database = m_Database;
             });
         }
-
-        #region Interface
-
-        public void ChangeScene(Enums.SceneType type)
-        {
-            switch (type)
-            {
-                case Enums.SceneType.tool:
-                    SceneManager.LoadScene("Tool");
-                    m_Interface.DrawCanvas(Enums.MajorCanvas.tool);
-                    break;
-                case Enums.SceneType.mainMenu:
-                    throw new NotImplementedException(); 
-                    break;
-                case Enums.SceneType.levels:
-                    throw new NotImplementedException(); 
-                    break;
-                case Enums.SceneType.inGame:
-                    throw new NotImplementedException(); 
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
-        }
-
         
+        public void OpenLevel(LevelData levelToOpen)
+        {
+            var levelGo = Object.Instantiate(new GameObject());
+            var level = levelGo.AddComponent<Level>();
+            level.GenerateLevel(levelToOpen);
+            
+            
+        }
+        
+        #region Loading
+
         public void CreateLoading()
         {
             throw new System.NotImplementedException();

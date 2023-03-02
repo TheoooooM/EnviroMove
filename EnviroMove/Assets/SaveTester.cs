@@ -13,9 +13,13 @@ public class SaveTester : MonoBehaviour
         //Debug.Log("update");
         if (Input.GetKeyDown(KeyCode.A))
         {
-            Debug.Log("Try save");
-            var data = new LevelData(true);
-            m_Database.GenerateDataLevel(data, "Nom de fou");
+            Try();
         }
+    }
+
+    public void Try()
+    {
+        var data = new LevelData(true);
+        m_Database.GenerateDataLevel(data, "Nom de fou");
     }
 }

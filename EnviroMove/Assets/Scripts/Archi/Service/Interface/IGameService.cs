@@ -1,8 +1,11 @@
-﻿namespace Archi.Service.Interface
+﻿using Levels;
+
+namespace Archi.Service.Interface
 {
     public interface IGameService : IService
     {
-        void ChangeScene(Enums.SceneType type);
+
+        public void OpenLevel(LevelData levelToOpen);
         
         void CreateLoading();
         void UpdateLoading();

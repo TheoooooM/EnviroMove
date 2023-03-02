@@ -78,6 +78,14 @@ namespace Archi.Service
         {
             return (LevelData)File.ReadAllText(path);
         }
+        
+        public LevelData GetLevelByName(string levelName)
+        {
+            var info = container.allInfoDatas.FirstOrDefault(i => i.levelName == levelName);
+            if (info == default) throw new NullReferenceException($"Level of Name {levelName} doesn't exist on Device");
+            return (LevelData)File.ReadAllText(info.levelFilePath);
+        }
+        
 
         
 
@@ -128,7 +136,8 @@ namespace Archi.Service
             TextWriter tw = new StreamWriter($"{levelPath}{data.id}.json");
             tw.WriteLine((string)data);
             tw.Close();
-            //CreateData((string)data, data.id);
+           
+            CreateData((string)data, data.id);
             
             string currentInfoPath =  $"{infoPath}{data.id}.json";
             var currentInfo = new LevelInfo(levelName, PlayerPrefs.GetString("Username"), currentLevelPath);

@@ -13,8 +13,7 @@ namespace Levels
         public Vector3Int size;
         public int[,,] blockGrid; //Grid by index of blocksUse
         public int[] blockEnumerable;
-        public string[] blocksUse;
-
+        public string[] blocksUse; //Block Address from Addressable
         public LevelData( int[,,] levelBlockGrid, string[] levelBlocksUse)
         {
             blocksUse = levelBlocksUse;
