@@ -2,22 +2,22 @@ using Archi.Service.Interface;
 using Attributes;
 using UnityEngine;
 
-namespace UI
+namespace UI.Canvas
 {
     public class CanvasUtilities : MonoBehaviour
     {
-        [ServiceDependency]public IGameService m_Game;
+        [ServiceDependency] private IGameService m_Game;
         [ServiceDependency] private IToolService m_Tool;
+        [ServiceDependency] private IDataBaseService m_Data;
 
         public virtual void Init()
         {
-            
+            var saver = GetComponentInChildren<SaveTester>();
+            if (saver){ saver.m_Database = m_Data; }
         }
         
         public void ChangeScene(int sceneIndex)
-        {
-            m_Game.ChangeScene((Enums.SceneType)sceneIndex);
-        }
+        { }
 
         public void ShowTool()
         {

@@ -4,7 +4,7 @@ using Levels;
 using UnityEngine.SceneManagement;
 using LevelData = Levels.LevelData;
 
-namespace UI
+namespace UI.Canvas
 {
     public class ToolUtilities : CanvasUtilities
     {

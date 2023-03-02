@@ -1,4 +1,4 @@
-﻿using Archi.Service.Interface;
+using Archi.Service.Interface;
 using Levels;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,7 +22,7 @@ namespace Archi.Service
             }
             
             level.levelData = data;
-            level.GenerateLevel();
+            level.GenerateLevel(data);
             return level;
         }
 
