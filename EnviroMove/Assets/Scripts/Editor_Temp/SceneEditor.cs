@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Archi.Service.Interface;
+using Attributes;
 using Interfaces;
 using Levels;
 using TMPro;
@@ -16,27 +17,27 @@ using JsonUtility = UnityEngine.JsonUtility;
 
 public class SceneEditor
 {
-    public IDataBaseService m_Data;
+    [ServiceDependency] public IDataBaseService m_Data;
     
     private GameObject[] prefabs;
 
     private GameObject selectedPrefab;
-    public int selectedPrefabIndex;
+    public int selectedPrefabIndex = 1;
 
-    [SerializeField] private int sizeOfGridSpace = 1;
+    private int sizeOfGridSpace = 1;
 
     private Camera _camera;
 
     private GameObject parent;
 
-    [SerializeField] private string path;
-    [SerializeField] private TMP_InputField inputField;
+    private string path;
+    private TMP_InputField inputField;
 
     public bool isMoveCamera = true;
     
     //LevelData
     public Vector3Int size;
-    public Vector3Int defaultSize = new Vector3Int(10, 10, 10);
+    public Vector3Int defaultSize = new(10, 10, 10);
     // public List<List<List<int>>> blockGrid;
     public int[,,] blockGrid;
     public List<string> blocksUsed;
@@ -50,13 +51,14 @@ public class SceneEditor
         delete,
     }
 
-    [SerializeField] private EditorMode Mode = EditorMode.create;
+    private EditorMode Mode = EditorMode.create;
 
     public void Start()
     {
         size = defaultSize;
         blocks = new Blocks();
         // blockGrid = new List<List<List<int>>>();
+        blocksUsed = new List<string>();
         blockGrid = new int[size.x, size.y, size.z];
         prefabs = new GameObject[Blocks.BlockType.Count];
         foreach (var blockAddress in Blocks.BlockType)
@@ -68,7 +70,8 @@ public class SceneEditor
 
         _camera = Camera.main;
         parent = new GameObject();
-        path = "Assets/SavedPrefab/" + parent.name + ".prefab";
+        parent.name = "Level";
+        selectedPrefab = prefabs[1];
         PlaceDefaultGround();
     }
 
@@ -89,7 +92,7 @@ public class SceneEditor
     {
         selectedPrefab = prefabs[selectedPrefabIndex];
         if (Input.touchCount <= 0) return;
-        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) return;
+        if (EventSystem.current.currentSelectedGameObject) return;
         switch (Mode)
         {
             case EditorMode.create:
@@ -129,10 +132,8 @@ public class SceneEditor
         Vector3 position = Input.GetTouch(0).position;
         RaycastHit hitRay;
         Ray ray = _camera.ScreenPointToRay(position);
-        Debug.Log("TryCast");
         if (Physics.Raycast(ray, out hitRay))
         {
-            Debug.Log(hitRay.point);
             position = hitRay.normal switch
             {
                 var up when up == Vector3.up => hitRay.point + new Vector3(0, 0.5f, 0),
@@ -152,11 +153,12 @@ public class SceneEditor
         position.x = Mathf.Round(position.x / sizeOfGridSpace) * sizeOfGridSpace;
         position.y = Mathf.Round(position.y / sizeOfGridSpace) * sizeOfGridSpace;
         position.z = Mathf.Round(position.z / sizeOfGridSpace) * sizeOfGridSpace;
+        if (position.x < 0 || position.x >= size.x || position.y < 0 || position.y >= size.y || position.z < 0 || position.z >= size.z) return;
         var blockPlacedAdress = Blocks.BlockType[(Enums.blockType)selectedPrefabIndex];
         if(!blocksUsed.Contains(blockPlacedAdress)) blocksUsed.Add(blockPlacedAdress);
         var newGo = UnityEngine.Object.Instantiate(selectedPrefab, position, Quaternion.identity);
         newGo.transform.parent = parent.transform;
-        blockGrid[(int)position.x, (int)position.y, (int)position.z] = blocksUsed.IndexOf(blockPlacedAdress);
+        blockGrid[(int)position.x, (int)position.y, (int)position.z] = selectedPrefabIndex;
     }
 
     private void Delete()
@@ -171,10 +173,11 @@ public class SceneEditor
     }
 
     public void SaveData()
-    { 
+    {
         // var blockGridIntArray = TripleListToIntArray(blockGrid);
-        data = new LevelData(blockGrid, blocksUsed.ToArray());
-        m_Data.GenerateDataLevel(data);
+        Debug.Log("blockGrid: " + blockGrid);
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray());
+        m_Data.GenerateDataLevel(data, "New level tamer");
     }
 
     private int[,,] TripleListToIntArray(List<List<List<int>>> list)
@@ -196,12 +199,27 @@ public class SceneEditor
 
     public void LoadData(LevelData dataToLoad)
     {
-        
+        Start();
+        CleanScene();
+        Debug.Log((string)dataToLoad);
+        blocksUsed = new List<string>(dataToLoad.blocksUsed);
+        blockGrid = dataToLoad.blockGrid;
+        for (int x = 0; x < blockGrid.GetLength(0); x++)
+        {
+            for (int y = 0; y < blockGrid.GetLength(1); y++)
+            {
+                for (int z = 0; z < blockGrid.GetLength(2); z++)
+                {
+                    if (blockGrid[x, y, z] == 0) continue;
+                    var block = UnityEngine.Object.Instantiate(prefabs[blockGrid[x, y, z]], new Vector3(x, y, z), Quaternion.identity);
+                    block.transform.parent = parent.transform;
+                }
+            }
+        }
     }
 
     public void CleanScene()
     {
-        parent = GameObject.Find(inputField.text);
         foreach (Transform child in parent.transform)
         {
             UnityEngine.Object.Destroy(child.gameObject);

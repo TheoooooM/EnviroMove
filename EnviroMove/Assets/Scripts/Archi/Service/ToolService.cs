@@ -41,8 +41,17 @@ namespace Archi.Service
         {
             m_Interface.DrawCanvas(Enums.MajorCanvas.tool);
             sceneEditor = new SceneEditor();
+            SetObjectDependencies(sceneEditor);
             m_Tick.OnUpdate += sceneEditor.Update;
-            sceneEditor.Start();
+            if (dataLoaded != null)
+            {
+                sceneEditor.LoadData(dataLoaded);
+                dataLoaded = null;
+            }
+            else
+            {
+                sceneEditor.Start();
+            }
             SceneManager.sceneLoaded -= OnLoadSceneCompleted;
         }
 
@@ -50,7 +59,8 @@ namespace Archi.Service
         {
             var newGo = Object.Instantiate(editor);
             var editorScript = newGo.GetComponent<SceneEditor>();
-            editorScript.m_Data = m_Data;   
+            SetObjectDependencies(editorScript);
+            Debug.Log("set m_Data :"+editorScript.m_Data);
         }
 
         public LevelData GetDataCreation()
@@ -58,9 +68,12 @@ namespace Archi.Service
             throw new System.NotImplementedException();
         }
 
+        private LevelData dataLoaded;
         public void OpenLevel(LevelData data)
         {
-            Debug.Log($"Open {(string)data}, id:{data.id}");
+            dataLoaded = data;
+            SceneManager.LoadScene("Tool");
+            SceneManager.sceneLoaded += OnLoadSceneCompleted;
         }
 
 
@@ -95,6 +108,7 @@ namespace Archi.Service
 
         public void SaveData()
         {
+            Debug.Log("Tool service clicked");
             sceneEditor.SaveData();
         }
 

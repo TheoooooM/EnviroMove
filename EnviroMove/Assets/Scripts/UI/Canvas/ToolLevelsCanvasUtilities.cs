@@ -25,5 +25,11 @@ namespace UI.Canvas
                 box.SetupBox(info, m_Tool, m_Data);
             }
         }
+
+        public void OpenTool()
+        {
+            m_Tool.ShowTool();
+        }
+        
     }
 }
