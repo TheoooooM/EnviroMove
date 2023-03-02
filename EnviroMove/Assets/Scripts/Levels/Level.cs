@@ -14,9 +14,15 @@ namespace Levels
          throw new System.NotImplementedException();
       }
 
-      public void GenerateLevel()
+
+      public void GenerateLevel(LevelData data)
       {
-         throw new System.NotImplementedException();
+         blocksUse = new GameObject[data.blocksUse.Length];
+
+         for (int i = 0; i < data.blocksUse.Length; i++)
+         {
+            //blocksUse[i] = 
+         }
       }
 
       IBoardable GetNeighbor(Vector2Int position, Enums.Side side)

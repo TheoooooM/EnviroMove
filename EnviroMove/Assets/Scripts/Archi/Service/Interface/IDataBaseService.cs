@@ -14,6 +14,7 @@ namespace Archi.Service.Interface
         LevelInfo[] GetAllLevelInfos();
         string[] GetUserLevels(string id);
         LevelData GetLevel(string path);
+        LevelData GetLevelByName(string levelName);
         
         void CreateData(string data, string id);
         void DeleteData(string id);

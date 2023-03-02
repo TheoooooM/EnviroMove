@@ -17,7 +17,6 @@ namespace BDD
 
         public void Init(IDataBaseService dataBase) // Récupère tout les LevelInfo
         {
-            Debug.Log($"init");
             var infoPaths = Directory.GetFiles(dataBase.InfoPath());
 
             foreach (var infoPath in infoPaths)
@@ -26,6 +25,7 @@ namespace BDD
                 allInfoDatas.Add(info);
             }
             Debug.Log($"Load {allInfoDatas.Count} infos");
+            
         }
     }
 }
