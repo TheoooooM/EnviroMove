@@ -8,7 +8,7 @@ namespace Archi.Service
 {
     public class TickService : Service,ITickService
     {
-        private bool timeState = false;
+        private bool timeState = true;
         private float lastTime;
         private float deltaTime;
         

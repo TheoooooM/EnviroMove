@@ -7,7 +7,7 @@ namespace Levels
    {
       public LevelData levelData;
       private IBoardable[,,] board;
-      private GameObject[] blocksUse;
+      private GameObject[] blocksUsed;
 
       void LoadBlocks()
       {
@@ -17,9 +17,9 @@ namespace Levels
 
       public void GenerateLevel(LevelData data)
       {
-         blocksUse = new GameObject[data.blocksUse.Length];
+         blocksUsed = new GameObject[data.blocksUsed.Length];
 
-         for (int i = 0; i < data.blocksUse.Length; i++)
+         for (int i = 0; i < data.blocksUsed.Length; i++)
          {
             //blocksUse[i] = 
          }

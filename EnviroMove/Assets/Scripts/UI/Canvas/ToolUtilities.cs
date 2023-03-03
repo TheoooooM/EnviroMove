@@ -1,6 +1,7 @@
 using Archi.Service.Interface;
 using Attributes;
 using Levels;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using LevelData = Levels.LevelData;
 
@@ -24,6 +25,12 @@ namespace UI.Canvas
         private LevelData GetEditorData()
         {
             throw new System.NotImplementedException();
+        }
+
+        public void SaveDatas()
+        {
+            Debug.Log("Button clicked");
+            m_Tool.SaveData();
         }
     }
 }
