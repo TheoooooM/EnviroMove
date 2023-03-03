@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using Archi.Service.Interface;
 using Attributes;
 using UI;
 using UI.Canvas;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static AdresseHelper;
 using Object = UnityEngine.Object;
 
@@ -14,32 +16,35 @@ namespace Archi.Service
         [DependeOnService] private IGameService m_Game;
         [DependeOnService] private IToolService m_Tool;
         [DependeOnService] private IDataBaseService m_data;
-        
+
+        private readonly Dictionary<Enums.MajorCanvas, string> canvasAddress = new()
+        {
+            {Enums.MajorCanvas.menu, "MainMenuCanvas"},
+            {Enums.MajorCanvas.inGame, ""},
+            {Enums.MajorCanvas.tool, "ToolCanvas"},
+            {Enums.MajorCanvas.levels, "LevelsCanvas"},
+            {Enums.MajorCanvas.toolLevels, "LevelSelectorCanvas"},
+        };
+
         protected override void Initialize()
-        { }
+        {
+            SceneManager.sceneLoaded += OnSceneInit;
+        }
+
+        private void OnSceneInit(Scene scene, LoadSceneMode sceneMode)
+        {
+            switch (scene.name)
+            {
+                case "MainMenu" : DrawCanvas(Enums.MajorCanvas.menu);
+                    break;
+                case "Levels" : DrawCanvas(Enums.MajorCanvas.levels);
+                    break;
+            }
+        }
 
         public void DrawCanvas(Enums.MajorCanvas canvas)
         {
-            string address = "";
-            switch (canvas)
-            {
-                case Enums.MajorCanvas.menu:
-                    address = "MainMenuCanvas";
-                    break;
-                case Enums.MajorCanvas.inGame:
-                    break;
-                case Enums.MajorCanvas.tool:
-                    address = "ToolCanvas";
-                    break;
-                case Enums.MajorCanvas.levels:
-                    break;
-                case Enums.MajorCanvas.toolLevels:
-                    address = "LevelSelectorCanvas";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(canvas), canvas, null);
-            }
-            LoadAssetWithCallback<GameObject>(address, DrawCanvasAsync);
+            LoadAssetWithCallback<GameObject>(canvasAddress[canvas], DrawCanvasAsync);
         }
 
         void DrawCanvasAsync(GameObject canvas)

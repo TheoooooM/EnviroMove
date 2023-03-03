@@ -10,6 +10,8 @@ namespace UI.Canvas
     {
         [ServiceDependency] private IToolService m_Tool;
 
+        public override void Init() { }
+        
         public void LaunchTool()
         {    
             SceneManager.LoadScene("Tool");
@@ -25,5 +27,7 @@ namespace UI.Canvas
         {
             throw new System.NotImplementedException();
         }
+
+        
     }
 }

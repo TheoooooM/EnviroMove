@@ -1,37 +1,17 @@
 using Archi.Service.Interface;
 using Attributes;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UI.Canvas
 {
-    public class CanvasUtilities : MonoBehaviour
+    public abstract class CanvasUtilities : MonoBehaviour
     {
-        [ServiceDependency] private IGameService m_Game;
-        [ServiceDependency] private IToolService m_Tool;
-        [ServiceDependency] private IDataBaseService m_Data;
+        public abstract void Init();
 
-        public virtual void Init()
+        public void ChangeScene(string sceneName)
         {
-            var saver = GetComponentInChildren<SaveTester>();
-            if (saver){ saver.m_Database = m_Data; }
-        }
-        
-        public void ChangeScene(int sceneIndex)
-        { }
-
-        public void ShowTool()
-        {
-            m_Tool.ShowTool();
-        }
-        
-        public void ShowLevelSelector()
-        {
-            m_Tool.ShowLevels();
-        }
-
-        public void SaveData()
-        {
-            m_Tool.SaveData();
+            SceneManager.LoadScene(sceneName);
         }
     }
 }

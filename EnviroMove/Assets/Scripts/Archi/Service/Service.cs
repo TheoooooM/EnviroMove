@@ -4,6 +4,7 @@ using System.Reflection;
 using Archi.Service.Interface;
 using Attributes;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Archi.Service
 {
@@ -14,6 +15,8 @@ namespace Archi.Service
 
         [InitializedOnCompose]
         protected abstract void Initialize();
+
+        protected virtual void OnSceneInit(Scene scene, LoadSceneMode loadMode) { }
 
         public virtual void SetServiceState(bool state)
         {
