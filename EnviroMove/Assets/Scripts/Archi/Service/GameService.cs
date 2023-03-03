@@ -16,15 +16,11 @@ namespace Archi.Service
         
         
         protected override void Initialize()
-        {
-            m_Interface.DrawCanvas(Enums.MajorCanvas.menu);
-            AdresseHelper.LoadAssetWithCallback<GameObject>("A suppr", (o)=>
-            {
-                var go = Object.Instantiate(o);
-                go.GetComponent<SaveTester>().m_Database = m_Database;
-            });
-        }
-        
+        { }
+
+        protected override void OnSceneInit(Scene scene, LoadSceneMode loadMode)
+        { }
+
         public void OpenLevel(LevelData levelToOpen)
         {
             var levelGo = Object.Instantiate(new GameObject());

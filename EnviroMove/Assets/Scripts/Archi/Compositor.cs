@@ -7,6 +7,10 @@ using Archi.Service.Interface;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Attributes;
+using Unity.VisualScripting;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 public class Compositor : MonoBehaviour
 {
@@ -37,6 +41,7 @@ public class Compositor : MonoBehaviour
         CreateServices();
         ResoleDepencencies();
         InitializeServices();
+        SceneManager.LoadScene("MainMenu");
         
         return true;
     }
@@ -45,6 +50,7 @@ public class Compositor : MonoBehaviour
     {
         //Debug.Log("Create Service");
         AddService<IGameService>(new GameService());
+        AddService<ILevelService>(new LevelService());
         AddService<IToolService>(new ToolService());
         AddService<IDataBaseService>(new DataBaseService());
         AddService<ITickService>(new TickService());
