@@ -2,17 +2,11 @@
 using System.IO;
 using System.Linq;
 using Archi.Service.Interface;
-using Attributes;
 using BDD;
 using Firebase.Database;
 using Levels;
-using UnityEditor;
-using UnityEditor.AddressableAssets;
-using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.Windows;
-using Directory = UnityEngine.Windows.Directory;
+using Directory = System.IO.Directory;
 using File = System.IO.File;
 using LevelData = Levels.LevelData;
 using Random = UnityEngine.Random;
@@ -40,7 +34,7 @@ namespace Archi.Service
             if (!File.Exists($"{Application.persistentDataPath}/SaveData/Infos")) Directory.CreateDirectory($"{Application.persistentDataPath}/SaveData/Infos");
             infoPath = $"{Application.persistentDataPath}/SaveData/Infos/";
 
-            dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+            // dbReference = FirebaseDatabase.DefaultInstance.RootReference;
             
             container.Init(this);
         }
