@@ -34,7 +34,7 @@ namespace Archi.Service
             if (!File.Exists($"{Application.persistentDataPath}/SaveData/Infos")) Directory.CreateDirectory($"{Application.persistentDataPath}/SaveData/Infos");
             infoPath = $"{Application.persistentDataPath}/SaveData/Infos/";
 
-            // dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+            dbReference = FirebaseDatabase.DefaultInstance.RootReference;
             
             container.Init(this);
         }
