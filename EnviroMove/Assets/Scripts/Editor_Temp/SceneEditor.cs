@@ -49,6 +49,7 @@ public class SceneEditor
     {
         create,
         delete,
+        moveCamera,
     }
 
     private EditorMode Mode = EditorMode.create;
@@ -102,6 +103,9 @@ public class SceneEditor
             case EditorMode.delete:
                 Delete();
                 break;
+            case EditorMode.moveCamera:
+                MoveCamera();
+                break;
         }
     }
 
@@ -116,6 +120,7 @@ public class SceneEditor
 
     private void Create()
     {
+        if (EventSystem.current.currentSelectedGameObject) return;
         if (Input.GetTouch(0).phase == TouchPhase.Began && isMoveCamera)
         {
             InstantiateNewBlock();
@@ -163,6 +168,8 @@ public class SceneEditor
 
     private void Delete()
     {
+        if (EventSystem.current.currentSelectedGameObject) return;
+        if (Input.GetTouch(0).phase != TouchPhase.Began) return;
         Vector3 position = Input.GetTouch(0).position;
         RaycastHit hitRay;
         Ray ray = _camera.ScreenPointToRay(position);
@@ -174,6 +181,12 @@ public class SceneEditor
 
     public void SaveData()
     {
+        if (blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerStart]) != 1 ||
+            blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerEnd]) != 1)
+        {
+            Debug.LogError("You need to have one player start and one player end");
+            return;
+        }
         // var blockGridIntArray = TripleListToIntArray(blockGrid);
         Debug.Log("blockGrid: " + blockGrid);
         data = new LevelData(size, blockGrid, blocksUsed.ToArray());

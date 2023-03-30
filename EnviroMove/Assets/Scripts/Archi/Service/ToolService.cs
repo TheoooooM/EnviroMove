@@ -94,7 +94,7 @@ namespace Archi.Service
 
         public void SwitchMode(int index)
         {
-            // Mode = (EditorMode) index;
+            sceneEditor.SwitchMode(index);
         }
     
         public void ChangeMoveCamera()

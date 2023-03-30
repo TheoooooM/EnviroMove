@@ -7,7 +7,7 @@
 
   public enum blockType
   {
-    empty, ground, wall, moveBlock
+    empty, ground, wall, moveBlock, playerStart, playerEnd
   }
 
   public enum MajorCanvas
