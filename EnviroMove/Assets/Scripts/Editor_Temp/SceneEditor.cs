@@ -10,6 +10,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 #if UNITY_STANDALONE && !UNITY_EDITOR
 using JsonUtility = UnityEngine.JsonUtility;
@@ -43,6 +44,12 @@ public class SceneEditor
     public List<string> blocksUsed;
     public LevelData data;
     private Blocks blocks;
+    
+    //SelectBox
+    private GameObject selectionBox;
+    private Image selectionBoxImage;
+    private Vector2 startPosition = Vector2.zero;
+    private Vector2 endPosition = Vector2.zero;
 
 
     private enum EditorMode
@@ -50,12 +57,16 @@ public class SceneEditor
         create,
         delete,
         moveCamera,
+        snapMode,
     }
 
     private EditorMode Mode = EditorMode.create;
 
     public void Start()
     {
+        selectionBox = Addressables.LoadAssetAsync<GameObject>("SelectionBox").WaitForCompletion();
+        selectionBoxImage = selectionBox.GetComponent<Image>();
+
         size = defaultSize;
         blocks = new Blocks();
         // blockGrid = new List<List<List<int>>>();
@@ -105,6 +116,9 @@ public class SceneEditor
                 break;
             case EditorMode.moveCamera:
                 MoveCamera();
+                break;
+            case EditorMode.snapMode:
+                SelectionBox();
                 break;
         }
     }
@@ -253,4 +267,72 @@ public class SceneEditor
     {
         isMoveCamera = !isMoveCamera;
     }
+
+    #region SelectBox
+
+    
+
+    private void SelectionBox()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Finger down");
+            StartSelectionBox();
+        }
+        else if (Input.GetMouseButton(0))
+        {
+            Debug.Log("finger held");
+            UpdateSelectionBox();
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            Debug.Log("finger up");
+            EndSelectionBox();
+        }
+    }
+    
+    private void StartSelectionBox()
+    {
+        startPosition = Input.GetTouch(0).position;
+        endPosition = startPosition;
+    }
+
+    private void UpdateSelectionBox()
+    {
+        endPosition = Input.GetTouch(0).position;
+        ChangeSelectionBoxSize();
+        if (startPosition != endPosition)
+        {
+            //TODO Select all in selection box
+        }
+        else if (startPosition == endPosition)
+        {
+            //TODO Select What was touched
+        }
+    }
+
+    private void ChangeSelectionBoxSize()
+    {
+        if (selectionBoxImage == null) return;
+        selectionBoxImage.transform.position = startPosition + (endPosition - startPosition) / 2;
+        selectionBoxImage.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Abs(endPosition.x - startPosition.x), Mathf.Abs(endPosition.y - startPosition.y));
+    }
+
+    private void EndSelectionBox()
+    {
+        
+        startPosition = Vector2.zero;
+        endPosition = Vector2.zero;
+        ResetSelectionBoxSize();
+
+    }
+
+    private void ResetSelectionBoxSize()
+    {
+        if (selectionBoxImage == null) return;
+        selectionBoxImage.transform.position = Vector2.zero;
+        selectionBoxImage.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
+    }
+
+    #endregion
 }

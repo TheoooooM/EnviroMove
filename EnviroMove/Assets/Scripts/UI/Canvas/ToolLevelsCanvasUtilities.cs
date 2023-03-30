@@ -13,6 +13,7 @@ namespace UI.Canvas
     
         [SerializeField] private Transform layout;
         [SerializeField] private GameObject levelBox;
+        [SerializeField] private GameObject contentBox;
 
         public override void Init()
         {
@@ -21,6 +22,8 @@ namespace UI.Canvas
             foreach (var info in infos)
             {
                 var go = Object.Instantiate(levelBox, layout);
+                go.transform.SetParent(contentBox.transform);
+                
                 var box = go.GetComponent<LevelBox>();
                 box.SetupBox(info, m_Tool, m_Data);
             }
