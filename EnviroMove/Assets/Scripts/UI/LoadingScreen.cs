@@ -6,7 +6,7 @@ namespace UI
 {
     public class LoadingScreen : MonoBehaviour
     {
-        [SerializeField] private TextMeshPro LoadName;
+        [SerializeField] private TMP_Text LoadName;
         [SerializeField] private Slider slider;
 
         public void SetLoader(string loadName,float maxValue)

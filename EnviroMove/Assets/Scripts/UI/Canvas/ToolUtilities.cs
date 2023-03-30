@@ -39,5 +39,10 @@ namespace UI.Canvas
         {
             m_Tool.SwitchMode(index);
         }
+        
+        public void TestLevel()
+        {
+            m_Tool.TestLevel();
+        }
     }
 }

@@ -14,6 +14,8 @@ namespace Archi.Service
         [DependeOnService] private IInterfaceService m_Interface;
         [DependeOnService] private IDataBaseService m_Data;
         [DependeOnService] private ITickService m_Tick; //TODO
+        [DependeOnService] private ILevelService m_Level;
+
         private SceneEditor sceneEditor;
         protected override void Initialize()
         { }
@@ -74,6 +76,13 @@ namespace Archi.Service
             dataLoaded = data;
             SceneManager.LoadScene("Tool");
             SceneManager.sceneLoaded += OnLoadSceneCompleted;
+        }
+        
+        public void TestLevel()
+        {
+            dataLoaded = sceneEditor.TestLevel();
+            Debug.Log(dataLoaded);
+            m_Level.LoadLevel(dataLoaded);
         }
 
 

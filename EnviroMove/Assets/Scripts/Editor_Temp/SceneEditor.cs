@@ -61,6 +61,8 @@ public class SceneEditor
     }
 
     private EditorMode Mode = EditorMode.create;
+    
+    private LevelData curentLevelData;
 
     public void Start()
     {
@@ -104,7 +106,6 @@ public class SceneEditor
     {
         selectedPrefab = prefabs[selectedPrefabIndex];
         if (Input.touchCount <= 0) return;
-        if (EventSystem.current.currentSelectedGameObject) return;
         switch (Mode)
         {
             case EditorMode.create:
@@ -205,6 +206,13 @@ public class SceneEditor
         Debug.Log("blockGrid: " + blockGrid);
         data = new LevelData(size, blockGrid, blocksUsed.ToArray());
         m_Data.GenerateDataLevel(data, "New level tamer");
+    }
+
+    public LevelData TestLevel()
+    {
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray());
+        curentLevelData = data;
+        return data;
     }
 
     private int[,,] TripleListToIntArray(List<List<List<int>>> list)
