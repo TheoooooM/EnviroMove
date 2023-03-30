@@ -33,7 +33,7 @@ namespace Archi.Service
             if (levelContainer) level = levelContainer.AddComponent<Level>();
             else
             {
-                var go = Object.Instantiate(new());
+                var go = Object.Instantiate(new GameObject());
                 level = go.AddComponent<Level>();
             }
             SetObjectDependencies(level);

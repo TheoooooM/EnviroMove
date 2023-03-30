@@ -97,7 +97,6 @@ public class SceneEditor
             {
                 var block = UnityEngine.Object.Instantiate(prefabs[1], new Vector3(x, 0, z), Quaternion.identity);
                 block.transform.parent = parent.transform;
-                blockGrid[x, 0, z] = 1;
             }
         }
     }
