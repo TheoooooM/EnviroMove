@@ -7,7 +7,9 @@ namespace UI.Canvas
 {
     public abstract class CanvasUtilities : MonoBehaviour
     {
-        public abstract void Init();
+        [ServiceDependency] protected IInterfaceService m_Interface;
+        
+         public abstract void Init();
 
         public void ChangeScene(string sceneName)
         {
