@@ -7,6 +7,8 @@ public struct Blocks
         { Enums.blockType.empty, "emptyBlock"},
         { Enums.blockType.ground , "groundBlock"},
         { Enums.blockType.wall , "wallBlock"},
-        { Enums.blockType.moveBlock , "moveBlock"}
+        { Enums.blockType.moveBlock , "moveBlock"},
+        { Enums.blockType.playerStart , "playerStartBlock"},
+        { Enums.blockType.playerEnd , "playerEndBlock"},
     };
 }

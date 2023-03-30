@@ -34,5 +34,10 @@ namespace UI.Canvas
             Debug.Log("Button clicked");
             m_Tool.SaveData();
         }
+        
+        public void SwitchMode(int index)
+        {
+            m_Tool.SwitchMode(index);
+        }
     }
 }
