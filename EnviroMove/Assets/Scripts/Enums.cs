@@ -2,7 +2,7 @@
 {
   public enum Side
   {
-    top, left, right, back
+    none, top, left, right, back
   }
 
   public enum blockType

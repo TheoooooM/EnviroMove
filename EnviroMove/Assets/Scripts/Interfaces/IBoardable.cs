@@ -5,6 +5,9 @@ namespace Interfaces
 {
     public interface IBoardable
     {
-        void SetOnBoard(Vector3Int boardPos, Level board);
+        public void SetOnBoard(Vector3Int boardPos, IBoard board);
+        public void SetPosition(Vector3Int newBoardPos);
+
+        public void StartBoard();
     }
 }
