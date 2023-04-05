@@ -16,6 +16,7 @@ namespace Levels
         public int[,,] blockGrid; //Grid by index of blocksUse
         public int[] blockEnumerable;
         public string[] blocksUsed; //lock Address from Addressable
+        public int[,,] blockRotationGrid; // TODO: Add rotation to block
 
         public LevelData(Vector3Int size, int[] blockEnumerable, string[] levelBlocksUsed)
         {
