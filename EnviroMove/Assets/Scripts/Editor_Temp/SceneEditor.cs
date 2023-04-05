@@ -73,6 +73,7 @@ public class SceneEditor
         blocks = new Blocks();
         // blockGrid = new List<List<List<int>>>();
         blocksUsed = new List<string>();
+        blocksUsed.Add(null);
         blockGrid = new int[size.x, size.y, size.z];
         prefabs = new GameObject[Blocks.BlockType.Count];
         foreach (var blockAddress in Blocks.BlockType)
@@ -97,6 +98,7 @@ public class SceneEditor
             {
                 var block = UnityEngine.Object.Instantiate(prefabs[1], new Vector3(x, 0, z), Quaternion.identity);
                 block.transform.parent = parent.transform;
+                blockGrid[x, 0, z] = 1;
             }
         }
     }
