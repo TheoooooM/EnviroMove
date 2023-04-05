@@ -132,7 +132,6 @@ namespace Archi.Service
             Debug.Log("Tool service clicked");
             sceneEditor.SaveData();
         }
-
         #endregion
     }
 }

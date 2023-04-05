@@ -58,6 +58,8 @@ public class SceneEditor
         delete,
         moveCamera,
         snapMode,
+        horizontalRotation,
+        verticalRotation,
     }
 
     private EditorMode Mode = EditorMode.create;
@@ -122,6 +124,12 @@ public class SceneEditor
             case EditorMode.snapMode:
                 SelectionBox();
                 break;
+            case EditorMode.horizontalRotation:
+                HorizontalRotation();
+                break;
+            case EditorMode.verticalRotation:
+                VerticalRotation();
+                break;
         }
     }
 
@@ -136,7 +144,8 @@ public class SceneEditor
 
     private void Create()
     {
-        if (EventSystem.current.currentSelectedGameObject) return;
+        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) return;
+        
         if (Input.GetTouch(0).phase == TouchPhase.Began && isMoveCamera)
         {
             InstantiateNewBlock();
@@ -197,8 +206,7 @@ public class SceneEditor
 
     public void SaveData()
     {
-        if (blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerStart]) != 1 ||
-            blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerEnd]) != 1)
+        if (!hasStartAndEnd())
         {
             Debug.LogError("You need to have one player start and one player end");
             return;
@@ -211,9 +219,20 @@ public class SceneEditor
 
     public LevelData TestLevel()
     {
+        if (!hasStartAndEnd()) return null;
         data = new LevelData(size, blockGrid, blocksUsed.ToArray());
         curentLevelData = data;
         return data;
+    }
+
+    private bool hasStartAndEnd()
+    {
+        if (blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerStart]) != 1 ||
+            blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerEnd]) != 1)
+        {
+            return false;
+        }
+        return true;
     }
 
     private int[,,] TripleListToIntArray(List<List<List<int>>> list)
@@ -259,6 +278,34 @@ public class SceneEditor
         foreach (Transform child in parent.transform)
         {
             UnityEngine.Object.Destroy(child.gameObject);
+        }
+    }
+
+    private void VerticalRotation()
+    {
+        if (Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            Vector3 position = Input.GetTouch(0).position;
+            RaycastHit hitRay;
+            Ray ray = _camera.ScreenPointToRay(position);
+            if (Physics.Raycast(ray, out hitRay))
+            {
+                hitRay.transform.Rotate(90, 0, 0);
+            }
+        }
+    }
+
+    private void HorizontalRotation()
+    {
+        if (Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            Vector3 position = Input.GetTouch(0).position;
+            RaycastHit hitRay;
+            Ray ray = _camera.ScreenPointToRay(position);
+            if (Physics.Raycast(ray, out hitRay))
+            {
+                hitRay.transform.Rotate(0, 90, 0);
+            }
         }
     }
 
