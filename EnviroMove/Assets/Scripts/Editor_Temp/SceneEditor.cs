@@ -213,7 +213,7 @@ public class SceneEditor
         }
     }
 
-    public void SaveData()
+    public void SaveData(string name)
     {
         if (!hasStartAndEnd())
         {
@@ -224,7 +224,7 @@ public class SceneEditor
         Debug.Log("blockGrid: " + blockGrid);
         BlockRotationGreedSetter();
         data = new LevelData(size, blockGrid, blocksUsed.ToArray(),blockRotationGrid);
-        m_Data.GenerateDataLevel(data, "New level tamer");
+        m_Data.GenerateDataLevel(data, name);
     }
 
     public LevelData TestLevel()

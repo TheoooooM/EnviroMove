@@ -25,7 +25,7 @@ namespace Levels
             this.size = size;
         }
 
-        public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed)
+        public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed, int[,,] rotationGrid)
         {
             blocksUsed = levelBlocksUsed;
             this.blockGrid = blockGrid;
