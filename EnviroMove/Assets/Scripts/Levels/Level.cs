@@ -18,6 +18,8 @@ namespace Levels
       private IBoardable[,,] _board;
       private GameObject[] _blocksUsed;
 
+      private Vector3Int _destinationPos;
+
       void LoadBlocks()
       {
          throw new System.NotImplementedException();
@@ -36,7 +38,7 @@ namespace Levels
             {
                if(data.blocksUsed[i] == null || data.blocksUsed[i] == "playerEndBlock") continue;  
                if(data.blocksUsed[i] == "playerStartBlock") LoadAssetWithCallbackIndexed<GameObject>("Player", (obj, index) => { _blocksUsed[index] = obj; waitCount--; }, i);
-               LoadAssetWithCallbackIndexed<GameObject>(data.blocksUsed[i], (obj, index) => { _blocksUsed[index] = obj; waitCount--; }, i);
+               else LoadAssetWithCallbackIndexed<GameObject>(data.blocksUsed[i], (obj, index) => { _blocksUsed[index] = obj; waitCount--; }, i);
                waitCount++;
             }
          }
@@ -60,7 +62,12 @@ namespace Levels
                   Debug.Log($"blockGrid: {data.blockGrid[currentPos.x, currentPos.y, currentPos.z]}");
                   Debug.Log($"Block use: {_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]]}");
                   */
-                  if(_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]] ==null ) continue;
+                  Debug.Log($"currentPos:{currentPos}, blockIndex:{data.blockGrid[currentPos.x, currentPos.y, currentPos.z]},");
+                  if (_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]] == null)
+                  {
+                     if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] != 0) _destinationPos = currentPos;
+                     continue;
+                  }
                   
                   GameObject currentGo = Instantiate(_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]],
                         transform.position + currentPos, Quaternion.identity, transform);

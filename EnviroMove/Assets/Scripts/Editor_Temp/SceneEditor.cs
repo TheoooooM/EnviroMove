@@ -179,7 +179,7 @@ public class SceneEditor
         if(!blocksUsed.Contains(blockPlacedAdress)) blocksUsed.Add(blockPlacedAdress);
         var newGo = UnityEngine.Object.Instantiate(selectedPrefab, position, Quaternion.identity);
         newGo.transform.parent = parent.transform;
-        blockGrid[(int)position.x, (int)position.y, (int)position.z] = selectedPrefabIndex;
+        blockGrid[(int)position.x, (int)position.y, (int)position.z] = blocksUsed.IndexOf(blockPlacedAdress);
     }
 
     private void Delete()

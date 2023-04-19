@@ -52,6 +52,6 @@ public class Player : MonoBehaviour, IBoardable
 
     public void StartBoard()
     {
-        UpdateAction();
+        //UpdateAction();
     }
 }
