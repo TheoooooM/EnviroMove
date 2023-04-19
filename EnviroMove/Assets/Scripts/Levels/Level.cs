@@ -71,6 +71,7 @@ namespace Levels
                   
                   GameObject currentGo = Instantiate(_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]],
                         transform.position + currentPos, Quaternion.identity, transform);
+                  currentGo.name = currentGo.name + currentPos;
                   IBoardable currentBoardable = currentGo.GetComponent<IBoardable>();
                   if (currentBoardable == null) throw new MissingMemberException($"{currentGo.name} isn't Boardable");
                   currentBoardable.SetOnBoard(currentPos, this);
@@ -86,6 +87,22 @@ namespace Levels
       IBoardable GetNeighbor(Vector3Int boardPos, Enums.Side side)
       {
          return GetNeighbor(boardPos, side, out _);
+      }
+
+      Vector3Int GetPosition(IBoardable boardable)
+      {
+         for (int z = 0; z < _board.GetLength(2); z++)
+         {
+            for (int y = 0; y < _board.GetLength(1); y++)
+            {
+               for (int x = 0; x < _board.GetLength(0); x++)
+               {
+                  if (_board[x, y, z] == boardable) return new Vector3Int(x, y, z);
+               }
+            }
+         }
+
+         throw new NullReferenceException($"{name} board Doesn't Countain {boardable}");
       }
       
       IBoardable GetNeighbor(Vector3Int boardPos, Enums.Side side, out Vector3Int neighborPos)
@@ -130,7 +147,14 @@ namespace Levels
 
       void SetBoardable(IBoardable boardable, Vector3Int boardPos, Enums.Side side = Enums.Side.none)
       {
-         
+         throw new NotImplementedException();
+      }
+
+      public void RemoveBoardable(IBoardable boardable)
+      {
+         var pos = GetPosition(boardable);
+         _board[pos.x, pos.y, pos.z] = null;
+         Debug.Log($"Remove Boardable At {pos}");
       }
 
       public bool TryMove(Vector3Int boardablePosition, Enums.Side side, out Vector3 position)
