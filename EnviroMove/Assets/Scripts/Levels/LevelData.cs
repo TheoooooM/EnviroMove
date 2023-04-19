@@ -18,20 +18,21 @@ namespace Levels
         public string[] blocksUsed; //lock Address from Addressable
         public int[,,] blockRotationGrid; // Add rotation to block
 
-        public LevelData(Vector3Int size, int[] blockEnumerable, string[] levelBlocksUsed)
+        public LevelData(Vector3Int size, int[] blockEnumerable, string[] levelBlocksUsed, int[,,] blockRotationGrid)
         {
             blocksUsed = levelBlocksUsed;
             this.blockEnumerable = blockEnumerable;
             this.size = size;
+            this.blockRotationGrid = blockRotationGrid;
         }
 
-        public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed)
+        public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed, int[,,] blockRotationGrid)
         {
             blocksUsed = levelBlocksUsed;
             this.blockGrid = blockGrid;
             blockEnumerable = From3DTo1DArray(blockGrid);
             this.size = size;
-            // Debug.Log("size 1 :" + size + "size 2 :" + this.size);
+            this.blockRotationGrid = blockRotationGrid;
         }
 
 
