@@ -41,6 +41,7 @@ public class SceneEditor
     public Vector3Int defaultSize = new(10, 10, 10);
     // public List<List<List<int>>> blockGrid;
     public int[,,] blockGrid;
+    public int[,,] blockRotationGrid;
     public List<string> blocksUsed;
     public LevelData data;
     private Blocks blocks;
@@ -58,6 +59,8 @@ public class SceneEditor
         delete,
         moveCamera,
         snapMode,
+        horizontalRotation,
+        verticalRotation,
     }
 
     private EditorMode Mode = EditorMode.create;
@@ -122,6 +125,12 @@ public class SceneEditor
             case EditorMode.snapMode:
                 SelectionBox();
                 break;
+            case EditorMode.horizontalRotation:
+                HorizontalRotation();
+                break;
+            case EditorMode.verticalRotation:
+                VerticalRotation();
+                break;
         }
     }
 
@@ -136,16 +145,24 @@ public class SceneEditor
 
     private void Create()
     {
-        if (EventSystem.current.currentSelectedGameObject) return;
+        if (IsPointerOverUIObject()) return;
         if (Input.GetTouch(0).phase == TouchPhase.Began && isMoveCamera)
         {
             InstantiateNewBlock();
         }
-        //else if the isMoveCamera is false
         else if (Input.GetTouch(0).phase == TouchPhase.Moved && !isMoveCamera)
         {
             InstantiateNewBlock();
         }
+    }
+
+    private bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
     }
 
     private void InstantiateNewBlock()
@@ -184,6 +201,7 @@ public class SceneEditor
 
     private void Delete()
     {
+        if (IsPointerOverUIObject()) return;
         if (EventSystem.current.currentSelectedGameObject) return;
         if (Input.GetTouch(0).phase != TouchPhase.Began) return;
         Vector3 position = Input.GetTouch(0).position;
@@ -195,25 +213,54 @@ public class SceneEditor
         }
     }
 
-    public void SaveData()
+    public void SaveData(string name)
     {
-        if (blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerStart]) != 1 ||
-            blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerEnd]) != 1)
+        if (!hasStartAndEnd())
         {
             Debug.LogError("You need to have one player start and one player end");
             return;
         }
         // var blockGridIntArray = TripleListToIntArray(blockGrid);
         Debug.Log("blockGrid: " + blockGrid);
-        data = new LevelData(size, blockGrid, blocksUsed.ToArray());
-        m_Data.GenerateDataLevel(data, "New level tamer");
+        BlockRotationGreedSetter();
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray(),blockRotationGrid);
+        m_Data.GenerateDataLevel(data, name);
     }
 
     public LevelData TestLevel()
     {
-        data = new LevelData(size, blockGrid, blocksUsed.ToArray());
+        if (!hasStartAndEnd()) return null;
+        BlockRotationGreedSetter();
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray(),blockRotationGrid);
         curentLevelData = data;
         return data;
+    }
+
+    private void BlockRotationGreedSetter()
+    {
+        blockRotationGrid = new int[size.x, size.y, size.z];
+        for (int i = 0; i < size.x; i++)
+        {
+            for (int j = 0; j < size.y; j++)
+            {
+                for (int k = 0; k < size.z; k++)
+                {
+                    if (blockGrid[i, j, k] == 0) continue;
+                    var block = parent.transform.GetChild(blockGrid[i, j, k] - 1).gameObject;
+                    blockRotationGrid[i, j, k] = (int)block.transform.rotation.eulerAngles.y / 90;
+                }
+            }
+        }
+    }
+
+    private bool hasStartAndEnd()
+    {
+        if (blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerStart]) != 1 ||
+            blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerEnd]) != 1)
+        {
+            return false;
+        }
+        return true;
     }
 
     private int[,,] TripleListToIntArray(List<List<List<int>>> list)
@@ -240,6 +287,7 @@ public class SceneEditor
         Debug.Log((string)dataToLoad);
         blocksUsed = new List<string>(dataToLoad.blocksUsed);
         blockGrid = dataToLoad.blockGrid;
+        blockRotationGrid = dataToLoad.blockRotationGrid;
         for (int x = 0; x < blockGrid.GetLength(0); x++)
         {
             for (int y = 0; y < blockGrid.GetLength(1); y++)
@@ -259,6 +307,32 @@ public class SceneEditor
         foreach (Transform child in parent.transform)
         {
             UnityEngine.Object.Destroy(child.gameObject);
+        }
+    }
+
+    private void VerticalRotation()
+    {
+        if (IsPointerOverUIObject()) return;
+        if (Input.GetTouch(0).phase != TouchPhase.Began) return;
+        Vector3 position = Input.GetTouch(0).position;
+        RaycastHit hitRay;
+        Ray ray = _camera.ScreenPointToRay(position);
+        if (Physics.Raycast(ray, out hitRay))
+        {
+            hitRay.transform.Rotate(90, 0, 0);
+        }
+    }
+
+    private void HorizontalRotation()
+    {
+        if (IsPointerOverUIObject()) return;
+        if (Input.GetTouch(0).phase != TouchPhase.Began) return;
+        Vector3 position = Input.GetTouch(0).position;
+        RaycastHit hitRay;
+        Ray ray = _camera.ScreenPointToRay(position);
+        if (Physics.Raycast(ray, out hitRay))
+        {
+            hitRay.transform.Rotate(0, 90, 0);
         }
     }
 

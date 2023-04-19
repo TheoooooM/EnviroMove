@@ -127,12 +127,11 @@ namespace Archi.Service
         {
         }
 
-        public void SaveData()
+        public void SaveData(string name)
         {
             Debug.Log("Tool service clicked");
-            sceneEditor.SaveData();
+            sceneEditor.SaveData(name);
         }
-
         #endregion
     }
 }
