@@ -8,6 +8,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Attributes;
 using Unity.VisualScripting;
+using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -26,7 +27,8 @@ public class Compositor : MonoBehaviour
 
     private void Awake()
     {
-       InitCompositor().Forget(); 
+       InitCompositor().Forget();
+       Addressables.CheckForCatalogUpdates();
     }
 
     private async UniTaskVoid InitCompositor()

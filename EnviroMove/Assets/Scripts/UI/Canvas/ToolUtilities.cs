@@ -39,7 +39,6 @@ namespace UI.Canvas
 
         public void SaveDatas()
         {
-            Debug.Log("Button clicked");
             m_Tool.SaveData(inputField.text);
         }
         
@@ -52,7 +51,7 @@ namespace UI.Canvas
         {
             ChangeScene(sceneName);
             m_Tool.TestLevel();
-            SceneManager.sceneLoaded += (_,__) => m_Tool.TestLevel();
+            SceneManager.sceneLoaded += (_,_) => m_Tool.TestLevel();
         }
     }
 }

@@ -215,23 +215,23 @@ public class SceneEditor
 
     public void SaveData(string name)
     {
-        if (!hasStartAndEnd())
-        {
-            Debug.LogError("You need to have one player start and one player end");
-            return;
-        }
+        // if (!hasStartAndEnd())
+        // {
+        //     Debug.LogError("You need to have one player start and one player end");
+        //     return;
+        // }
         // var blockGridIntArray = TripleListToIntArray(blockGrid);
         Debug.Log("blockGrid: " + blockGrid);
-        BlockRotationGreedSetter();
-        data = new LevelData(size, blockGrid, blocksUsed.ToArray(),blockRotationGrid);
+        // BlockRotationGreedSetter();
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray());
         m_Data.GenerateDataLevel(data, name);
     }
 
     public LevelData TestLevel()
     {
-        if (!hasStartAndEnd()) return null;
-        BlockRotationGreedSetter();
-        data = new LevelData(size, blockGrid, blocksUsed.ToArray(),blockRotationGrid);
+        // if (!hasStartAndEnd()) return null;
+        // BlockRotationGreedSetter();
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray());
         curentLevelData = data;
         return data;
     }
@@ -255,12 +255,8 @@ public class SceneEditor
 
     private bool hasStartAndEnd()
     {
-        if (blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerStart]) != 1 ||
-            blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerEnd]) != 1)
-        {
-            return false;
-        }
-        return true;
+        return blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerStart]) == 1 &&
+               blocksUsed.Count(x => x == Blocks.BlockType[Enums.blockType.playerEnd]) == 1;
     }
 
     private int[,,] TripleListToIntArray(List<List<List<int>>> list)
@@ -284,7 +280,7 @@ public class SceneEditor
     {
         Start();
         CleanScene();
-        Debug.Log((string)dataToLoad);
+        // Debug.Log((string)dataToLoad);
         blocksUsed = new List<string>(dataToLoad.blocksUsed);
         blockGrid = dataToLoad.blockGrid;
         blockRotationGrid = dataToLoad.blockRotationGrid;

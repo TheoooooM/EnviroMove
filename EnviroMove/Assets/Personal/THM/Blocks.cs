@@ -10,9 +10,9 @@ public struct Blocks
         { Enums.blockType.moveBlock , "moveBlock"},
         { Enums.blockType.playerStart , "playerStartBlock"},
         { Enums.blockType.playerEnd , "playerEndBlock"},
-        { Enums.blockType.ground1 , "groundBlock1"},
-        { Enums.blockType.ground2 , "groundBlock2"},
-        { Enums.blockType.ground3 , "groundBlock3"},
-        { Enums.blockType.ground4 , "groundBlock4"},
+        { Enums.blockType.ground1 , "groundBlockOne"},
+        { Enums.blockType.ground2 , "groundBlockTwo"},
+        { Enums.blockType.groundThree , "groundBlockThree"},
+        { Enums.blockType.ground4 , "groundBlockFour"},
     };
 }

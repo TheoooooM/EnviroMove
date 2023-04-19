@@ -16,7 +16,7 @@ namespace Levels
         public int[,,] blockGrid; //Grid by index of blocksUse
         public int[] blockEnumerable;
         public string[] blocksUsed; //lock Address from Addressable
-        public int[,,] blockRotationGrid; // TODO: Add rotation to block
+        public int[,,] blockRotationGrid; // Add rotation to block
 
         public LevelData(Vector3Int size, int[] blockEnumerable, string[] levelBlocksUsed)
         {
@@ -25,13 +25,13 @@ namespace Levels
             this.size = size;
         }
 
-        public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed, int[,,] rotationGrid)
+        public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed)
         {
             blocksUsed = levelBlocksUsed;
             this.blockGrid = blockGrid;
             blockEnumerable = From3DTo1DArray(blockGrid);
             this.size = size;
-            Debug.Log("size 1 :" + size + "size 2 :" + this.size);
+            // Debug.Log("size 1 :" + size + "size 2 :" + this.size);
         }
 
 
@@ -121,9 +121,9 @@ namespace Levels
 
         public static explicit operator LevelData(string levelData)
         {
-            Debug.Log(levelData);
+            // Debug.Log(levelData);
             var level = JsonUtility.FromJson(levelData, typeof(LevelData)) as LevelData;
-            Debug.Log((string)level);
+            // Debug.Log((string)level);
             level.blockGrid = BlockEnumerable(level.blockEnumerable, level.size);
             return level;
         }

@@ -83,6 +83,7 @@ namespace Archi.Service
         public void TestLevel()
         {
             sceneLoaded += AsyncTestLevel;
+            dataLoaded = sceneEditor.TestLevel();
             /*dataLoaded = sceneEditor.TestLevel();
             Debug.Log(dataLoaded);
             m_Level.LoadLevel(dataLoaded); */
@@ -90,7 +91,6 @@ namespace Archi.Service
 
         private void AsyncTestLevel(Scene scene, LoadSceneMode mode)
         {
-            dataLoaded = sceneEditor.TestLevel();
             Debug.Log(dataLoaded);
             m_Level.LoadLevel(dataLoaded);
             
