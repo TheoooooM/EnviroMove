@@ -61,6 +61,8 @@ public class SceneEditor
     }
 
     private EditorMode Mode = EditorMode.create;
+    
+    private LevelData curentLevelData;
 
     public void Start()
     {
@@ -71,6 +73,7 @@ public class SceneEditor
         blocks = new Blocks();
         // blockGrid = new List<List<List<int>>>();
         blocksUsed = new List<string>();
+        blocksUsed.Add(null);
         blockGrid = new int[size.x, size.y, size.z];
         prefabs = new GameObject[Blocks.BlockType.Count];
         foreach (var blockAddress in Blocks.BlockType)
@@ -104,7 +107,6 @@ public class SceneEditor
     {
         selectedPrefab = prefabs[selectedPrefabIndex];
         if (Input.touchCount <= 0) return;
-        if (EventSystem.current.currentSelectedGameObject) return;
         switch (Mode)
         {
             case EditorMode.create:
@@ -177,7 +179,7 @@ public class SceneEditor
         if(!blocksUsed.Contains(blockPlacedAdress)) blocksUsed.Add(blockPlacedAdress);
         var newGo = UnityEngine.Object.Instantiate(selectedPrefab, position, Quaternion.identity);
         newGo.transform.parent = parent.transform;
-        blockGrid[(int)position.x, (int)position.y, (int)position.z] = selectedPrefabIndex;
+        blockGrid[(int)position.x, (int)position.y, (int)position.z] = blocksUsed.IndexOf(blockPlacedAdress);
     }
 
     private void Delete()
@@ -205,6 +207,13 @@ public class SceneEditor
         Debug.Log("blockGrid: " + blockGrid);
         data = new LevelData(size, blockGrid, blocksUsed.ToArray());
         m_Data.GenerateDataLevel(data, "New level tamer");
+    }
+
+    public LevelData TestLevel()
+    {
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray());
+        curentLevelData = data;
+        return data;
     }
 
     private int[,,] TripleListToIntArray(List<List<List<int>>> list)

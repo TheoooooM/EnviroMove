@@ -39,5 +39,12 @@ namespace UI.Canvas
         {
             m_Tool.SwitchMode(index);
         }
+        
+        public void TestLevel(string sceneName)
+        {
+            ChangeScene(sceneName);
+            m_Tool.TestLevel();
+            SceneManager.sceneLoaded += (_,__) => m_Tool.TestLevel();
+        }
     }
 }

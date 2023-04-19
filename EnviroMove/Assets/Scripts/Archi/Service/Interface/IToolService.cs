@@ -23,5 +23,6 @@ namespace Archi.Service.Interface
         public void PlaceBlock(int indexBlock);
 
         public void SaveData();
+        public void TestLevel();
     }
 }

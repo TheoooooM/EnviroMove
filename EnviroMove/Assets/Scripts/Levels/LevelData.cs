@@ -27,6 +27,7 @@ namespace Levels
         public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed)
         {
             blocksUsed = levelBlocksUsed;
+            this.blockGrid = blockGrid;
             blockEnumerable = From3DTo1DArray(blockGrid);
             this.size = size;
             Debug.Log("size 1 :" + size + "size 2 :" + this.size);
