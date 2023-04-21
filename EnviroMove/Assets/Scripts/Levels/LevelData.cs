@@ -130,6 +130,8 @@ namespace Levels
             var level = JsonUtility.FromJson(levelData, typeof(LevelData)) as LevelData;
             // Debug.Log((string)level);
             level.blockGrid = BlockEnumerable(level.blockEnumerable, level.size);
+            level.blockHorizontalRotationGrid = BlockEnumerable(level.blockEnumerable, level.size);
+            level.blockVerticalRotationGrid = BlockEnumerable(level.blockEnumerable, level.size);
             return level;
         }
     }
