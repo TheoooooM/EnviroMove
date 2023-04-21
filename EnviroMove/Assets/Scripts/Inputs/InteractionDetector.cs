@@ -22,7 +22,9 @@ namespace Inputs
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 selectEntity = hit.transform.GetComponent<IInteractable>();
-                selectEntity?.Select();
+                if (selectEntity == null) return;
+                if (selectEntity.IsInteractible()) selectEntity.Select();
+                else selectEntity = null;
             }
         }
 

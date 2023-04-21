@@ -4,6 +4,10 @@ namespace BlockBehaviors
 {
     public class BreakableBehavior : BlockBehavior, IInteractable
     {
+        private bool _isInteractible = true;
+
+
+        public bool IsInteractible() => _isInteractible;
         public void Select()
         {
             boardMaster.RemoveBoardable(this);
