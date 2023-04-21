@@ -271,7 +271,10 @@ public class SceneEditor
         Debug.Log((string)dataToLoad);
         blocksUsed = new List<string>(dataToLoad.blocksUsed);
         blockGrid = dataToLoad.blockGrid;
-        blockRotationGrid = dataToLoad.blockRotationGrid;
+        Debug.Log("size of blockHorizontalRotationGrid: " + blockHorizontalRotationGrid.GetLength(0) + " " + blockHorizontalRotationGrid.GetLength(1) + " " + blockHorizontalRotationGrid.GetLength(2));
+        Debug.Log("size of blockVerticalRotationGrid: " + blockVerticalRotationGrid.GetLength(0) + " " + blockVerticalRotationGrid.GetLength(1) + " " + blockVerticalRotationGrid.GetLength(2));
+        // blockHorizontalRotationGrid = dataToLoad.blockHorizontalRotationGrid;
+        // blockVerticalRotationGrid = dataToLoad.blockVerticalRotationGrid;
         for (int z = 0; z < blockGrid.GetLength(0); z++)
         {
             for (int y = 0; y < blockGrid.GetLength(1); y++)
@@ -281,9 +284,9 @@ public class SceneEditor
                     if (blockGrid[x, y, z] == 0) continue;
                     int prefabIndex = (int)Blocks.BlockAdressType[blocksUsed[blockGrid[x, y, z]]];
                     var block = UnityEngine.Object.Instantiate(prefabs[prefabIndex/*blockGrid[x, y, z]*/], new Vector3(z, y, x), Quaternion.identity);
+                    // block.transform.Rotate(0, blockHorizontalRotationGrid[x, y, z] * 90, 0);
+                    // block.transform.Rotate(blockVerticalRotationGrid[x, y, z] * 90, 0, 0);
                     block.transform.parent = parent.transform;
-                    block.transform.Rotate(0, 0, 0);
-                    block.transform.Rotate(0, 0, 0);
                 }
             }
         }
