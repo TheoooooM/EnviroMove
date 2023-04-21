@@ -16,23 +16,27 @@ namespace Levels
         public int[,,] blockGrid; //Grid by index of blocksUse
         public int[] blockEnumerable;
         public string[] blocksUsed; //lock Address from Addressable
-        public int[,,] blockRotationGrid; // Add rotation to block
+        public int[,,] blockHorizontalRotationGrid;
+        public int[,,] blockVerticalRotationGrid;
+        
 
-        public LevelData(Vector3Int size, int[] blockEnumerable, string[] levelBlocksUsed, int[,,] blockRotationGrid)
+        public LevelData(Vector3Int size, int[] blockEnumerable, string[] levelBlocksUsed, int[,,] blockHorizontalRotationGrid, int[,,] blockVerticalRotationGrid)
         {
             blocksUsed = levelBlocksUsed;
             this.blockEnumerable = blockEnumerable;
             this.size = size;
-            this.blockRotationGrid = blockRotationGrid;
+            this.blockHorizontalRotationGrid = blockHorizontalRotationGrid;
+            this.blockVerticalRotationGrid = blockVerticalRotationGrid;
         }
 
-        public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed, int[,,] blockRotationGrid)
+        public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed, int[,,] blockHorizontalRotationGrid, int[,,] blockVerticalRotationGrid)
         {
             blocksUsed = levelBlocksUsed;
             this.blockGrid = blockGrid;
             blockEnumerable = From3DTo1DArray(blockGrid);
             this.size = size;
-            this.blockRotationGrid = blockRotationGrid;
+            this.blockHorizontalRotationGrid = blockHorizontalRotationGrid;
+            this.blockVerticalRotationGrid = blockVerticalRotationGrid;
         }
 
 

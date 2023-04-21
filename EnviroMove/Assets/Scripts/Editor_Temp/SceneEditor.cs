@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
 #if UNITY_STANDALONE && !UNITY_EDITOR
 using JsonUtility = UnityEngine.JsonUtility;
 #endif
@@ -38,7 +37,8 @@ public class SceneEditor
     public Vector3Int defaultSize = new(10, 10, 10);
     // public List<List<List<int>>> blockGrid;
     public int[,,] blockGrid;
-    public int[,,] blockRotationGrid;
+    public int[,,] blockHorizontalRotationGrid;
+    public int[,,] blockVerticalRotationGrid;
     public List<string> blocksUsed;
     public LevelData data;
     private Blocks blocks;
@@ -75,6 +75,8 @@ public class SceneEditor
         blocksUsed = new List<string>();
         blocksUsed.Add(null);
         blockGrid = new int[size.x, size.y, size.z];
+        blockHorizontalRotationGrid = new int[size.x, size.y, size.z];
+        blockVerticalRotationGrid = new int[size.x, size.y, size.z];
         prefabs = new GameObject[Blocks.BlockType.Count];
         foreach (var blockAddress in Blocks.BlockType)
         {
@@ -96,13 +98,14 @@ public class SceneEditor
         {
             for (int z = 0; z < size.z; z++)
             {
-                var block = UnityEngine.Object.Instantiate(prefabs[1], new Vector3(x, 0, z), Quaternion.identity);
+                var block = Object.Instantiate(prefabs[1], new Vector3(x, 0, z), Quaternion.identity);
                 block.transform.parent = parent.transform;
                 blockGrid[x, 0, z] = 1;
+                blockVerticalRotationGrid[x, 0, z] = 0;
+                blockHorizontalRotationGrid[x, 0, z] = 0;
             }
         }
         blocksUsed.Add("groundBlock");
-        BlockRotationGreedSetter();
     }
 
     public void Update()
@@ -193,10 +196,13 @@ public class SceneEditor
         if (position.x < 0 || position.x >= size.x || position.y < 0 || position.y >= size.y || position.z < 0 || position.z >= size.z) return;
         var blockPlacedAddress = Blocks.BlockType[(Enums.blockType)selectedPrefabIndex];
         if(!blocksUsed.Contains(blockPlacedAddress)) blocksUsed.Add(blockPlacedAddress);
-        var newGo = UnityEngine.Object.Instantiate(selectedPrefab, position, Quaternion.identity);
+        var newGo = Object.Instantiate(selectedPrefab, position, Quaternion.identity);
         newGo.transform.parent = parent.transform;
-        blockGrid[(int)position.x, (int)position.y, (int)position.z] = blocksUsed.IndexOf(blockPlacedAddress);
-        BlockRotationGreedSetter();
+        blockGrid[(int)position.x, (int)position.y, (int)position.z] = selectedPrefabIndex;
+        Debug.Log("Block Placed");
+        Debug.Log("blockGrid[" + (int)position.x + "," + (int)position.y + "," + (int)position.z + "] = " + selectedPrefabIndex);
+        blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = 0;
+        blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = 0;
     }
 
     private void Delete()
@@ -209,7 +215,7 @@ public class SceneEditor
         Ray ray = _camera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out hitRay))
         {
-            UnityEngine.Object.Destroy(hitRay.transform.gameObject);
+            Object.Destroy(hitRay.transform.gameObject);
         }
     }
 
@@ -221,34 +227,18 @@ public class SceneEditor
         //     return;
         // }
         // var blockGridIntArray = TripleListToIntArray(blockGrid);
-        Debug.Log("blockGrid: " + blockGrid);
-        data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockRotationGrid);
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGrid, blockVerticalRotationGrid);
+        curentLevelData = data;
+        Debug.Log("data: " + (string)data);
         m_Data.GenerateDataLevel(data, name);
     }
 
     public LevelData TestLevel()
     {
         // if (!hasStartAndEnd()) return null;
-        data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockRotationGrid);
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGrid, blockVerticalRotationGrid);
         curentLevelData = data;
         return data;
-    }
-
-    private void BlockRotationGreedSetter()
-    {
-        blockRotationGrid = new int[size.x, size.y, size.z];
-        for (int i = 0; i < size.x; i++)
-        {
-            for (int j = 0; j < size.y; j++)
-            {
-                for (int k = 0; k < size.z; k++)
-                {
-                    if (blockGrid[i, j, k] == 0) continue;
-                    var block = parent.transform.GetChild(blockGrid[i, j, k] - 1).gameObject;
-                    blockRotationGrid[i, j, k] = (int)block.transform.rotation.eulerAngles.y / 90;
-                }
-            }
-        }
     }
 
     private bool hasStartAndEnd()
@@ -278,7 +268,7 @@ public class SceneEditor
     {
         Start();
         CleanScene();
-        // Debug.Log((string)dataToLoad);
+        Debug.Log((string)dataToLoad);
         blocksUsed = new List<string>(dataToLoad.blocksUsed);
         blockGrid = dataToLoad.blockGrid;
         blockRotationGrid = dataToLoad.blockRotationGrid;
@@ -292,6 +282,8 @@ public class SceneEditor
                     int prefabIndex = (int)Blocks.BlockAdressType[blocksUsed[blockGrid[x, y, z]]];
                     var block = UnityEngine.Object.Instantiate(prefabs[prefabIndex/*blockGrid[x, y, z]*/], new Vector3(z, y, x), Quaternion.identity);
                     block.transform.parent = parent.transform;
+                    block.transform.Rotate(0, 0, 0);
+                    block.transform.Rotate(0, 0, 0);
                 }
             }
         }
@@ -301,7 +293,7 @@ public class SceneEditor
     {
         foreach (Transform child in parent.transform)
         {
-            UnityEngine.Object.Destroy(child.gameObject);
+            Object.Destroy(child.gameObject);
         }
     }
 
@@ -317,7 +309,7 @@ public class SceneEditor
             hitRay.transform.Rotate(90, 0, 0);
         }
         var blockPosition = hitRay.transform.position;
-        blockRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] = (int)hitRay.transform.rotation.eulerAngles.y / 90;
+        blockVerticalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] = (int)hitRay.transform.rotation.eulerAngles.x / 90;
     }
 
     private void HorizontalRotation()
@@ -333,7 +325,7 @@ public class SceneEditor
         }
         
         var blockPosition = hitRay.transform.position;
-        blockRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] = (int)hitRay.transform.rotation.eulerAngles.y / 90;
+        blockHorizontalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] = (int)hitRay.transform.rotation.eulerAngles.y / 90;
     }
 
     public void ChangePrefab(int index)
