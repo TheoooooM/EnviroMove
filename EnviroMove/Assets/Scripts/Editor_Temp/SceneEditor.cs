@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Archi.Service.Interface;
 using Attributes;
-using Interfaces;
 using Levels;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
@@ -285,14 +282,15 @@ public class SceneEditor
         blocksUsed = new List<string>(dataToLoad.blocksUsed);
         blockGrid = dataToLoad.blockGrid;
         blockRotationGrid = dataToLoad.blockRotationGrid;
-        for (int x = 0; x < blockGrid.GetLength(0); x++)
+        for (int z = 0; z < blockGrid.GetLength(0); z++)
         {
             for (int y = 0; y < blockGrid.GetLength(1); y++)
             {
-                for (int z = 0; z < blockGrid.GetLength(2); z++)
+                for (int x = 0; x < blockGrid.GetLength(2); x++)
                 {
                     if (blockGrid[x, y, z] == 0) continue;
-                    var block = UnityEngine.Object.Instantiate(prefabs[blockGrid[x, y, z]], new Vector3(x, y, z), Quaternion.identity);
+                    int prefabIndex = (int)Blocks.BlockAdressType[blocksUsed[blockGrid[x, y, z]]];
+                    var block = UnityEngine.Object.Instantiate(prefabs[prefabIndex/*blockGrid[x, y, z]*/], new Vector3(z, y, x), Quaternion.identity);
                     block.transform.parent = parent.transform;
                 }
             }

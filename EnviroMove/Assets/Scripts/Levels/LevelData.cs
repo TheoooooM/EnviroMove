@@ -101,13 +101,13 @@ namespace Levels
         {
             var oneDList = new List<int>();
 
-            for (int i = 0; i < threeDArray.GetLength(0); i++)
+            for (int z = 0; z < threeDArray.GetLength(0); z++)
             {
-                for (int j = 0; j < threeDArray.GetLength(1); j++)
+                for (int y = 0; y < threeDArray.GetLength(1); y++)
                 {
-                    for (int k = 0; k < threeDArray.GetLength(2); k++)
+                    for (int x = 0; x < threeDArray.GetLength(2); x++)
                     {
-                        oneDList.Add(threeDArray[i, j, k]);
+                        oneDList.Add(threeDArray[x, y, z]);
                     }
                 }
             }

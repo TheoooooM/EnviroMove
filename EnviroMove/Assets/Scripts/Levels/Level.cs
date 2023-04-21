@@ -36,7 +36,7 @@ namespace Levels
          {
             if (data.blocksUsed[i] != null)
             {
-               if(data.blocksUsed[i] == null || data.blocksUsed[i] == "playerEndBlock") continue;  
+               if(data.blocksUsed[i] == "" || data.blocksUsed[i] == "playerEndBlock") continue;  
                if(data.blocksUsed[i] == "playerStartBlock") LoadAssetWithCallbackIndexed<GameObject>("Player", (obj, index) => { _blocksUsed[index] = obj; waitCount--; }, i);
                else LoadAssetWithCallbackIndexed<GameObject>(data.blocksUsed[i], (obj, index) => { _blocksUsed[index] = obj; waitCount--; }, i);
                waitCount++;
