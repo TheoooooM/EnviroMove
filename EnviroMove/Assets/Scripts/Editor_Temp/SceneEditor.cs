@@ -270,25 +270,34 @@ public class SceneEditor
         CleanScene();
         Debug.Log((string)dataToLoad);
         blocksUsed = new List<string>(dataToLoad.blocksUsed);
+        blocksUsed.ForEach(x => Debug.Log(x));
         blockGrid = dataToLoad.blockGrid;
-        blockRotationGrid = dataToLoad.blockRotationGrid;
+        Debug.Log("size of blockHorizontalRotationGrid: " + blockHorizontalRotationGrid.GetLength(0) + " " + blockHorizontalRotationGrid.GetLength(1) + " " + blockHorizontalRotationGrid.GetLength(2));
+        Debug.Log("size of blockVerticalRotationGrid: " + blockVerticalRotationGrid.GetLength(0) + " " + blockVerticalRotationGrid.GetLength(1) + " " + blockVerticalRotationGrid.GetLength(2));
+        Debug.Log("size of blockGrid: " + blockGrid.GetLength(0) + " " + blockGrid.GetLength(1) + " " + blockGrid.GetLength(2));
+        blockHorizontalRotationGrid = dataToLoad.blockHorizontalRotationGrid;
+        blockVerticalRotationGrid = dataToLoad.blockVerticalRotationGrid;
         for (int z = 0; z < blockGrid.GetLength(0); z++)
         {
             for (int y = 0; y < blockGrid.GetLength(1); y++)
             {
                 for (int x = 0; x < blockGrid.GetLength(2); x++)
                 {
+                    Debug.Log("x= " + x + " y= " + y + " z= " + z + " blockGrid[x, y, z]= " + blockGrid[x, y, z]);
                     if (blockGrid[x, y, z] == 0) continue;
-                    int prefabIndex = (int)Blocks.BlockAdressType[blocksUsed[blockGrid[x, y, z]]];
+                    Debug.Log("prefabs[" + blockGrid[x, y, z] + "]");
+                    // Debug.Log("blockUsed[" + blockGrid[x, y, z] + "] = " + blocksUsed[blockGrid[x, y, z]]);
+                    // int prefabIndex = (int)Blocks.BlockAdressType[blocksUsed[blockGrid[x, y, z]]];
+                    int prefabIndex = blockGrid[x, y, z];
                     var block = UnityEngine.Object.Instantiate(prefabs[prefabIndex/*blockGrid[x, y, z]*/], new Vector3(z, y, x), Quaternion.identity);
+                    block.transform.Rotate(0, blockHorizontalRotationGrid[x, y, z] * 90, 0);
+                    block.transform.Rotate(blockVerticalRotationGrid[x, y, z] * 90, 0, 0);
                     block.transform.parent = parent.transform;
-                    block.transform.Rotate(0, 0, 0);
-                    block.transform.Rotate(0, 0, 0);
                 }
             }
         }
     }
-
+//(int)Blocks.BlockAdressType[blocksUsed.FirstOrDefault(jpp => jpp == blocksUsed[blockGrid[x, y, z]]) ?? string.Empty];
     public void CleanScene()
     {
         foreach (Transform child in parent.transform)
