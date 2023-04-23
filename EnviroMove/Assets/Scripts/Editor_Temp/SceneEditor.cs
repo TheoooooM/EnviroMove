@@ -100,9 +100,25 @@ public class SceneEditor
 
         _camera = Camera.main;
         parent = new GameObject();
+        parent.transform.position = Vector3.zero;
         parent.name = "Level";
         selectedPrefab = prefabs[1];
+        InitializePathGrid();
         PlaceDefaultGround();
+    }
+
+    private void InitializePathGrid()
+    {
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y; y++)
+            {
+                for (int z = 0; z < size.z; z++)
+                {
+                    pathGrid[x, y, z] = new Node(new Vector3(x, y, z), false);
+                }
+            }
+        }
     }
 
     private void PlaceDefaultGround()
@@ -117,6 +133,7 @@ public class SceneEditor
                 blockVerticalRotationGrid[x, 0, z] = 0;
                 blockHorizontalRotationGrid[x, 0, z] = 0;
                 wallsAndFloors.Add(block);
+                pathGrid[x, 0, z] = new Node(block.transform.position, true);
             }
         }
         blocksUsed.Add("groundBlock");
@@ -124,11 +141,9 @@ public class SceneEditor
 
     public void Update()
     {
+        if (_camera == null) _camera = Camera.main;
+        if (parent == null) parent = new GameObject();
         selectedPrefab = prefabs[selectedPrefabIndex];
-        if (startBlock != null && endBlock != null && pathForPlayer.Count == 0)
-        {
-            pathForPlayer = pathFinding.FindPath(startBlock.transform.position, endBlock.transform.position);
-        }
         if (startBlock != null)
         {
             Debug.Log("start block is placed");
@@ -138,14 +153,20 @@ public class SceneEditor
         {
             Debug.Log("end block is placed");
         }
-        // if (pathForPlayer != null)
-        // {
-        //     foreach (var node in pathForPlayer)
-        //     {
-        //         Debug.DrawRay(node.position, Vector3.up, Color.blue);
-        //         Debug.Log(node.position);
-        //     }
-        // }
+        if (pathForPlayer == null) Debug.Log("path is null");
+        if (startBlock != null && endBlock != null && pathForPlayer.Count == 0)
+        {
+            Debug.Log("start block position: " + startBlock.transform.position + " end block position: " + endBlock.transform.position);
+            pathForPlayer = pathFinding.FindPath(startBlock.transform.position, endBlock.transform.position);
+        }
+        if (pathForPlayer != null)
+        {
+            foreach (var node in pathForPlayer)
+            {
+                Debug.DrawRay(node.position, Vector3.up * 10, Color.blue);
+                Debug.Log(node.position);
+            }
+        }
         if (Input.touchCount <= 0) return;
         switch (Mode)
         {
@@ -243,17 +264,26 @@ public class SceneEditor
         Debug.Log("blockGrid[" + (int)position.x + "," + (int)position.y + "," + (int)position.z + "] = " + selectedPrefabIndex);
         blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = 0;
         blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = 0;
-        if (selectedPrefabIndex == 4)
+        if (selectedPrefabIndex == 2)
         {
             startBlock = newGo;
+            var position1 = startBlock.transform.position;
+            position1 = new Vector3(position1.x, position1.y + 0.5f, position1.z);
+            startBlock.transform.position = position1;
+            Debug.Log("start");
         }
-        else if (selectedPrefabIndex == 5)
+        else if (selectedPrefabIndex == 3)
         {
             endBlock = newGo;
+            var position1 = endBlock.transform.position;
+            position1 = new Vector3(position1.x, position1.y + 0.5f, position1.z);
+            endBlock.transform.position = position1;
+            Debug.Log("end");
         }
-        if (selectedPrefabIndex is 1 or 2)
+
+        if (selectedPrefabIndex == 1)
         {
-            wallsAndFloors.Add(newGo);
+            pathGrid[(int)position.x, (int)position.y, (int)position.z] = new Node(new Vector3(position.x, position.y, position.z), true);
         }
     }
 

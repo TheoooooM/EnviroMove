@@ -8,4 +8,10 @@ public class Node
     public float hCost;
     public float fCost;
     public Node parent;
+    
+    public Node(Vector3 position, bool isBlocked)
+    {
+        this.position = position;
+        this.isBlocked = isBlocked;
+    }
 }

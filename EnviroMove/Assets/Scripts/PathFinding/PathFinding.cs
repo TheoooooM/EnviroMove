@@ -22,7 +22,7 @@ public class PathFinding
         HashSet<Node> closedSet = new HashSet<Node>();
         openList.Add(startNode);
         int count = 0;
-        while (openList.Count > 0 && count < 100)
+        while (openList.Count > 0 && count < 10000)
         {
             Node currentNode = openList[0];
             for (int i = 1; i < openList.Count; i++)
@@ -35,7 +35,9 @@ public class PathFinding
             }
 
             openList.Remove(currentNode);
+            Debug.Log($"OpenList: {openList.Count}");
             closedSet.Add(currentNode);
+            Debug.Log($"ClosedSet: {closedSet.Count}");
 
             if (currentNode == targetNode)
             {
@@ -63,28 +65,30 @@ public class PathFinding
                     }
                 }
             }
+            
+            Debug.DrawRay(currentNode.position, Vector3.up*5, Color.green, 10f);
 
             count++;
         }
-
         return null;
     }
 
 
     public Node GetNodeFromPosition(Vector3 position)
     {
-        var startblockPos = sceneEditor.startBlock.transform.position;
-        int x = (int)(position.x - startblockPos.x);
-        int y = (int)(position.y - startblockPos.y);
-        int z = (int)(position.z - startblockPos.z);
-        return sceneEditor.pathGrid[x, y, z];
+        // var startblockPos = sceneEditor.startBlock.transform.position;
+        // int x = (int)(position.x - startblockPos.x);
+        // int y = (int)(position.y - startblockPos.y);
+        // int z = (int)(position.z - startblockPos.z);
+        // Debug.Log("x = " + x + " y = " + y + " z = " + z);
+        return sceneEditor.pathGrid[(int)position.x, (int)position.y, (int)position.z];
     }
 
     public List<Node> GetNeighbours(Node node)
     {
         List<Node> neighbors = new List<Node>();
 
-        var startBlockPos = sceneEditor.startBlock.transform.position;
+        var startBlockPos = Vector3.zero;
         int x = (int)(node.position.x - startBlockPos.x);
         int y = (int)(node.position.y - startBlockPos.y);
         int z = (int)(node.position.z - startBlockPos.z);
@@ -116,16 +120,9 @@ public class PathFinding
         
         if (z + 1 < sceneEditor.pathGrid.GetLength(2))
         {
-            neighbors.Add(sceneEditor.pathGrid[x, y, z + 1]);
+            neighbors.Add(sceneEditor.pathGrid[x, y + 1, z]);
         }
-
-
-        foreach (Vector3 wallOrFloor in sceneEditor.wallsAndFloors.Select(wallsAndFloor => wallsAndFloor.transform.position))
-        {
-            Node node1 = GetNodeFromPosition(wallOrFloor);
-            node1.isBlocked = true;
-        }
-
+        Debug.Log(neighbors.Count);
         return neighbors;
     }
 
