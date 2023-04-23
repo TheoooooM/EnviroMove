@@ -34,7 +34,7 @@ public class SceneEditor
     
     //LevelData
     public Vector3Int size;
-    public Vector3Int defaultSize = new(10, 10, 10);
+    public Vector3Int defaultSize = new(6, 10, 12);
     // public List<List<List<int>>> blockGrid;
     public int[,,] blockGrid;
     public int[,,] blockHorizontalRotationGrid;
@@ -43,6 +43,14 @@ public class SceneEditor
     public LevelData data;
     private Blocks blocks;
     
+    //path
+    public GameObject startBlock;
+    public GameObject endBlock;
+    public Node[,,] pathGrid;
+    public List<GameObject> wallsAndFloors;
+    private PathFinding pathFinding;
+    public List<Node> pathForPlayer;
+
     //SelectBox
     private GameObject selectionBox;
     private Image selectionBoxImage;
@@ -77,6 +85,10 @@ public class SceneEditor
         blockGrid = new int[size.x, size.y, size.z];
         blockHorizontalRotationGrid = new int[size.x, size.y, size.z];
         blockVerticalRotationGrid = new int[size.x, size.y, size.z];
+        wallsAndFloors = new List<GameObject>();
+        pathGrid = new Node[size.x, size.y, size.z];
+        pathForPlayer = new List<Node>();
+        pathFinding = new PathFinding(this);
         prefabs = new GameObject[Blocks.BlockType.Count];
         foreach (var blockAddress in Blocks.BlockType)
         {
@@ -103,6 +115,7 @@ public class SceneEditor
                 blockGrid[x, 0, z] = 1;
                 blockVerticalRotationGrid[x, 0, z] = 0;
                 blockHorizontalRotationGrid[x, 0, z] = 0;
+                wallsAndFloors.Add(block);
             }
         }
         blocksUsed.Add("groundBlock");
@@ -111,6 +124,28 @@ public class SceneEditor
     public void Update()
     {
         selectedPrefab = prefabs[selectedPrefabIndex];
+        // if (startBlock != null && endBlock != null)
+        // {
+        //     pathForPlayer = pathFinding.FindPath(startBlock.transform.position, endBlock.transform.position);
+        // }
+        // if (startBlock != null)
+        // {
+        //     Debug.Log("start block is placed");
+        // }
+        //
+        // if (endBlock != null)
+        // {
+        //     Debug.Log("end block is placed");
+        // }
+        //
+        // if (pathForPlayer != null)
+        // {
+        //     foreach (var node in pathForPlayer)
+        //     {
+        //         Debug.DrawRay(node.position, Vector3.up, Color.blue);
+        //         Debug.Log(node.position);
+        //     }
+        // }
         if (Input.touchCount <= 0) return;
         switch (Mode)
         {
@@ -203,6 +238,18 @@ public class SceneEditor
         Debug.Log("blockGrid[" + (int)position.x + "," + (int)position.y + "," + (int)position.z + "] = " + selectedPrefabIndex);
         blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = 0;
         blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = 0;
+        if (selectedPrefabIndex == 4)
+        {
+            startBlock = newGo;
+        }
+        else if (selectedPrefabIndex == 5)
+        {
+            endBlock = newGo;
+        }
+        if (selectedPrefabIndex == 1 || selectedPrefabIndex == 2)
+        {
+            wallsAndFloors.Add(newGo);
+        }
     }
 
     private void Delete()
@@ -293,6 +340,15 @@ public class SceneEditor
                     block.transform.Rotate(0, blockHorizontalRotationGrid[x, y, z] * 90, 0);
                     block.transform.Rotate(blockVerticalRotationGrid[x, y, z] * 90, 0, 0);
                     block.transform.parent = parent.transform;
+                    switch (prefabIndex)
+                    {
+                        case 4:
+                            startBlock = block;
+                            break;
+                        case 5:
+                            endBlock = block;
+                            break;
+                    }
                 }
             }
         }
