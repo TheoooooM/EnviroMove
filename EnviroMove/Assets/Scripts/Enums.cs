@@ -7,7 +7,7 @@
 
   public enum blockType
   {
-    empty, ground, wall, moveBlock, playerStart, playerEnd, ground1, ground2, groundThree, ground4
+    empty, ground, playerStart, playerEnd, box, breakableBlock, chariot, frog, ice, penguin, rabbit, ground8
   }
 
   public enum MajorCanvas

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
 
@@ -14,6 +15,9 @@ public class Player : MonoBehaviour, IBoardable
     private bool moving;
     
     [SerializeField] private float speed;
+    
+    [SerializeField] protected List<Enums.BlockTag> tags;
+    public List<Enums.BlockTag> GetTags() => tags;
 
 
     void UpdateAction()
@@ -38,7 +42,6 @@ public class Player : MonoBehaviour, IBoardable
         }
         moving = false;
     }
-    
     public void SetOnBoard(Vector3Int boardPos, IBoard board)
     {
         _boardPos = boardPos;
@@ -48,6 +51,11 @@ public class Player : MonoBehaviour, IBoardable
     public void SetPosition(Vector3Int newBoardPos)
     {
         _boardPos = newBoardPos;
+    }
+
+    public bool TryMoveOn(IBoardable move, Enums.Side commingSide)
+    {
+        return false;
     }
 
     public void StartBoard()

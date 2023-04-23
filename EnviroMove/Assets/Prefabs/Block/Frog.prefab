@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1024110690461995335}
   - component: {fileID: -2421886766195039093}
   m_Layer: 0
-  m_Name: Ground 4
+  m_Name: Frog
   m_TagString: Untagged
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 77b3cf48008882847bbfaf5e7766bb0a, type: 2}
+  - {fileID: 2100000, guid: 11e2c2c3b39ada5439565d6d0d119c4f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -110,3 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb9e4c916fa907541939578a5f7cd0bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 1

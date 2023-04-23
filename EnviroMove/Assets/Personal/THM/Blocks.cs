@@ -6,27 +6,31 @@ public struct Blocks
     {
         { Enums.blockType.empty, "emptyBlock"},
         { Enums.blockType.ground , "groundBlock"},
-        { Enums.blockType.wall , "wallBlock"},
-        { Enums.blockType.moveBlock , "moveBlock"},
         { Enums.blockType.playerStart , "playerStartBlock"},
         { Enums.blockType.playerEnd , "playerEndBlock"},
-        { Enums.blockType.ground1 , "groundBlockOne"},
-        { Enums.blockType.ground2 , "groundBlockTwo"},
-        { Enums.blockType.groundThree , "groundBlockThree"},
-        { Enums.blockType.ground4 , "groundBlockFour"},
+        { Enums.blockType.box , "box"},
+        { Enums.blockType.breakableBlock , "breakableBlock"},
+        { Enums.blockType.chariot , "chariot"},
+        { Enums.blockType.frog , "frog"},
+        { Enums.blockType.ice , "ice"},
+        { Enums.blockType.penguin , "penguin"},
+        { Enums.blockType.rabbit , "rabbit"},
+        { Enums.blockType.ground8, "ground8"}
     };
     
     public static readonly Dictionary<string,Enums.blockType> BlockAdressType = new()
     {
         { "emptyBlock", Enums.blockType.empty},
         { "groundBlock", Enums.blockType.ground },
-        { "wallBlock", Enums.blockType.wall },
-        { "moveBlock", Enums.blockType.moveBlock },
         { "playerStartBlock", Enums.blockType.playerStart},
         { "playerEndBlock", Enums.blockType.playerEnd},
-        { "groundBlockOne", Enums.blockType.ground1},
-        { "groundBlockTwo", Enums.blockType.ground2 },
-        { "groundBlockThree", Enums.blockType.groundThree},
-        { "groundBlockFour", Enums.blockType.ground4 },
+        { "box", Enums.blockType.box},
+        { "breakableBlock", Enums.blockType.breakableBlock},
+        { "chariot", Enums.blockType.chariot},
+        { "frog", Enums.blockType.frog},
+        { "ice", Enums.blockType.ice},
+        { "penguin", Enums.blockType.penguin},
+        { "rabbit", Enums.blockType.rabbit},
+        { "ground8", Enums.blockType.ground8}
     };
 }
