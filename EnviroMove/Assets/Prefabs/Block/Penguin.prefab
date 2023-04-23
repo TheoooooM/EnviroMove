@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1207691450924263064}
   - component: {fileID: 5381544425935042496}
   - component: {fileID: 1024110690461995335}
-  - component: {fileID: -2421886766195039093}
+  - component: {fileID: -1040200133129678322}
   m_Layer: 0
-  m_Name: Ground 3
+  m_Name: Penguin
   m_TagString: Untagged
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -98,7 +98,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-2421886766195039093
+--- !u!114 &-1040200133129678322
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,6 +107,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4004579813908878604}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb9e4c916fa907541939578a5f7cd0bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 63749a95bfed45aca6fe057ad35c58e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 1

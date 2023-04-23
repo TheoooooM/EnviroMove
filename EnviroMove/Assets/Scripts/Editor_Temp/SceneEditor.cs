@@ -4,9 +4,11 @@ using Archi.Service.Interface;
 using Attributes;
 using Levels;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 #if UNITY_STANDALONE && !UNITY_EDITOR
 using JsonUtility = UnityEngine.JsonUtility;
@@ -34,7 +36,7 @@ public class SceneEditor
     
     //LevelData
     public Vector3Int size;
-    public Vector3Int defaultSize = new(10, 10, 10);
+    public Vector3Int defaultSize = new(6, 10, 12);
     // public List<List<List<int>>> blockGrid;
     public int[,,] blockGrid;
     public int[,,] blockHorizontalRotationGrid;
@@ -48,7 +50,6 @@ public class SceneEditor
     private Image selectionBoxImage;
     private Vector2 startPosition = Vector2.zero;
     private Vector2 endPosition = Vector2.zero;
-
 
     private enum EditorMode
     {
@@ -160,11 +161,16 @@ public class SceneEditor
 
     private bool IsPointerOverUIObject()
     {
-        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
-        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-        return results.Count > 0;
+        if (EventSystem.current)
+        {
+            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+            eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+            return results.Count > 0;
+        }
+
+        return false;
     }
 
     private void InstantiateNewBlock()
@@ -215,6 +221,16 @@ public class SceneEditor
         Ray ray = _camera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out hitRay))
         {
+            if (blockGrid[(int)hitRay.transform.position.x, (int)hitRay.transform.position.y, (int)hitRay.transform.position.z] == 0)
+            {
+                var blockPlacedAddress = Blocks.BlockType[(Enums.blockType)selectedPrefabIndex];
+                if(blocksUsed.Contains(blockPlacedAddress)) blocksUsed.Remove(blockPlacedAddress);
+            }
+
+            var position1 = hitRay.transform.position;
+            blockGrid[(int)position1.x, (int)position1.y, (int)position1.z] = 0;
+            blockHorizontalRotationGrid[(int)position1.x, (int)position1.y, (int)position1.z] = 0;
+            blockVerticalRotationGrid[(int)position1.x, (int)position1.y, (int)position1.z] = 0;
             Object.Destroy(hitRay.transform.gameObject);
         }
     }
@@ -277,17 +293,15 @@ public class SceneEditor
         Debug.Log("size of blockGrid: " + blockGrid.GetLength(0) + " " + blockGrid.GetLength(1) + " " + blockGrid.GetLength(2));
         blockHorizontalRotationGrid = dataToLoad.blockHorizontalRotationGrid;
         blockVerticalRotationGrid = dataToLoad.blockVerticalRotationGrid;
-        for (int z = 0; z < blockGrid.GetLength(0); z++)
+        for (int z = 0; z < blockGrid.GetLength(2); z++)
         {
             for (int y = 0; y < blockGrid.GetLength(1); y++)
             {
-                for (int x = 0; x < blockGrid.GetLength(2); x++)
+                for (int x = 0; x < blockGrid.GetLength(0); x++)
                 {
                     Debug.Log("x= " + x + " y= " + y + " z= " + z + " blockGrid[x, y, z]= " + blockGrid[x, y, z]);
                     if (blockGrid[x, y, z] == 0) continue;
                     Debug.Log("prefabs[" + blockGrid[x, y, z] + "]");
-                    // Debug.Log("blockUsed[" + blockGrid[x, y, z] + "] = " + blocksUsed[blockGrid[x, y, z]]);
-                    // int prefabIndex = (int)Blocks.BlockAdressType[blocksUsed[blockGrid[x, y, z]]];
                     int prefabIndex = blockGrid[x, y, z];
                     var block = UnityEngine.Object.Instantiate(prefabs[prefabIndex/*blockGrid[x, y, z]*/], new Vector3(x, y, z), Quaternion.identity);
                     block.transform.Rotate(0, blockHorizontalRotationGrid[x, y, z] * 90, 0);
@@ -297,7 +311,6 @@ public class SceneEditor
             }
         }
     }
-//(int)Blocks.BlockAdressType[blocksUsed.FirstOrDefault(jpp => jpp == blocksUsed[blockGrid[x, y, z]]) ?? string.Empty];
     public void CleanScene()
     {
         foreach (Transform child in parent.transform)

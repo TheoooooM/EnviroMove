@@ -51,6 +51,7 @@ namespace UI.Canvas
         {
             ChangeScene(sceneName);
             m_Tool.TestLevel();
+            m_Tool.SetServiceState(false);
             SceneManager.sceneLoaded += (_,_) => m_Tool.TestLevel();
         }
     }
