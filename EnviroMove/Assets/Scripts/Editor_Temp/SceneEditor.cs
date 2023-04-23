@@ -124,20 +124,19 @@ public class SceneEditor
     public void Update()
     {
         selectedPrefab = prefabs[selectedPrefabIndex];
-        // if (startBlock != null && endBlock != null)
-        // {
-        //     pathForPlayer = pathFinding.FindPath(startBlock.transform.position, endBlock.transform.position);
-        // }
-        // if (startBlock != null)
-        // {
-        //     Debug.Log("start block is placed");
-        // }
-        //
-        // if (endBlock != null)
-        // {
-        //     Debug.Log("end block is placed");
-        // }
-        //
+        if (startBlock != null && endBlock != null && pathForPlayer.Count == 0)
+        {
+            pathForPlayer = pathFinding.FindPath(startBlock.transform.position, endBlock.transform.position);
+        }
+        if (startBlock != null)
+        {
+            Debug.Log("start block is placed");
+        }
+        
+        if (endBlock != null)
+        {
+            Debug.Log("end block is placed");
+        }
         // if (pathForPlayer != null)
         // {
         //     foreach (var node in pathForPlayer)
@@ -246,7 +245,7 @@ public class SceneEditor
         {
             endBlock = newGo;
         }
-        if (selectedPrefabIndex == 1 || selectedPrefabIndex == 2)
+        if (selectedPrefabIndex is 1 or 2)
         {
             wallsAndFloors.Add(newGo);
         }

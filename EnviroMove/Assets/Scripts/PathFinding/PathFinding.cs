@@ -13,13 +13,6 @@ public class PathFinding
     {
         this.sceneEditor = sceneEditor;
     }
-    
-    public static PathFinding instance;
-    private void Awake()
-    {
-        instance = this;
-    }
-
     public List<Node> FindPath(Vector3 start, Vector3 target)
     {
         Node startNode = GetNodeFromPosition(start);
