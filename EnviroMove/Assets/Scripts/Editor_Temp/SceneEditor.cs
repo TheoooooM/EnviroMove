@@ -289,7 +289,7 @@ public class SceneEditor
                     // Debug.Log("blockUsed[" + blockGrid[x, y, z] + "] = " + blocksUsed[blockGrid[x, y, z]]);
                     // int prefabIndex = (int)Blocks.BlockAdressType[blocksUsed[blockGrid[x, y, z]]];
                     int prefabIndex = blockGrid[x, y, z];
-                    var block = UnityEngine.Object.Instantiate(prefabs[prefabIndex/*blockGrid[x, y, z]*/], new Vector3(z, y, x), Quaternion.identity);
+                    var block = UnityEngine.Object.Instantiate(prefabs[prefabIndex/*blockGrid[x, y, z]*/], new Vector3(x, y, z), Quaternion.identity);
                     block.transform.Rotate(0, blockHorizontalRotationGrid[x, y, z] * 90, 0);
                     block.transform.Rotate(blockVerticalRotationGrid[x, y, z] * 90, 0, 0);
                     block.transform.parent = parent.transform;
