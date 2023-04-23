@@ -277,11 +277,11 @@ public class SceneEditor
         Debug.Log("size of blockGrid: " + blockGrid.GetLength(0) + " " + blockGrid.GetLength(1) + " " + blockGrid.GetLength(2));
         blockHorizontalRotationGrid = dataToLoad.blockHorizontalRotationGrid;
         blockVerticalRotationGrid = dataToLoad.blockVerticalRotationGrid;
-        for (int z = 0; z < blockGrid.GetLength(0); z++)
+        for (int z = 0; z < blockGrid.GetLength(2); z++)
         {
             for (int y = 0; y < blockGrid.GetLength(1); y++)
             {
-                for (int x = 0; x < blockGrid.GetLength(2); x++)
+                for (int x = 0; x < blockGrid.GetLength(0); x++)
                 {
                     Debug.Log("x= " + x + " y= " + y + " z= " + z + " blockGrid[x, y, z]= " + blockGrid[x, y, z]);
                     if (blockGrid[x, y, z] == 0) continue;
