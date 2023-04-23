@@ -41,6 +41,7 @@ namespace BlockBehaviors
             else
             {
                 onMoveFinish -= () => Move(side);
+                boardMaster.RemoveBoardable(this);
                 Destroy(gameObject);
             }
         }

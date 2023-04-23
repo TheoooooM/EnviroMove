@@ -15,6 +15,11 @@
     menu, inGame, tool, toolLevels, levels
   }
 
+  public enum BlockTag
+  {
+    Penguin, Player
+  }
+
   public enum SceneType
   {
      mainMenu, tool, levels, inGame

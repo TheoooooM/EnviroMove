@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
 
@@ -11,6 +12,9 @@ namespace BlockBehaviors
         protected IBoard boardMaster;
 
         protected BlockDelegate onMoveFinish;
+
+        [SerializeField] protected List<Enums.BlockTag> tags;
+        public List<Enums.BlockTag> GetTags() => tags;
         
         [SerializeField] private float moveSpeed = 1f;
     
@@ -23,6 +27,11 @@ namespace BlockBehaviors
         public void SetPosition(Vector3Int newBoardPos)
         {
             boardPos = newBoardPos;
+        }
+
+        public virtual bool TryMoveOn(IBoardable move, Enums.Side commingSide)
+        {
+            return false;
         }
 
         public void StartBoard()
