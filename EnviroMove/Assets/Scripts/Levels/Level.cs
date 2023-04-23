@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Archi.Service.Interface;
 using Attributes;
 using Cysharp.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace Levels
       
       public LevelData levelData;
       private IBoardable[,,] _board;
-      private GameObject[] _blocksUsed;
+      private Dictionary<int, GameObject> _blocksUsed;
 
       private Vector3Int _destinationPos;
 
@@ -28,17 +29,33 @@ namespace Levels
 
       public async void GenerateLevel(LevelData data)
       {
-         _blocksUsed = new GameObject[data.blocksUsed.Length];
+         _blocksUsed = new();
+         
          _board = new IBoardable[data.size.x,data.size.y,data.size.z];
 
          int waitCount = 0;
-         for (int i = 0; i < data.blocksUsed.Length; i++)
+         /*for (int i = 0; i < data.blocksUsed.Length; i++)
          {
             if (data.blocksUsed[i] != null)
             {
                if(data.blocksUsed[i] == "" || data.blocksUsed[i] == "playerEndBlock") continue;  
                if(data.blocksUsed[i] == "playerStartBlock") LoadAssetWithCallbackIndexed<GameObject>("Player", (obj, index) => { _blocksUsed[index] = obj; waitCount--; }, i);
                else LoadAssetWithCallbackIndexed<GameObject>(data.blocksUsed[i], (obj, index) => { _blocksUsed[index] = obj; waitCount--; }, i);
+               waitCount++;
+            }
+         }*/
+
+         _blocksUsed.Add((int)Enums.blockType.empty, null);
+         _blocksUsed.Add((int)Enums.blockType.playerEnd, null);
+         foreach (var index in data.blockGrid)
+         {
+            Enums.blockType type = (Enums.blockType)index;
+            if(type is Enums.blockType.playerEnd or  Enums.blockType.empty) continue;
+            string key = Blocks.BlockType[type];
+            if (type == Enums.blockType.playerStart) key = "Player";
+            if (!_blocksUsed.ContainsKey(index))
+            {
+               LoadAssetWithCallbackIndexed<GameObject>(key, (block, i) => { _blocksUsed[i] = block; waitCount--; }, index);
                waitCount++;
             }
          }
@@ -65,7 +82,7 @@ namespace Levels
                   Debug.Log($"currentPos:{currentPos}, blockIndex:{data.blockGrid[currentPos.x, currentPos.y, currentPos.z]},");
                   if (_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]] == null)
                   {
-                     if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] != 0) _destinationPos = currentPos;
+                     if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] == (int)Enums.blockType.playerEnd) _destinationPos = currentPos;
                      continue;
                   }
                   
