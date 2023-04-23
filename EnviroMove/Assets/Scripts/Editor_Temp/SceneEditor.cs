@@ -34,7 +34,7 @@ public class SceneEditor
     
     //LevelData
     public Vector3Int size;
-    public Vector3Int defaultSize = new(10, 10, 10);
+    public Vector3Int defaultSize = new(6, 10, 12);
     // public List<List<List<int>>> blockGrid;
     public int[,,] blockGrid;
     public int[,,] blockHorizontalRotationGrid;
