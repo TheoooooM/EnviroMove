@@ -16,6 +16,7 @@ public class Player : MonoBehaviour, IBoardable
     private basicDelegate _onMoveFinish;
     
     [SerializeField] private float moveSpeed;
+    private Coroutine _actionCoroutine;
     
     [SerializeField] protected List<Enums.BlockTag> tags;
     public List<Enums.BlockTag> GetTags() => tags;
@@ -30,7 +31,7 @@ public class Player : MonoBehaviour, IBoardable
         if (_board.TryMove(_boardPos, _lastDir, out Vector3 movePosition))
         {
             _moving = true;
-            StartCoroutine(MoveToPoint(movePosition));
+            MoveToPoint(movePosition, moveSpeed);
         }
         else GameOver();
     }
@@ -40,12 +41,21 @@ public class Player : MonoBehaviour, IBoardable
         Destroy(gameObject);
     }
 
+    public void StopCoroutineAction()
+    {
+        StopCoroutine(_actionCoroutine);
+    }
 
-    IEnumerator MoveToPoint(Vector3 newPos)
+    public void MoveToPoint(Vector3 newPos, float speed)
+    {
+        _actionCoroutine = StartCoroutine(MoveToPosition(newPos, moveSpeed));
+    }
+    
+    public IEnumerator MoveToPosition(Vector3 newPos, float speed)
     {
         var magnitude = Vector3.Distance(transform.position, newPos);
             var startMagnitude = magnitude;
-            var step = moveSpeed * Time.deltaTime;
+            var step = speed * Time.deltaTime;
             while (magnitude> step)
             {
                 //Debug.Log($"Moving by {(newPos - transform.position).normalized * step}");

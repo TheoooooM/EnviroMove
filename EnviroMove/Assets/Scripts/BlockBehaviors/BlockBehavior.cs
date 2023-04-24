@@ -9,6 +9,7 @@ namespace BlockBehaviors
     public class BlockBehavior : MonoBehaviour, IBoardable
     {
         protected Vector3Int boardPos;
+        
         protected IBoard boardMaster;
 
         protected BlockDelegate onMoveFinish;
@@ -16,9 +17,10 @@ namespace BlockBehaviors
         [SerializeField] protected List<Enums.BlockTag> tags;
         public List<Enums.BlockTag> GetTags() => tags;
         
-        [SerializeField] private float moveSpeed = 1f;
+        [SerializeField] protected float moveSpeed = 1f;
+        private Coroutine _actionCoroutine;
     
-        public virtual void SetOnBoard(Vector3Int boardPos, IBoard board)
+        public virtual void SetOnBoard(Vector3Int boardPos, Enums.Side blockSide, IBoard board)
         {
             this.boardPos = boardPos;
             boardMaster = board;
@@ -37,11 +39,21 @@ namespace BlockBehaviors
         public void StartBoard()
         { }
 
-        protected IEnumerator MoveToPosition(Vector3 newPos)
+        public void MoveToPoint(Vector3 newPos, float speed)
+        {
+            _actionCoroutine = StartCoroutine(MoveToPosition(newPos, moveSpeed));
+        }
+        
+        public void StopCoroutineAction()
+        {
+            StopCoroutine(_actionCoroutine);
+        }
+        
+        public IEnumerator MoveToPosition(Vector3 newPos, float speed)
         {
             var magnitude = Vector3.Distance(transform.position, newPos);
             var startMagnitude = magnitude;
-            var step = moveSpeed * Time.deltaTime;
+            var step = speed * Time.deltaTime;
             while (magnitude> step)
             {
                 //Debug.Log($"Moving by {(newPos - transform.position).normalized * step}");

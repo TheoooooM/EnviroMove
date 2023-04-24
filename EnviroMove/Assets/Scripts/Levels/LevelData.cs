@@ -17,9 +17,9 @@ namespace Levels
         public int[] blockEnumerable;
         public string[] blocksUsed; //lock Address from Addressable
         public int[,,] blockHorizontalRotationGrid;
-        public int[] blockHorizontalRotationEnumerable;
+        private int[] _blockHorizontalRotationEnumerable;
         public int[,,] blockVerticalRotationGrid;
-        public int[] blockVerticalRotationEnumerable;
+        private int[] _blockVerticalRotationEnumerable;
         public int[,,] playerDir;
         public int[] playerDirEnumerable;
         
@@ -40,9 +40,9 @@ namespace Levels
             blockEnumerable = From3DTo1DArray(blockGrid);
             this.size = size;
             this.blockHorizontalRotationGrid = blockHorizontalRotationGrid;
-            blockHorizontalRotationEnumerable = From3DTo1DArray(this.blockHorizontalRotationGrid);
+            _blockHorizontalRotationEnumerable = From3DTo1DArray(this.blockHorizontalRotationGrid);
             this.blockVerticalRotationGrid = blockVerticalRotationGrid;
-            blockVerticalRotationEnumerable = From3DTo1DArray(this.blockVerticalRotationGrid);
+            _blockVerticalRotationEnumerable = From3DTo1DArray(this.blockVerticalRotationGrid);
             playerDir = Vector3ToSideArray(playerDirGrid);
             playerDirEnumerable = From3DTo1DArray(playerDir);
         }
@@ -159,8 +159,8 @@ namespace Levels
             var level = JsonUtility.FromJson(levelData, typeof(LevelData)) as LevelData;
             // Debug.Log((string)level);
             level.blockGrid = BlockEnumerable(level.blockEnumerable, level.size);
-            level.blockHorizontalRotationGrid = BlockEnumerable(level.blockHorizontalRotationEnumerable, level.size);
-            level.blockVerticalRotationGrid = BlockEnumerable(level.blockVerticalRotationEnumerable, level.size);
+            level.blockHorizontalRotationGrid = BlockEnumerable(level._blockHorizontalRotationEnumerable, level.size);
+            level.blockVerticalRotationGrid = BlockEnumerable(level._blockVerticalRotationEnumerable, level.size);
             level.playerDir = BlockEnumerable(level.playerDirEnumerable, level.size);
             return level;
         }

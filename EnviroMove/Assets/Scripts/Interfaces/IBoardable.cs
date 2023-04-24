@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Levels;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Interfaces
@@ -8,10 +8,13 @@ namespace Interfaces
     {
         public List<Enums.BlockTag> GetTags();
         
-        public void SetOnBoard(Vector3Int boardPos, IBoard board);
+        public void SetOnBoard(Vector3Int boardPos, Enums.Side blockSide, IBoard board);
         public void SetPosition(Vector3Int newBoardPos);
 
         bool TryMoveOn(IBoardable move, Enums.Side commingSide);
+
+        void StopCoroutineAction();
+        public void MoveToPoint(Vector3 newPos, float speed);
 
         public void StartBoard();
     }

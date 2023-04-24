@@ -105,7 +105,7 @@ namespace Levels
                   currentGo.name = currentGo.name + currentPos;
                   IBoardable currentBoardable = currentGo.GetComponent<IBoardable>();
                   if (currentBoardable == null) throw new MissingMemberException($"{currentGo.name} isn't Boardable");
-                  currentBoardable.SetOnBoard(currentPos, this);
+                  currentBoardable.SetOnBoard(currentPos, this, );
                   _board[currentPos.x, currentPos.y, currentPos.z] = currentBoardable;
                   onFinishGenerate += currentBoardable.StartBoard;
                }
@@ -115,7 +115,7 @@ namespace Levels
          onFinishGenerate?.Invoke();
       }
 
-      IBoardable GetNeighbor(Vector3Int boardPos, Enums.Side side)
+      public IBoardable GetNeighbor(Vector3Int boardPos, Enums.Side side)
       {
          return GetNeighbor(boardPos, side, out _);
       }
