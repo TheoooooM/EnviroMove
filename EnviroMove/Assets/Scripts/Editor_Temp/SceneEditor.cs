@@ -157,7 +157,7 @@ public class SceneEditor
         if (startBlock != null && endBlock != null && pathForPlayer.Count == 0)
         {
             Debug.Log("start block position: " + startBlock.transform.position + " end block position: " + endBlock.transform.position);
-            pathForPlayer = pathFinding.FindPath(startBlock.transform.position, endBlock.transform.position);
+            //pathForPlayer = pathFinding.FindPath(startBlock.transform.position, endBlock.transform.position);
         }
         if (pathForPlayer != null)
         {
@@ -216,7 +216,7 @@ public class SceneEditor
 
     private bool IsPointerOverUIObject()
     {
-        if (EventSystem.current)
+        //if (EventSystem.current)
         {
             PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
             eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
