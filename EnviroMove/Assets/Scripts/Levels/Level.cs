@@ -35,6 +35,17 @@ namespace Levels
          _board = new IBoardable[data.size.x,data.size.y,data.size.z];
          _playerDirBoard = new Enums.Side[data.size.x,data.size.y,data.size.z];
          
+         for (int z = 0; z < data.size.z ; z++)
+         {
+            for (int y = 0; y < data.size.y; y++)
+            {
+               for (int x = 0; x < data.size.x; x++)
+               {
+                  _playerDirBoard[x,y,z] = (Enums.Side)data.playerDir[x, y, z];
+               }
+            }
+         }
+         
 
          int waitCount = 0;
          /*for (int i = 0; i < data.blocksUsed.Length; i++)

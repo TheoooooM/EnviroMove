@@ -285,7 +285,7 @@ public class SceneEditor
         //     return;
         // }
         // var blockGridIntArray = TripleListToIntArray(blockGrid);
-        data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGrid, blockVerticalRotationGrid);
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGrid, blockVerticalRotationGrid, directionGrid);
         curentLevelData = data;
         Debug.Log("data: " + (string)data);
         m_Data.GenerateDataLevel(data, name);
@@ -294,7 +294,7 @@ public class SceneEditor
     public LevelData TestLevel()
     {
         // if (!hasStartAndEnd()) return null;
-        data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGrid, blockVerticalRotationGrid);
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGrid, blockVerticalRotationGrid, directionGrid);
         curentLevelData = data;
         return data;
     }

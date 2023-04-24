@@ -18,6 +18,8 @@ namespace Levels
         public string[] blocksUsed; //lock Address from Addressable
         public int[,,] blockHorizontalRotationGrid;
         public int[,,] blockVerticalRotationGrid;
+        public int[,,] playerDir;
+        public int[] playerDirEnumerable;
         
 
         public LevelData(Vector3Int size, int[] blockEnumerable, string[] levelBlocksUsed, int[,,] blockHorizontalRotationGrid, int[,,] blockVerticalRotationGrid)
@@ -29,7 +31,7 @@ namespace Levels
             this.blockVerticalRotationGrid = blockVerticalRotationGrid;
         }
 
-        public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed, int[,,] blockHorizontalRotationGrid, int[,,] blockVerticalRotationGrid)
+        public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed, int[,,] blockHorizontalRotationGrid, int[,,] blockVerticalRotationGrid, Vector3[,,] playerDirGrid)
         {
             blocksUsed = levelBlocksUsed;
             this.blockGrid = blockGrid;
@@ -37,6 +39,8 @@ namespace Levels
             this.size = size;
             this.blockHorizontalRotationGrid = blockHorizontalRotationGrid;
             this.blockVerticalRotationGrid = blockVerticalRotationGrid;
+            playerDir = Vector3ToSideArray(playerDirGrid);
+            playerDirEnumerable = From3DTo1DArray(playerDir);
         }
 
 
@@ -101,6 +105,27 @@ namespace Levels
             return array3;
         }
 
+        int[,,] Vector3ToSideArray(Vector3[,,] vectorArray)
+        {
+            var size = new Vector3Int(vectorArray.GetLength(0), vectorArray.GetLength(1), vectorArray.GetLength(2));
+            int[,,] sideArray = new int[size.x,size.y,size.z];
+            for (int z = 0; z < size.z ; z++)
+            {
+                for (int y = 0; y < size.y; y++)
+                {
+                    for (int x = 0; x < size.x; x++)
+                    {
+                        if (vectorArray[x, y, z] == Vector3.forward) sideArray[x, y, z] = (int)Enums.Side.top;
+                        else if(vectorArray[x, y, z] == Vector3.back)sideArray[x, y, z] = (int)Enums.Side.back;
+                        else if(vectorArray[x, y, z] == Vector3.left)sideArray[x, y, z] = (int)Enums.Side.left;
+                        else if(vectorArray[x, y, z] == Vector3.right)sideArray[x, y, z] = (int)Enums.Side.right;
+                        else sideArray[x, y, z] = (int)Enums.Side.none;
+                    }
+                }
+            }
+            return sideArray;
+        }
+
         private static int[] From3DTo1DArray(int[,,] threeDArray)
         {
             var oneDList = new List<int>();
@@ -132,6 +157,7 @@ namespace Levels
             level.blockGrid = BlockEnumerable(level.blockEnumerable, level.size);
             level.blockHorizontalRotationGrid = BlockEnumerable(level.blockEnumerable, level.size);
             level.blockVerticalRotationGrid = BlockEnumerable(level.blockEnumerable, level.size);
+            level.playerDir = BlockEnumerable(level.playerDirEnumerable, level.size);
             return level;
         }
     }
