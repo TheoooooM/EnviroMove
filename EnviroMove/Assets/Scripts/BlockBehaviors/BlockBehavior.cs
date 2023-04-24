@@ -18,7 +18,7 @@ namespace BlockBehaviors
         
         [SerializeField] private float moveSpeed = 1f;
     
-        public virtual void SetOnBoard(Vector3Int boardPos, IBoard board)
+        public virtual void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board)
         {
             this.boardPos = boardPos;
             boardMaster = board;
