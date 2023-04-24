@@ -4,9 +4,12 @@ using Archi.Service.Interface;
 using Attributes;
 using Levels;
 using TMPro;
+using UnityEditor;
+using UnityEditor.AddressableAssets.Build.BuildPipelineTasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 #if UNITY_STANDALONE && !UNITY_EDITOR
 using JsonUtility = UnityEngine.JsonUtility;
@@ -367,9 +370,23 @@ public class SceneEditor
         Ray ray = _camera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out hitRay))
         {
-            //if the raycast hit not a block, return
-            if (hitRay.transform.gameObject.name ==  "Plane") return;
+            if (hitRay.transform.gameObject.transform.name ==  "Plane") return;
             hitRay.transform.Rotate(90, 0, 0);
+            if (hitRay.transform.gameObject.transform.name == "directionBlock")
+            {
+                var position2 = hitRay.transform.position;
+                directionGrid[(int)position2.x, (int)position2.y, (int)position2.z] =
+                    directionGrid[(int)position2.x, (int)position2.y, (int)position2.z] switch
+                    {
+                        Enums.Side.forward => Enums.Side.up,
+                        Enums.Side.up => Enums.Side.back,
+                        Enums.Side.back => Enums.Side.down,
+                        Enums.Side.down => Enums.Side.forward,
+                        _ => directionGrid[(int)position2.x, (int)position2.y, (int)position2.z]
+                    };
+                hitRay.transform.Rotate(0, 0, 90);
+                return;
+            }
         }
         var blockPosition = hitRay.transform.position;
         blockVerticalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] =
@@ -392,6 +409,7 @@ public class SceneEditor
         Ray ray = _camera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out hitRay))
         {
+            if (hitRay.transform.gameObject.transform.name ==  "Plane") return;
             hitRay.transform.Rotate(0, 90, 0);
             if (hitRay.transform.gameObject.transform.name ==  "directionBlock")
             {
