@@ -30,7 +30,7 @@ namespace BlockBehaviors
             isInteractible = false;
             if (boardMaster.TryMove(boardPos, side, out Vector3 newPos))
             {
-                StartCoroutine(MoveToPosition(newPos));
+                StartCoroutine(MoveToPosition(newPos, moveSpeed));
             }
         }
 

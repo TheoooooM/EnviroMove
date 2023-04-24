@@ -116,7 +116,7 @@ namespace Levels
          onFinishGenerate?.Invoke();
       }
 
-      IBoardable GetNeighbor(Vector3Int boardPos, Enums.Side side)
+      public IBoardable GetNeighbor(Vector3Int boardPos, Enums.Side side)
       {
          return GetNeighbor(boardPos, side, out _);
       }

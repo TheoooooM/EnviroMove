@@ -37,7 +37,7 @@ namespace BlockBehaviors
             Debug.Log("Move");
             if (boardMaster.TryMove(boardPos, side, out Vector3 newPos))
             {
-                StartCoroutine(MoveToPosition(newPos));
+                StartCoroutine(MoveToPosition(newPos, moveSpeed));
             }
             else
             {
