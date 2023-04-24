@@ -21,6 +21,7 @@ namespace BlockBehaviors
 
         public void Swipe(Enums.Side side)
         {
+            isInteractible = false;
             Slide(side);
         }
 

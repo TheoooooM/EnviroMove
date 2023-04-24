@@ -32,8 +32,14 @@ public class Player : MonoBehaviour, IBoardable
             _moving = true;
             StartCoroutine(MoveToPoint(movePosition));
         }
+        else GameOver();
     }
-   
+
+    private void GameOver()
+    {
+        Destroy(gameObject);
+    }
+
 
     IEnumerator MoveToPoint(Vector3 newPos)
     {
