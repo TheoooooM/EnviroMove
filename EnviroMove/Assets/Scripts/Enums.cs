@@ -33,7 +33,7 @@ public class Enums
 
   public enum BlockTag
   {
-    Penguin, Player
+    Player,Penguin 
   }
 
   public enum SceneType
