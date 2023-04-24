@@ -24,7 +24,7 @@ namespace BlockBehaviors
 
         void Grab()
         {
-            boardMaster.GetNeighbor(boardPos,)
+            //boardMaster.GetNeighbor(boardPos,);
         }
     }
 }
