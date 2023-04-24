@@ -13,7 +13,11 @@ namespace BlockBehaviors
         
         
 
-        private void Start()=> _startScale = transform.localScale;
+        private void Start()
+        {
+            _startScale = transform.localScale;
+            onMoveFinish += ()=>isInteractible = true;
+        }
 
 
         public bool IsInteractible() => isInteractible;
@@ -23,6 +27,7 @@ namespace BlockBehaviors
 
         public void Swipe(Enums.Side side)
         {
+            isInteractible = false;
             if (boardMaster.TryMove(boardPos, side, out Vector3 newPos))
             {
                 StartCoroutine(MoveToPosition(newPos));

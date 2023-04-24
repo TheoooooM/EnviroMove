@@ -17,6 +17,7 @@ namespace Levels
       
       public LevelData levelData;
       private IBoardable[,,] _board;
+      private Enums.Side[,,] _playerDirBoard;
       private Dictionary<int, GameObject> _blocksUsed;
 
       private Vector3Int _destinationPos;
@@ -32,6 +33,8 @@ namespace Levels
          _blocksUsed = new();
          
          _board = new IBoardable[data.size.x,data.size.y,data.size.z];
+         _playerDirBoard = new Enums.Side[data.size.x,data.size.y,data.size.z];
+         
 
          int waitCount = 0;
          /*for (int i = 0; i < data.blocksUsed.Length; i++)
@@ -173,6 +176,8 @@ namespace Levels
          _board[pos.x, pos.y, pos.z] = null;
          Debug.Log($"Remove Boardable At {pos}");
       }
+
+      public Enums.Side GetPlayerDirection(Vector3Int pos)=>_playerDirBoard[pos.x, pos.y, pos.z];
 
       public bool TryMove(Vector3Int boardablePosition, Enums.Side side, out Vector3 position)
       {

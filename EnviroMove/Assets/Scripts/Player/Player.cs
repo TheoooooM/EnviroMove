@@ -9,38 +9,53 @@ public class Player : MonoBehaviour, IBoardable
     private IBoard _board;
     
     private Vector3Int _boardPos;
-    private Enums.Side _lookDir = Enums.Side.top;
     private Vector3 _moveDir;
 
-    private bool moving;
+    private Enums.Side _lastDir = Enums.Side.top;
+    private bool _moving;
+    private basicDelegate _onMoveFinish;
     
-    [SerializeField] private float speed;
+    [SerializeField] private float moveSpeed;
     
     [SerializeField] protected List<Enums.BlockTag> tags;
     public List<Enums.BlockTag> GetTags() => tags;
 
 
-    void UpdateAction()
-    {
-        if (!moving)
-        {
-            if (_board.TryMove(_boardPos, _lookDir, out Vector3 movePosition))
-            {
-                moving = true;
-                StartCoroutine(MoveToPoint(movePosition));
-            }
-        }
-    }
-   
+    
 
-    IEnumerator MoveToPoint(Vector3 position)
+    void Move()
     {
-        while (Vector3.Distance(transform.position, position)< speed)
+        var dir = _board.GetPlayerDirection(_boardPos);
+        if (dir != Enums.Side.none) _lastDir = dir;
+        if (_board.TryMove(_boardPos, _lastDir, out Vector3 movePosition))
         {
-            transform.position += _moveDir*speed;
-            yield return new WaitForEndOfFrame();
+            _moving = true;
+            StartCoroutine(MoveToPoint(movePosition));
         }
-        moving = false;
+        else GameOver();
+    }
+
+    private void GameOver()
+    {
+        Destroy(gameObject);
+    }
+
+
+    IEnumerator MoveToPoint(Vector3 newPos)
+    {
+        var magnitude = Vector3.Distance(transform.position, newPos);
+            var startMagnitude = magnitude;
+            var step = moveSpeed * Time.deltaTime;
+            while (magnitude> step)
+            {
+                //Debug.Log($"Moving by {(newPos - transform.position).normalized * step}");
+                transform.position += (newPos - transform.position).normalized * step;
+                magnitude -= step;
+                yield return new WaitForEndOfFrame();
+            }
+            transform.position = newPos;
+            _moving = false;
+            _onMoveFinish?.Invoke();
     }
     public void SetOnBoard(Vector3Int boardPos, IBoard board)
     {
@@ -60,6 +75,7 @@ public class Player : MonoBehaviour, IBoardable
 
     public void StartBoard()
     {
-        //UpdateAction();
+        Move();
+        _onMoveFinish += Move;
     }
 }
