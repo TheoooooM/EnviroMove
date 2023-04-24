@@ -103,7 +103,7 @@ public class Enums
 
   public enum BlockTag
   {
-    Player,Penguin 
+    Player,Penguin , FrogGrabbable
   }
 
   public enum SceneType

@@ -93,7 +93,6 @@ namespace Levels
                   Debug.Log($"blockGrid: {data.blockGrid[currentPos.x, currentPos.y, currentPos.z]}");
                   Debug.Log($"Block use: {_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]]}");
                   */
-                  Debug.Log($"currentPos:{currentPos}, blockIndex:{data.blockGrid[currentPos.x, currentPos.y, currentPos.z]},");
                   if (_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]] == null)
                   {
                      if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] == (int)Enums.blockType.playerEnd) _destinationPos = currentPos;
@@ -182,6 +181,25 @@ namespace Levels
       void SetBoardable(IBoardable boardable, Vector3Int boardPos, Enums.Side side = Enums.Side.none)
       {
          throw new NotImplementedException();
+      }
+
+      public void Move(IBoardable boardable, Vector3Int position)
+      {
+         for (int z = 0; z < _board.GetLength(2); z++)
+         {
+            for (int y = 0; y < _board.GetLength(1); y++)
+            {
+               for (int x = 0; x < _board.GetLength(0); x++)
+               {
+                  if (_board[x, y, z] == boardable)
+                  {
+                     _board[position.x, position.y, position.z] = _board[x, y, z];
+                     _board[position.x, position.y, position.z].SetPosition(position);
+                     _board[x, y, z] = null;
+                  }
+               }
+            }
+         }
       }
 
       public void RemoveBoardable(IBoardable boardable)
