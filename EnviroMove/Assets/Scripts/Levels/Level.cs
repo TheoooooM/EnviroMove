@@ -99,13 +99,14 @@ namespace Levels
                      if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] == (int)Enums.blockType.playerEnd) _destinationPos = currentPos;
                      continue;
                   }
-                  
+
+                  Quaternion rotation = Quaternion.LookRotation(Enums.SideVector3((Enums.Side)data.blockHorizontalRotationGrid[x, y, z]), Enums.SideVector3((Enums.Side)data.blockVerticalRotationGrid[x, y, z]));
                   GameObject currentGo = Instantiate(_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]],
-                        transform.position + currentPos, Quaternion.identity, transform);
+                        transform.position + currentPos, rotation, transform);
                   currentGo.name = currentGo.name + currentPos;
                   IBoardable currentBoardable = currentGo.GetComponent<IBoardable>();
                   if (currentBoardable == null) throw new MissingMemberException($"{currentGo.name} isn't Boardable");
-                  currentBoardable.SetOnBoard(currentPos, this);
+                  currentBoardable.SetOnBoard(currentPos,(Enums.Side)data.blockHorizontalRotationGrid[x, y, z] , this);
                   _board[currentPos.x, currentPos.y, currentPos.z] = currentBoardable;
                   onFinishGenerate += currentBoardable.StartBoard;
                }

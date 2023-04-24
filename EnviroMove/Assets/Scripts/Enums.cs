@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using UnityEngine;
 
 public class Enums
 {
@@ -20,6 +21,21 @@ public class Enums
       case Side.down: return Side.up;
       default:
         throw new ArgumentOutOfRangeException(nameof(side), side, null);
+    }
+  }
+
+  public static Vector3 SideVector3(Side side)
+  {
+    switch (side)
+    {
+      case Side.none: return Vector3.zero;
+      case Side.forward: return Vector3.forward;
+      case Side.left: return Vector3.left;
+      case Side.right: return Vector3.right;
+      case Side.back: return Vector3.back;
+      case Side.up: return Vector3.up;
+      case Side.down: return Vector3.down;
+      default: throw new ArgumentOutOfRangeException(nameof(side), side, null);
     }
   }
 

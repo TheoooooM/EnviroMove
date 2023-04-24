@@ -57,7 +57,7 @@ public class Player : MonoBehaviour, IBoardable
             _moving = false;
             _onMoveFinish?.Invoke();
     }
-    public void SetOnBoard(Vector3Int boardPos, IBoard board)
+    public void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board)
     {
         _boardPos = boardPos;
         _board = board;
