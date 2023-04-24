@@ -4,12 +4,9 @@ using Archi.Service.Interface;
 using Attributes;
 using Levels;
 using TMPro;
-using UnityEditor;
-using UnityEditor.AddressableAssets.Build.BuildPipelineTasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 #if UNITY_STANDALONE && !UNITY_EDITOR
 using JsonUtility = UnityEngine.JsonUtility;
@@ -370,7 +367,8 @@ public class SceneEditor
         Ray ray = _camera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out hitRay))
         {
-            if (hitRay.transform.gameObject.transform.name ==  "directionBlock") return;
+            //if the raycast hit not a block, return
+            if (hitRay.transform.gameObject.name ==  "Plane") return;
             hitRay.transform.Rotate(90, 0, 0);
         }
         var blockPosition = hitRay.transform.position;
