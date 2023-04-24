@@ -9,7 +9,7 @@ namespace BlockBehaviors
     public class BlockBehavior : MonoBehaviour, IBoardable
     {
         protected Vector3Int boardPos;
-        
+        protected Enums.Side boardRotation;
         protected IBoard boardMaster;
 
         protected BlockDelegate onMoveFinish;
@@ -23,6 +23,7 @@ namespace BlockBehaviors
         public virtual void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board)
         {
             this.boardPos = boardPos;
+            this.boardRotation = boardRotation;
             boardMaster = board;
         }
 
