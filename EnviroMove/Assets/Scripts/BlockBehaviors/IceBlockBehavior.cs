@@ -8,7 +8,13 @@ namespace BlockBehaviors
         public override bool TryMoveOn(IBoardable move, Enums.Side commingSide)
         {
             List<Enums.BlockTag> moverTags = move.GetTags();
-            return moverTags.Contains(Enums.BlockTag.Penguin);
+            if (moverTags.Contains(Enums.BlockTag.Penguin))
+            {
+                boardMaster.RemoveBoardable(this);
+                Destroy(gameObject);
+                return true;
+            }
+            return false;
         }
     }
 }

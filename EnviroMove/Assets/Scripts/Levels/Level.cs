@@ -177,9 +177,12 @@ namespace Levels
       public bool TryMove(Vector3Int boardablePosition, Enums.Side side, out Vector3 position)
       {
          position = transform.position + boardablePosition;
-         
+         var mover = _board[boardablePosition.x, boardablePosition.y, boardablePosition.z];
          IBoardable neighboor = GetNeighbor(boardablePosition, side, out Vector3Int neighborPos);
-         if (neighboor != null) return false;
+         if (neighboor != null)
+         {
+            if(!neighboor.TryMoveOn(mover, Enums.InverseSide(side))) return false;
+         }
          position = transform.position + neighborPos;
          _board[neighborPos.x, neighborPos.y, neighborPos.z] = _board[boardablePosition.x, boardablePosition.y, boardablePosition.z];
          _board[neighborPos.x, neighborPos.y, neighborPos.z].SetPosition(neighborPos);
