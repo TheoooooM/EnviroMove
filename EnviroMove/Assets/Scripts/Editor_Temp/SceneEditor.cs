@@ -5,6 +5,7 @@ using Attributes;
 using Levels;
 using TMPro;
 using UnityEditor;
+using UnityEditor.AddressableAssets.Build.BuildPipelineTasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
@@ -50,6 +51,9 @@ public class SceneEditor
     private Image selectionBoxImage;
     private Vector2 startPosition = Vector2.zero;
     private Vector2 endPosition = Vector2.zero;
+    
+    //Path
+    public Vector3[,,] directionGrid;
 
     private enum EditorMode
     {
@@ -91,7 +95,23 @@ public class SceneEditor
         parent.transform.position = Vector3.zero;
         parent.name = "Level";
         selectedPrefab = prefabs[1];
+        InitializeDirectionGrid();
         PlaceDefaultGround();
+    }
+
+    private void InitializeDirectionGrid()
+    {
+        directionGrid = new Vector3[size.x, size.y, size.z];
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y - 1; y++)
+            {
+                for (int z = 0; z < size.z; z++)
+                {
+                    directionGrid[x, y, z] = Vector3.zero;
+                }
+            }
+        }
     }
 
     private void PlaceDefaultGround()
@@ -114,6 +134,19 @@ public class SceneEditor
     {
         if (_camera == null) _camera = Camera.main;
         if (parent == null) parent = new GameObject();
+        if (directionGrid != null)
+        {
+            for (int x = 0; x < size.x; x++)
+            {
+                for (int y = 0; y < size.y - 1; y++)
+                {
+                    for (int z = 0; z < size.z; z++)
+                    {
+                        Debug.DrawRay(new Vector3(x, y, z), directionGrid[x, y, z], Color.red);
+                    }
+                }
+            }
+        }
         selectedPrefab = prefabs[selectedPrefabIndex];
         if (Input.touchCount <= 0) return;
         switch (Mode)
@@ -206,6 +239,12 @@ public class SceneEditor
         var blockPlacedAddress = Blocks.BlockType[(Enums.blockType)selectedPrefabIndex];
         if(!blocksUsed.Contains(blockPlacedAddress)) blocksUsed.Add(blockPlacedAddress);
         var newGo = Object.Instantiate(selectedPrefab, position, Quaternion.identity);
+        if (selectedPrefab == prefabs[11])
+        {
+            directionGrid[(int)position.x, (int)position.y, (int)position.z] = new Vector3(0, 0, 1);
+            newGo.name = "directionBlock";
+            return;
+        }
         newGo.transform.parent = parent.transform;
         blockGrid[(int)position.x, (int)position.y, (int)position.z] = selectedPrefabIndex;
         Debug.Log("Block Placed");
@@ -331,6 +370,7 @@ public class SceneEditor
         Ray ray = _camera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out hitRay))
         {
+            if (hitRay.transform.gameObject.transform.name ==  "directionBlock") return;
             hitRay.transform.Rotate(90, 0, 0);
         }
         var blockPosition = hitRay.transform.position;
@@ -347,6 +387,26 @@ public class SceneEditor
         if (Physics.Raycast(ray, out hitRay))
         {
             hitRay.transform.Rotate(0, 90, 0);
+            if (hitRay.transform.gameObject.transform.name ==  "directionBlock")
+            {
+                var position1 = hitRay.transform.position;
+                if (directionGrid[(int)position1.x, (int)position1.y, (int)position1.z] ==  Vector3.forward)
+                {
+                    directionGrid[(int)position1.x, (int)position1.y, (int)position1.z] = Vector3.right;
+                }
+                else if (directionGrid[(int)position1.x, (int)position1.y, (int)position1.z] ==  Vector3.right)
+                {
+                    directionGrid[(int)position1.x, (int)position1.y, (int)position1.z] = Vector3.back;
+                }
+                else if (directionGrid[(int)position1.x, (int)position1.y, (int)position1.z] ==  Vector3.back)
+                {
+                    directionGrid[(int)position1.x, (int)position1.y, (int)position1.z] = Vector3.left;
+                }
+                else if (directionGrid[(int)position1.x, (int)position1.y, (int)position1.z] ==  Vector3.left)
+                {
+                    directionGrid[(int)position1.x, (int)position1.y, (int)position1.z] = Vector3.forward;
+                }
+            }
         }
         
         var blockPosition = hitRay.transform.position;
@@ -367,7 +427,6 @@ public class SceneEditor
     {
         isMoveCamera = !isMoveCamera;
     }
-
     #region SelectBox
 
     
