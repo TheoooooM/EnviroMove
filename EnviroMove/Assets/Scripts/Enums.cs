@@ -5,17 +5,19 @@ public class Enums
 {
   public enum Side
   {
-    none, top, left, right, back
+    none, forward, left, right, back, up, down
   }
 
   public static Side InverseSide(Side side)
   {
     switch (side)
     {
-      case Side.top: return Side.back;
+      case Side.forward: return Side.back;
       case Side.left: return Side.right;
       case Side.right: return Side.left;
-      case Side.back: return Side.top;
+      case Side.back: return Side.forward;
+      case Side.up: return Side.down;
+      case Side.down: return Side.up;
       default:
         throw new ArgumentOutOfRangeException(nameof(side), side, null);
     }

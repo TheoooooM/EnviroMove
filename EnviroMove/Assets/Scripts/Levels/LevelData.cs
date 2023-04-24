@@ -119,7 +119,7 @@ namespace Levels
                 {
                     for (int x = 0; x < size.x; x++)
                     {
-                        if (vectorArray[x, y, z] == Vector3.forward) sideArray[x, y, z] = (int)Enums.Side.top;
+                        if (vectorArray[x, y, z] == Vector3.forward) sideArray[x, y, z] = (int)Enums.Side.forward;
                         else if(vectorArray[x, y, z] == Vector3.back)sideArray[x, y, z] = (int)Enums.Side.back;
                         else if(vectorArray[x, y, z] == Vector3.left)sideArray[x, y, z] = (int)Enums.Side.left;
                         else if(vectorArray[x, y, z] == Vector3.right)sideArray[x, y, z] = (int)Enums.Side.right;

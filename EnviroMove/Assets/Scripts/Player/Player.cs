@@ -11,7 +11,7 @@ public class Player : MonoBehaviour, IBoardable
     private Vector3Int _boardPos;
     private Vector3 _moveDir;
 
-    private Enums.Side _lastDir = Enums.Side.top;
+    private Enums.Side _lastDir = Enums.Side.forward;
     private bool _moving;
     private basicDelegate _onMoveFinish;
     

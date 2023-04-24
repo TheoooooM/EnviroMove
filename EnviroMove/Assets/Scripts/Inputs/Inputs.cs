@@ -41,7 +41,7 @@ namespace Inputs
             var dir = endPos - startPos;
             if (Vector2.Distance(startPos, endPos) >= minimumSwipeDistance)
                 OnSwip?.Invoke(Mathf.Abs(dir.x) > Mathf.Abs(dir.y) ? dir.x >= 0 ? Enums.Side.right : Enums.Side.left :
-                    dir.y >= 0 ? Enums.Side.top : Enums.Side.back);
+                    dir.y >= 0 ? Enums.Side.forward : Enums.Side.back);
         }
     }
 }

@@ -141,7 +141,7 @@ namespace Levels
          neighborPos = boardPos;
          switch (side)
          {
-            case Enums.Side.top:
+            case Enums.Side.forward:
                if (boardPos.z + 1 == _board.GetLength(2)) return null;
                neighborPos = new Vector3Int(boardPos.x, boardPos.y, boardPos.z + 1);
                return _board[neighborPos.x, neighborPos.y, neighborPos.z];
