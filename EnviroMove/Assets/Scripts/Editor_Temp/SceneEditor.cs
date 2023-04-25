@@ -377,6 +377,7 @@ public class SceneEditor
         else
         {
             _camera.orthographic = true;
+            _camera.orthographicSize = 8;
             _camera.transform.position = new Vector3(_camera.transform.position.x, _camera.transform.position.y, _camera.transform.position.z + 10);
             _camera.transform.rotation = Quaternion.Euler(90, 0, 0);
         }
