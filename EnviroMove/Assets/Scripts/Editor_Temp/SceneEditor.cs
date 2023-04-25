@@ -251,14 +251,15 @@ public class SceneEditor
 
     private void Delete()
     {
-        if (IsPointerOverUIObject()) return;
-        if (EventSystem.current.currentSelectedGameObject) return;
-        if (Input.GetTouch(0).phase != TouchPhase.Began) return;
+        if (IsPointerOverUIObject() || 
+            Input.GetTouch(0).phase != TouchPhase.Began ||
+            EventSystem.current.currentSelectedGameObject) return;
         Vector3 position = Input.GetTouch(0).position;
         RaycastHit hitRay;
         Ray ray = _camera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out hitRay))
         {
+            if (hitRay.transform.gameObject.transform.name ==  "Plane") return;
             if (blockGrid[(int)hitRay.transform.position.x, (int)hitRay.transform.position.y, (int)hitRay.transform.position.z] == 0)
             {
                 var blockPlacedAddress = Blocks.BlockType[(Enums.blockType)selectedPrefabIndex];
@@ -371,14 +372,14 @@ public class SceneEditor
         if (_camera.orthographic)
         {
             _camera.orthographic = false;
-            _camera.transform.position = new Vector3(_camera.transform.position.x, _camera.transform.position.y, _camera.transform.position.z - 10);
+            _camera.transform.position = new Vector3(_camera.transform.position.x, _camera.transform.position.y - 10f, _camera.transform.position.z - 10);
             _camera.transform.rotation = Quaternion.Euler(80, 0, 0);
         }
         else
         {
             _camera.orthographic = true;
             _camera.orthographicSize = 8;
-            _camera.transform.position = new Vector3(_camera.transform.position.x, _camera.transform.position.y, _camera.transform.position.z + 10);
+            _camera.transform.position = new Vector3(_camera.transform.position.x, _camera.transform.position.y + 10f, _camera.transform.position.z + 10);
             _camera.transform.rotation = Quaternion.Euler(90, 0, 0);
         }
     }
