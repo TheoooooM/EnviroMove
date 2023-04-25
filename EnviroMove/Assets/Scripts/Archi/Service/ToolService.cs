@@ -4,8 +4,10 @@ using Levels;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using static AdresseHelper;
+using static UnityEngine.SceneManagement.SceneManager;
 
 namespace Archi.Service
 {
@@ -14,33 +16,40 @@ namespace Archi.Service
         [DependeOnService] private IInterfaceService m_Interface;
         [DependeOnService] private IDataBaseService m_Data;
         [DependeOnService] private ITickService m_Tick; //TODO
+        [DependeOnService] private ILevelService m_Level;
+
         private SceneEditor sceneEditor;
         protected override void Initialize()
         { }
 
         public void ShowLevels()
         {
-            SceneManager.LoadScene("LevelSelector");
-            SceneManager.sceneLoaded += OnLevelSelectorLoad;
+            if (sceneEditor != null)
+            {
+                m_Tick.OnUpdate -= sceneEditor.Update;
+                sceneEditor = null;
+            }
+            LoadScene("LevelSelector");
+            sceneLoaded += OnLevelSelectorLoad;
         }
 
         void OnLevelSelectorLoad(Scene scene, LoadSceneMode mode)
         {
             m_Interface.DrawCanvas(Enums.MajorCanvas.toolLevels);
-            SceneManager.sceneLoaded -= OnLevelSelectorLoad;
+            sceneLoaded -= OnLevelSelectorLoad;
         }
         
 
         public void ShowTool()
         {
-            SceneManager.LoadScene("Tool");
-            SceneManager.sceneLoaded += OnLoadSceneCompleted;
+            LoadScene("Tool");
+            sceneLoaded += OnLoadSceneCompleted;
         }
 
         private void OnLoadSceneCompleted(Scene scene, LoadSceneMode mode)
         {
             m_Interface.DrawCanvas(Enums.MajorCanvas.tool);
-            sceneEditor = new SceneEditor();
+            sceneEditor ??= new SceneEditor();
             SetObjectDependencies(sceneEditor);
             m_Tick.OnUpdate += sceneEditor.Update;
             if (dataLoaded != null)
@@ -52,7 +61,7 @@ namespace Archi.Service
             {
                 sceneEditor.Start();
             }
-            SceneManager.sceneLoaded -= OnLoadSceneCompleted;
+            sceneLoaded -= OnLoadSceneCompleted;
         }
 
         private void GenerateEditorHandler(GameObject editor)
@@ -72,8 +81,25 @@ namespace Archi.Service
         public void OpenLevel(LevelData data)
         {
             dataLoaded = data;
-            SceneManager.LoadScene("Tool");
-            SceneManager.sceneLoaded += OnLoadSceneCompleted;
+            LoadScene("Tool");
+            sceneLoaded += OnLoadSceneCompleted;
+        }
+        
+        public void TestLevel()
+        {
+            sceneLoaded += AsyncTestLevel;
+            dataLoaded = sceneEditor.TestLevel();
+            /*dataLoaded = sceneEditor.TestLevel();
+            Debug.Log(dataLoaded);
+            m_Level.LoadLevel(dataLoaded); */
+        }
+
+        private void AsyncTestLevel(Scene scene, LoadSceneMode mode)
+        {
+            Debug.Log(dataLoaded);
+            m_Level.LoadLevel(dataLoaded);
+            
+            sceneLoaded -= AsyncTestLevel;
         }
 
 
@@ -106,12 +132,21 @@ namespace Archi.Service
         {
         }
 
-        public void SaveData()
+        public void SaveData(string name)
         {
             Debug.Log("Tool service clicked");
-            sceneEditor.SaveData();
+            sceneEditor.SaveData(name);
         }
 
+        public void ToggleLevelElements()
+        {
+            sceneEditor.ToggleLevelElements();
+        }
+
+        public void ChangeCameraAngle()
+        {
+            sceneEditor.ChangeCameraAngle();
+        }
         #endregion
     }
 }

@@ -17,6 +17,8 @@ namespace Archi.Service
         [DependeOnService] private IToolService m_Tool;
         [DependeOnService] private IDataBaseService m_data;
 
+        private LoadingScreen loadingScreen;
+
         private readonly Dictionary<Enums.MajorCanvas, string> canvasAddress = new()
         {
             {Enums.MajorCanvas.menu, "MainMenuCanvas"},
@@ -29,6 +31,16 @@ namespace Archi.Service
         protected override void Initialize()
         {
             SceneManager.sceneLoaded += OnSceneInit;
+            AdresseHelper.LoadAssetWithCallback<GameObject>("LoadingCanvas",SetupLoading);
+        }
+
+        void SetupLoading(GameObject obj)
+        {
+            var go = Object.Instantiate(obj);
+            loadingScreen = go.GetComponent<LoadingScreen>();
+            if (!loadingScreen) throw new MissingMemberException($"{loadingScreen} havn't LoadingScreen Script");
+            Object.DontDestroyOnLoad(go);
+            go.SetActive(false);
         }
 
         private void OnSceneInit(Scene scene, LoadSceneMode sceneMode)
@@ -63,7 +75,8 @@ namespace Archi.Service
 
         public void GenerateLoadingScreen(string loadingName, float loadingMaxValue)
         {
-            throw new System.NotImplementedException();
+            loadingScreen.gameObject.SetActive(true);
+            loadingScreen.SetLoader(loadingName, loadingMaxValue);
         }
 
         public void UpdateLoadingScreen(float progressValue)
@@ -73,7 +86,7 @@ namespace Archi.Service
 
         public void HideLoadingScreen()
         {
-            throw new System.NotImplementedException();
+            loadingScreen.gameObject.SetActive(false);
         }
     }
 }

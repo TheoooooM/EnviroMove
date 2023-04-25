@@ -1,8 +1,10 @@
 using Archi.Service.Interface;
 using Attributes;
 using Levels;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using LevelData = Levels.LevelData;
 
 namespace UI.Canvas
@@ -10,6 +12,7 @@ namespace UI.Canvas
     public class ToolUtilities : CanvasUtilities
     {
         [ServiceDependency] private IToolService m_Tool;
+        [SerializeField] private TMP_InputField inputField;
 
         public override void Init() { }
         
@@ -17,6 +20,11 @@ namespace UI.Canvas
         {    
             SceneManager.LoadScene("Tool");
             m_Tool.ShowTool();
+        }
+
+        public void ReturnButton()
+        {
+            m_Tool.ShowLevels();
         }
     
         public void ChangePrefab(int index)
@@ -31,13 +39,30 @@ namespace UI.Canvas
 
         public void SaveDatas()
         {
-            Debug.Log("Button clicked");
-            m_Tool.SaveData();
+            m_Tool.SaveData(inputField.text);
         }
         
         public void SwitchMode(int index)
         {
             m_Tool.SwitchMode(index);
+        }
+        
+        public void TestLevel(string sceneName)
+        {
+            ChangeScene(sceneName);
+            m_Tool.TestLevel();
+            m_Tool.SetServiceState(false);
+            SceneManager.sceneLoaded += (_,_) => m_Tool.TestLevel();
+        }
+
+        public void ToggleLevelElements()
+        {
+            m_Tool.ToggleLevelElements();
+        }
+
+        public void ChangeCameraAngle()
+        {
+            m_Tool.ChangeCameraAngle();
         }
     }
 }

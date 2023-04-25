@@ -24,10 +24,5 @@ namespace UI.Canvas
         {
             m_Tool.ShowLevels();
         }
-        
-        public void SaveData()
-        {
-            m_Tool.SaveData();
-        }
     }
 }

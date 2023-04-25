@@ -11,7 +11,7 @@ namespace Archi.Service
     public class LevelService : Service, ILevelService
     {
         [DependeOnService] private IInterfaceService m_Interface;
-        
+
         protected override void Initialize()
         {
             SceneManager.sceneLoaded += OnSceneInit;
@@ -28,17 +28,24 @@ namespace Archi.Service
 
         public Level LoadLevel(LevelData data, GameObject levelContainer = null)
         {
+            m_Interface.GenerateLoadingScreen("Load Level", 1);
             Level level;
             if (levelContainer) level = levelContainer.AddComponent<Level>();
             else
             {
-                var go = Object.Instantiate(new());
+                var go = Object.Instantiate(new GameObject());
                 level = go.AddComponent<Level>();
             }
-            
+            SetObjectDependencies(level);
+            level.onFinishGenerate += OnLoadLevel;
             level.levelData = data;
             level.GenerateLevel(data);
             return level;
+        }
+
+        void OnLoadLevel()
+        {
+           m_Interface.HideLoadingScreen(); 
         }
 
         public LevelData GetData(Level level)
