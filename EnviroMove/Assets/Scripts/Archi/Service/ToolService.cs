@@ -44,7 +44,7 @@ namespace Archi.Service
         private void OnLoadSceneCompleted(Scene scene, LoadSceneMode mode)
         {
             m_Interface.DrawCanvas(Enums.MajorCanvas.tool);
-            sceneEditor = new SceneEditor();
+            sceneEditor ??= new SceneEditor();
             SetObjectDependencies(sceneEditor);
             m_Tick.OnUpdate += sceneEditor.Update;
             if (dataLoaded != null)
