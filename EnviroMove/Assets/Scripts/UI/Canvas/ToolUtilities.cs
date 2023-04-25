@@ -59,5 +59,10 @@ namespace UI.Canvas
         {
             m_Tool.ToggleLevelElements();
         }
+
+        public void ChangeCameraAngle()
+        {
+            m_Tool.ChangeCameraAngle();
+        }
     }
 }

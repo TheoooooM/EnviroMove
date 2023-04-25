@@ -137,6 +137,11 @@ namespace Archi.Service
         {
             sceneEditor.ToggleLevelElements();
         }
+
+        public void ChangeCameraAngle()
+        {
+            sceneEditor.ChangeCameraAngle();
+        }
         #endregion
     }
 }
