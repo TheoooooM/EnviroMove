@@ -86,6 +86,9 @@ namespace Levels
 
         static int[,,] BlockEnumerable(IEnumerable<int> sequenceToRead, Vector3Int arraySize)
         {
+            if(sequenceToRead == null) {Debug.LogError("Missing Sequence To Read");
+                return new int[arraySize.x, arraySize.y, arraySize.z];
+            }
             IEnumerator<int> sequenceEnumerator = sequenceToRead.GetEnumerator();
             Vector3Int position = Vector3Int.zero;
             int[,,] array3 = new int[arraySize.x, arraySize.y, arraySize.z];

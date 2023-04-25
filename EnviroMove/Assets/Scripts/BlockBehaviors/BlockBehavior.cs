@@ -9,7 +9,7 @@ namespace BlockBehaviors
     public class BlockBehavior : MonoBehaviour, IBoardable
     {
         protected Vector3Int boardPos;
-        
+        protected Enums.Side boardRotation;
         protected IBoard boardMaster;
 
         protected BlockDelegate onMoveFinish;
@@ -23,6 +23,8 @@ namespace BlockBehaviors
         public virtual void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board)
         {
             this.boardPos = boardPos;
+            if (boardRotation == Enums.Side.none) this.boardRotation = Enums.Side.forward; 
+            else this.boardRotation = boardRotation;
             boardMaster = board;
         }
 
@@ -36,7 +38,7 @@ namespace BlockBehaviors
             return false;
         }
 
-        public void StartBoard()
+        public virtual void StartBoard()
         { }
 
         public void MoveToPoint(Vector3 newPos, float speed)
@@ -46,7 +48,7 @@ namespace BlockBehaviors
         
         public void StopCoroutineAction()
         {
-            StopCoroutine(_actionCoroutine);
+            if(_actionCoroutine != null)StopCoroutine(_actionCoroutine);
         }
         
         public IEnumerator MoveToPosition(Vector3 newPos, float speed)

@@ -93,7 +93,6 @@ namespace Levels
                   Debug.Log($"blockGrid: {data.blockGrid[currentPos.x, currentPos.y, currentPos.z]}");
                   Debug.Log($"Block use: {_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]]}");
                   */
-                  Debug.Log($"currentPos:{currentPos}, blockIndex:{data.blockGrid[currentPos.x, currentPos.y, currentPos.z]},");
                   if (_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]] == null)
                   {
                      if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] == (int)Enums.blockType.playerEnd) _destinationPos = currentPos;
@@ -116,10 +115,7 @@ namespace Levels
          onFinishGenerate?.Invoke();
       }
 
-      public IBoardable GetNeighbor(Vector3Int boardPos, Enums.Side side)
-      {
-         return GetNeighbor(boardPos, side, out _);
-      }
+      
 
       Vector3Int GetPosition(IBoardable boardable)
       {
@@ -137,26 +133,31 @@ namespace Levels
          throw new NullReferenceException($"{name} board Doesn't Countain {boardable}");
       }
       
-      IBoardable GetNeighbor(Vector3Int boardPos, Enums.Side side, out Vector3Int neighborPos)
+      public IBoardable GetNeighbor(Vector3Int boardPos, Enums.Side side, out bool boardLimit)
+      {
+         return GetNeighbor(boardPos, side, out boardLimit, out _);
+      }
+      
+      public IBoardable GetNeighbor(Vector3Int boardPos, Enums.Side side, out bool boardLimit, out Vector3Int neighborPos)
       {
          neighborPos = boardPos;
+         boardLimit = false;
          switch (side)
          {
             case Enums.Side.forward:
-               if (boardPos.z + 1 == _board.GetLength(2)) return null;
+               if (boardPos.z + 1 == _board.GetLength(2)) { boardLimit = false; return null;}
                neighborPos = new Vector3Int(boardPos.x, boardPos.y, boardPos.z + 1);
                return _board[neighborPos.x, neighborPos.y, neighborPos.z];
             case Enums.Side.left:
-               if (boardPos.x + 1 == _board.GetLength(0)) return null;
+               if (boardPos.x + 1 == _board.GetLength(0)) { boardLimit = false; return null;}
                neighborPos = new Vector3Int(boardPos.x - 1, boardPos.y, boardPos.z);
                return _board[neighborPos.x, neighborPos.y, neighborPos.z];
             case Enums.Side.right:
-               if (boardPos.x == 0) return null;
+               if (boardPos.x == 0) { boardLimit = false; return null;}
                neighborPos = new Vector3Int(boardPos.x + 1, boardPos.y, boardPos.z);
                return _board[neighborPos.x, neighborPos.y, neighborPos.z];
-               break;
             case Enums.Side.back:
-               if (boardPos.z == 0) return null;
+               if (boardPos.z == 0) { boardLimit = false; return null;}
                neighborPos = new Vector3Int(boardPos.x, boardPos.y, boardPos.z - 1);
                return _board[neighborPos.x, neighborPos.y, neighborPos.z];
             default:
@@ -182,6 +183,25 @@ namespace Levels
          throw new NotImplementedException();
       }
 
+      public void Move(IBoardable boardable, Vector3Int position)
+      {
+         for (int z = 0; z < _board.GetLength(2); z++)
+         {
+            for (int y = 0; y < _board.GetLength(1); y++)
+            {
+               for (int x = 0; x < _board.GetLength(0); x++)
+               {
+                  if (_board[x, y, z] == boardable)
+                  {
+                     _board[position.x, position.y, position.z] = _board[x, y, z];
+                     _board[position.x, position.y, position.z].SetPosition(position);
+                     _board[x, y, z] = null;
+                  }
+               }
+            }
+         }
+      }
+
       public void RemoveBoardable(IBoardable boardable)
       {
          var pos = GetPosition(boardable);
@@ -189,13 +209,16 @@ namespace Levels
          Debug.Log($"Remove Boardable At {pos}");
       }
 
+      public Vector3 GetWorldPos(Vector3Int boardPos) => transform.position+boardPos;
+
       public Enums.Side GetPlayerDirection(Vector3Int pos)=>_playerDirBoard[pos.x, pos.y, pos.z];
 
       public bool TryMove(Vector3Int boardablePosition, Enums.Side side, out Vector3 position)
       {
          position = transform.position + boardablePosition;
          var mover = _board[boardablePosition.x, boardablePosition.y, boardablePosition.z];
-         IBoardable neighboor = GetNeighbor(boardablePosition, side, out Vector3Int neighborPos);
+         IBoardable neighboor = GetNeighbor(boardablePosition, side, out bool boardLimit, out Vector3Int neighborPos);
+         if (boardLimit) return false;
          if (neighboor != null)
          {
             if(!neighboor.TryMoveOn(mover, Enums.InverseSide(side))) return false;
