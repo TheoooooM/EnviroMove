@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using Archi.Service.Interface;
@@ -35,7 +35,8 @@ namespace Archi.Service
             infoPath = $"{Application.persistentDataPath}/SaveData/Infos/";
 
            dbReference = FirebaseDatabase.DefaultInstance.RootReference;
-            
+
+           //dbReference.Child("Levels").RemoveValueAsync();
             container.Init(this);
         }
 
