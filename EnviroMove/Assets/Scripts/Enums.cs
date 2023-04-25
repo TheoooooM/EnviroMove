@@ -23,7 +23,6 @@ public class Enums
         throw new ArgumentOutOfRangeException(nameof(side), side, null);
     }
   }
-
   public static Side[,,] IntToSideArray(int[,,] array)
   {
     Side[,,] sideArray = new Side[array.GetLength(0), array.GetLength(1), array.GetLength(2)];
@@ -40,7 +39,6 @@ public class Enums
 
     return sideArray;
   }
-  
   public static int[,,] SideToIntArray(Side[,,] array)
   {
     int[,,] intArray = new int[array.GetLength(0), array.GetLength(1), array.GetLength(2)];
@@ -62,7 +60,6 @@ public class Enums
 
     return intArray;
   }
-
   public static Vector3[,,] SideToVector3Array(Side[,,] array)
   {
     Vector3[,,] vectorArray = new Vector3[array.GetLength(0), array.GetLength(1), array.GetLength(2)];
@@ -79,8 +76,6 @@ public class Enums
 
     return vectorArray;
   }
-  
-  
   public static Vector3 SideVector3(Side side)
   {
     switch (side)
