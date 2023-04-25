@@ -366,6 +366,22 @@ public class SceneEditor
         parent.SetActive(!parent.activeSelf);
     }
 
+    public void ChangeCameraAngle()
+    {
+        if (_camera.orthographic)
+        {
+            _camera.orthographic = false;
+            _camera.transform.position = new Vector3(_camera.transform.position.x, _camera.transform.position.y, _camera.transform.position.z - 10);
+            _camera.transform.rotation = Quaternion.Euler(80, 0, 0);
+        }
+        else
+        {
+            _camera.orthographic = true;
+            _camera.transform.position = new Vector3(_camera.transform.position.x, _camera.transform.position.y, _camera.transform.position.z + 10);
+            _camera.transform.rotation = Quaternion.Euler(90, 0, 0);
+        }
+    }
+
     private void VerticalRotation()
     {
         if (IsPointerOverUIObject()) return;
