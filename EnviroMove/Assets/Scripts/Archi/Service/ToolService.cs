@@ -24,6 +24,11 @@ namespace Archi.Service
 
         public void ShowLevels()
         {
+            if (sceneEditor != null)
+            {
+                m_Tick.OnUpdate -= sceneEditor.Update;
+                sceneEditor = null;
+            }
             LoadScene("LevelSelector");
             sceneLoaded += OnLevelSelectorLoad;
         }
