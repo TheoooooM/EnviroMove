@@ -40,6 +40,10 @@ public class SceneEditor
     public List<string> blocksUsed;
     public LevelData data;
     
+    //LevelDataList
+    public int[,] levelGridPosition;
+    public List<LevelData> levelDataList;
+    
     //Path
     public Enums.Side[,,] directionGrid;
 
@@ -218,21 +222,31 @@ public class SceneEditor
         position.y = Mathf.Round(position.y / sizeOfGridSpace) * sizeOfGridSpace;
         position.z = Mathf.Round(position.z / sizeOfGridSpace) * sizeOfGridSpace;
         if (position.x < 0 || position.x >= size.x || position.y < 0 || position.y >= size.y || position.z < 0 || position.z >= size.z) return;
-        var blockPlacedAddress = Blocks.BlockType[(Enums.blockType)selectedPrefabIndex];
-        if(!blocksUsed.Contains(blockPlacedAddress)) blocksUsed.Add(blockPlacedAddress);
         var newGo = Object.Instantiate(selectedPrefab, position, Quaternion.identity);
-        if (selectedPrefab == prefabs[11])
+        
+        switch (selectedPrefabIndex)
         {
-            directionGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
-            newGo.name = "directionBlock";
-            return;
+            case 6:
+                Debug.Log("case 6 block below: " + blockGrid[(int)position.x, (int)position.y - 1, (int)position.z]);
+                if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] != 1)
+                {
+                    Object.Destroy(newGo);
+                    return;
+                }
+                break;
+            case 11:
+                directionGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
+                newGo.name = "directionBlock";
+                return;
         }
         newGo.transform.parent = parent.transform;
+        
+        
+        var blockPlacedAddress = Blocks.BlockType[(Enums.blockType)selectedPrefabIndex];
+        if(!blocksUsed.Contains(blockPlacedAddress)) blocksUsed.Add(blockPlacedAddress);
         blockGrid[(int)position.x, (int)position.y, (int)position.z] = selectedPrefabIndex;
-        Debug.Log("Block Placed");
-        Debug.Log("blockGrid[" + (int)position.x + "," + (int)position.y + "," + (int)position.z + "] = " + selectedPrefabIndex);
-        blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = 0;
-        blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = 0;
+        blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
+        blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
     }
 
     private void Delete()
@@ -312,9 +326,7 @@ public class SceneEditor
         blocksUsed = new List<string>(dataToLoad.blocksUsed);
         blocksUsed.ForEach(x => Debug.Log(x));
         blockGrid = dataToLoad.blockGrid;
-        Debug.Log("size of blockHorizontalRotationGrid: " + blockHorizontalRotationGrid.GetLength(0) + " " + blockHorizontalRotationGrid.GetLength(1) + " " + blockHorizontalRotationGrid.GetLength(2));
-        Debug.Log("size of blockVerticalRotationGrid: " + blockVerticalRotationGrid.GetLength(0) + " " + blockVerticalRotationGrid.GetLength(1) + " " + blockVerticalRotationGrid.GetLength(2));
-        Debug.Log("size of blockGrid: " + blockGrid.GetLength(0) + " " + blockGrid.GetLength(1) + " " + blockGrid.GetLength(2));
+        directionGrid = Enums.IntToSideArray(dataToLoad.playerDir);
         blockHorizontalRotationGrid = Enums.IntToSideArray(dataToLoad.blockHorizontalRotationGrid);
         blockVerticalRotationGrid = Enums.IntToSideArray(dataToLoad.blockVerticalRotationGrid);
         for (int z = 0; z < blockGrid.GetLength(2); z++)
@@ -323,14 +335,20 @@ public class SceneEditor
             {
                 for (int x = 0; x < blockGrid.GetLength(0); x++)
                 {
-                    Debug.Log("x= " + x + " y= " + y + " z= " + z + " blockGrid[x, y, z]= " + blockGrid[x, y, z]);
                     if (blockGrid[x, y, z] == 0) continue;
-                    Debug.Log("prefabs[" + blockGrid[x, y, z] + "]");
                     int prefabIndex = blockGrid[x, y, z];
-                    var block = UnityEngine.Object.Instantiate(prefabs[prefabIndex/*blockGrid[x, y, z]*/], new Vector3(x, y, z), Quaternion.identity);
-                    block.transform.Rotate(Enums.SideVector3(blockHorizontalRotationGrid[x, y, z]));
-                    block.transform.Rotate(Enums.SideVector3(blockVerticalRotationGrid[x, y, z]));
+                    var block = Object.Instantiate(prefabs[prefabIndex/*blockGrid[x, y, z]*/], new Vector3(x, y, z), Quaternion.identity);
+                    if (blockHorizontalRotationGrid[x, y, z] != Enums.Side.none) Debug.Log("Rotate" + blockHorizontalRotationGrid[x, y, z]);
+                    if (blockVerticalRotationGrid[x, y, z] != Enums.Side.none) Debug.Log("Rotate" + blockHorizontalRotationGrid[x, y, z]);
+                    block.transform.Rotate(Enums.SideVector3(blockHorizontalRotationGrid[x, y, z])*90f);
+                    block.transform.Rotate(Enums.SideVector3(blockVerticalRotationGrid[x, y, z])*90f);
                     block.transform.parent = parent.transform;
+                    if(directionGrid[x, y, z] != Enums.Side.none)
+                    {
+                        var directionBlock = Object.Instantiate(prefabs[11], new Vector3(x, y, z), Quaternion.identity);
+                        directionBlock.transform.Rotate(Enums.SideVector3(directionGrid[x, y, z]));
+                        directionBlock.transform.parent = parent.transform;
+                    }
                 }
             }
         }
@@ -341,6 +359,11 @@ public class SceneEditor
         {
             Object.Destroy(child.gameObject);
         }
+    }
+
+    public void ToggleLevelElements()
+    {
+        parent.SetActive(!parent.activeSelf);
     }
 
     private void VerticalRotation()
@@ -369,17 +392,18 @@ public class SceneEditor
                 hitRay.transform.Rotate(0, 0, 90);
                 return;
             }
+            var blockPosition = hitRay.transform.position;
+            blockVerticalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] =
+                blockVerticalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] switch
+                {
+                    Enums.Side.forward => Enums.Side.up,
+                    Enums.Side.up => Enums.Side.back,
+                    Enums.Side.back => Enums.Side.down,
+                    Enums.Side.down => Enums.Side.forward,
+                    _ => blockVerticalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z]
+                };
+            Debug.Log("blockVerticalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] = " + blockVerticalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z]);
         }
-        var blockPosition = hitRay.transform.position;
-        blockVerticalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] =
-            blockVerticalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] switch
-            {
-                Enums.Side.forward => Enums.Side.up,
-                Enums.Side.up => Enums.Side.back,
-                Enums.Side.back => Enums.Side.down,
-                Enums.Side.down => Enums.Side.forward,
-                _ => blockVerticalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z]
-            };
     }
 
     private void HorizontalRotation()
@@ -418,6 +442,7 @@ public class SceneEditor
                 Enums.Side.left => Enums.Side.forward,
                 _ => blockHorizontalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z]
             };
+        Debug.Log("blockHorizontalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] = " + blockHorizontalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z]);
     }
 
     public void ChangePrefab(int index)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Google.MiniJSON;
+using Levels;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Random = UnityEngine.Random;
@@ -17,11 +18,12 @@ namespace Levels
         public int[] blockEnumerable;
         public string[] blocksUsed; //lock Address from Addressable
         public int[,,] blockHorizontalRotationGrid;
-        private int[] _blockHorizontalRotationEnumerable;
+        public int[] _blockHorizontalRotationEnumerable;
         public int[,,] blockVerticalRotationGrid;
-        private int[] _blockVerticalRotationEnumerable;
+        public int[] _blockVerticalRotationEnumerable;
         public int[,,] playerDir;
         public int[] playerDirEnumerable;
+        public int[,] levelGridPosition;
         
 
         public LevelData(Vector3Int size, int[] blockEnumerable, string[] levelBlocksUsed, int[,,] blockHorizontalRotationGrid, int[,,] blockVerticalRotationGrid)
@@ -46,7 +48,6 @@ namespace Levels
             playerDir = Vector3ToSideArray(playerDirGrid);
             playerDirEnumerable = From3DTo1DArray(playerDir);
         }
-
 
         public LevelData(bool random)
         {
@@ -167,5 +168,26 @@ namespace Levels
             level.playerDir = BlockEnumerable(level.playerDirEnumerable, level.size);
             return level;
         }
+    }
+}
+
+public class ListOfLevelData
+{
+    public List<LevelData> levels = new List<LevelData>();
+
+
+    public void AddLevelDataToList(LevelData levelData)
+    {
+        levels.Add(levelData);
+    }
+
+    public static explicit operator string(ListOfLevelData listOfLevelData)
+    {
+        return JsonUtility.ToJson(listOfLevelData);
+    }
+
+    public static explicit operator ListOfLevelData(string listOfLevelData)
+    {
+        return JsonUtility.FromJson(listOfLevelData, typeof(ListOfLevelData)) as ListOfLevelData;
     }
 }

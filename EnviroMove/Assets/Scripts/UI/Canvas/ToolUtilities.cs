@@ -54,5 +54,10 @@ namespace UI.Canvas
             m_Tool.SetServiceState(false);
             SceneManager.sceneLoaded += (_,_) => m_Tool.TestLevel();
         }
+
+        public void ToggleLevelElements()
+        {
+            m_Tool.ToggleLevelElements();
+        }
     }
 }
