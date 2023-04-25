@@ -121,6 +121,7 @@ public class SceneEditor
 
     public void Update()
     {
+        Debug.Log("Update SceneEditor");
         if (_camera == null) _camera = Camera.main;
         if (parent == null) parent = new GameObject();
         // if (directionGrid != null)
