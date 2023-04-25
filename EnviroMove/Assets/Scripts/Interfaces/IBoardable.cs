@@ -15,7 +15,7 @@ namespace Interfaces
         bool TryMoveOn(IBoardable move, Enums.Side commingSide);
 
         void StopCoroutineAction();
-        public void MoveToPoint(Vector3 newPos, float speed);
+        public void MoveToPoint(Vector3 newPos, float speed = 0);
 
         public void StartBoard();
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BlockBehaviors
 {
-    public class FrogBehavior : BlockBehavior, IInteractable
+    public class FrogBehavior : InteractiveBlockBehavior, IInteractable
     {
 
         [SerializeField] private GameObject tongue;
@@ -17,22 +17,26 @@ namespace BlockBehaviors
         
         private bool isInteractable = true;
 
-        public bool IsInteractible() => isInteractable; 
+        public override bool IsInteractible() => isInteractable; 
         
-        public void Select()
+        public override void Select()
         {
-            isInteractable = false;
-            tonguePos = boardPos;
-            onTongueMoveFinish += Grab;
-            tongue.SetActive(true);
-            Grab();
+            if(!onCD)
+            {
+                isInteractable = false;
+                tonguePos = boardPos;
+                onTongueMoveFinish += Grab;
+                tongue.SetActive(true);
+                StartCoroutine(Cooldown());
+                Grab();
+            }
             
         }
-        public void Deselect()
+        public override void Deselect()
         {
             //throw new System.NotImplementedException();
         }
-        public void Swipe(Enums.Side side)
+        public override void Swipe(Enums.Side side)
         {
             //throw new System.NotImplementedException();
         }
