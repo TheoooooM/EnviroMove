@@ -14,6 +14,8 @@ public class Player : MonoBehaviour, IBoardable
     private Enums.Side _lastDir = Enums.Side.forward;
     private bool _moving;
     private basicDelegate _onMoveFinish;
+
+    [SerializeField] private float startDelay = 2;
     
     [SerializeField] private float moveSpeed;
     private Coroutine _actionCoroutine;
@@ -85,6 +87,12 @@ public class Player : MonoBehaviour, IBoardable
 
     public void StartBoard()
     {
+        StartCoroutine(DelayStart());
+    }
+
+    IEnumerator DelayStart()
+    {
+        yield return new WaitForSeconds(startDelay);
         Move();
         _onMoveFinish += Move;
     }
