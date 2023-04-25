@@ -4,13 +4,9 @@ using Archi.Service.Interface;
 using Attributes;
 using Levels;
 using TMPro;
-using UnityEditor;
-using UnityEditor.AddressableAssets.Build.BuildPipelineTasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 #if UNITY_STANDALONE && !UNITY_EDITOR
 using JsonUtility = UnityEngine.JsonUtility;
 #endif
@@ -149,9 +145,6 @@ public class SceneEditor
                 break;
             case EditorMode.moveCamera:
                 MoveCamera();
-                break;
-            case EditorMode.snapMode:
-                SelectionBox();
                 break;
             case EditorMode.horizontalRotation:
                 HorizontalRotation();
