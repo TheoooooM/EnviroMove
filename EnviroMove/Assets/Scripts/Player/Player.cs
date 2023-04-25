@@ -48,7 +48,7 @@ public class Player : MonoBehaviour, IBoardable
 
     public void MoveToPoint(Vector3 newPos, float speed)
     {
-        _actionCoroutine = StartCoroutine(MoveToPosition(newPos, moveSpeed));
+        _actionCoroutine = StartCoroutine(MoveToPosition(newPos, speed));
     }
     
     public IEnumerator MoveToPosition(Vector3 newPos, float speed)
