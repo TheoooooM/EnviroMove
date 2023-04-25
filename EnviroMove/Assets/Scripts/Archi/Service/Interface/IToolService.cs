@@ -24,5 +24,6 @@ namespace Archi.Service.Interface
 
         public void SaveData(string name);
         public void TestLevel();
+        void ToggleLevelElements();
     }
 }

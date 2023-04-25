@@ -361,6 +361,11 @@ public class SceneEditor
         }
     }
 
+    public void ToggleLevelElements()
+    {
+        parent.SetActive(!parent.activeSelf);
+    }
+
     private void VerticalRotation()
     {
         if (IsPointerOverUIObject()) return;
