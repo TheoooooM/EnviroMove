@@ -21,9 +21,10 @@ namespace Archi.Service.Interface
         public void ChangeMoveCamera();
 
         public void PlaceBlock(int indexBlock);
-
-        public void SaveData(string name);
-        public void TestLevel();
+        
+        
+        //public void SaveData(string name);
+        //public void TestLevel();
         void ToggleLevelElements();
         void ChangeCameraAngle();
     }

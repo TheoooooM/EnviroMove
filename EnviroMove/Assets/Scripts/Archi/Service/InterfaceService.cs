@@ -14,6 +14,7 @@ namespace Archi.Service
     public class InterfaceService : Service, IInterfaceService
     {
         [DependeOnService] private IGameService m_Game;
+        [DependeOnService] private ILevelService m_Level;
         [DependeOnService] private IToolService m_Tool;
         [DependeOnService] private IDataBaseService m_data;
 

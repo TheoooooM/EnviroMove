@@ -9,6 +9,8 @@ namespace Archi.Service.Interface
     {
         public string LevelPath();
         public string InfoPath();
+
+        public void SetUsername(string name);
         
         string[] GetAllLevels();
         LevelInfo[] GetAllLevelInfos();

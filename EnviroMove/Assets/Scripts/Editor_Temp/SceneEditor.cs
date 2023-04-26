@@ -289,6 +289,13 @@ public class SceneEditor
         m_Data.GenerateDataLevel(data, name);
     }
 
+    public LevelData GetData()
+    {
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray(), Enums.SideToIntArray(blockHorizontalRotationGrid), Enums.SideToIntArray(blockVerticalRotationGrid),Enums.SideToVector3Array(directionGrid));
+        curentLevelData = data;
+        return data;
+    }
+
     public LevelData TestLevel()
     {
         // if (!hasStartAndEnd()) return null;

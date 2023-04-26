@@ -42,6 +42,8 @@ namespace Archi.Service
 
         public string LevelPath() {return levelPath;}
         public string InfoPath() {return infoPath;}
+        
+        public void SetUsername(string name)=>PlayerPrefs.SetString("Username", name);
 
         /// <summary>
         /// Get All Levels on the DataBase
@@ -95,6 +97,7 @@ namespace Archi.Service
         {
             string username = PlayerPrefs.GetString("Username");
             if (username == string.Empty) username = "unnamed";
+            Debug.Log($"username:{username}, id:{id}, data:{data}");
            dbReference.Child("Levels").Child(username).Child(id).SetRawJsonValueAsync(data);
         }
 
@@ -114,6 +117,9 @@ namespace Archi.Service
         /// <exception cref="NotImplementedException"></exception>
         public void UpdateData()
         {
+            //dbReference.Child("Levels").;
+            
+            
             throw new System.NotImplementedException();
         }
 
@@ -125,6 +131,8 @@ namespace Archi.Service
         public void GenerateDataLevel(LevelData data, string levelName = "unnamed")
         {
             if (data.id == default) data.id = GetUniqueIdentifier();
+            data.levelName = levelName;
+            data.creator = PlayerPrefs.GetString("Username");
             string currentLevelPath =  $"{levelPath}{data.id}.json";
             FileStream ft = File.Create(currentLevelPath);
             ft.Close();
@@ -132,7 +140,7 @@ namespace Archi.Service
             tw.WriteLine((string)data);
             tw.Close();
            
-            CreateData((string)data, data.id);
+            //CreateData((string)data, data.id);
             
             string currentInfoPath =  $"{infoPath}{data.id}.json";
             Debug.Log($"Save At {currentInfoPath}");

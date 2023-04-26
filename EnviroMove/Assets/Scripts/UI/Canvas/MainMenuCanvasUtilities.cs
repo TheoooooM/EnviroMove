@@ -1,6 +1,8 @@
 using Archi.Service.Interface;
 using Attributes;
+using TMPro;
 using UnityEditor;
+using UnityEngine;
 
 namespace UI.Canvas
 {
@@ -8,6 +10,9 @@ namespace UI.Canvas
     {
         [ServiceDependency] IToolService m_Tool;
         [ServiceDependency] IDataBaseService m_Data;
+        
+        
+        [SerializeField] private TMP_InputField inputField;
         
         public override void Init()
         {
@@ -23,6 +28,11 @@ namespace UI.Canvas
         public void ShowLevelSelector()
         {
             m_Tool.ShowLevels();
+        }
+
+        public void SetUsername()
+        {
+            if(inputField.text != "")m_Data.SetUsername(inputField.text);
         }
     }
 }

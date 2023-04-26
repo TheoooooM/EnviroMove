@@ -14,9 +14,11 @@ namespace BDD
     public class DataContainer
     {
         public List<LevelInfo> allInfoDatas = new ();
+        private IDataBaseService dataBase;
 
-        public void Init(IDataBaseService dataBase) // Récupère tout les LevelInfo
+        public void Init(IDataBaseService dataBaseReference) // Récupère tout les LevelInfo
         {
+            dataBase = dataBaseReference;
             var infoPaths = Directory.GetFiles(dataBase.InfoPath());
 
             foreach (var infoPath in infoPaths)
@@ -26,6 +28,17 @@ namespace BDD
             }
             Debug.Log($"Load {allInfoDatas.Count} infos");
             
+        }
+
+        public void UpdateDatas()
+        {
+            var infoPaths = Directory.GetFiles(dataBase.InfoPath());
+
+            foreach (var infoPath in infoPaths)
+            {
+                LevelInfo info = JsonUtility.FromJson<LevelInfo>(File.ReadAllText(infoPath));
+                if(!allInfoDatas.Contains(info)) allInfoDatas.Add(info);
+            }
         }
     }
 }

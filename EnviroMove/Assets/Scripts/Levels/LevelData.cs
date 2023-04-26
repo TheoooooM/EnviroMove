@@ -24,6 +24,8 @@ namespace Levels
         public int[,,] playerDir;
         public int[] playerDirEnumerable;
         public int[,] levelGridPosition;
+        public string levelName;
+        public string creator;
         
 
         public LevelData(Vector3Int size, int[] blockEnumerable, string[] levelBlocksUsed, int[,,] blockHorizontalRotationGrid, int[,,] blockVerticalRotationGrid)

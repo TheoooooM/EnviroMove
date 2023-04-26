@@ -1,4 +1,4 @@
-﻿using Archi.Service.Interface;
+using Archi.Service.Interface;
 using Attributes;
 using Levels;
 using UnityEditor;
@@ -74,7 +74,7 @@ namespace Archi.Service
 
         public LevelData GetDataCreation()
         {
-            throw new System.NotImplementedException();
+            return sceneEditor.GetData();
         }
 
         private LevelData dataLoaded;
