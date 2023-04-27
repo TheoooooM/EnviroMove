@@ -4,6 +4,7 @@ using Archi.Service.Interface;
 using Attributes;
 using Levels;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
@@ -380,7 +381,11 @@ public class SceneEditor
 
     public void ToggleLevelElements()
     {
-        parent.SetActive(!parent.activeSelf);
+        foreach (Transform child in parent.transform)
+        {
+            if (child.gameObject.name == "Ground(Clone)") continue;
+            child.gameObject.SetActive(!child.gameObject.activeSelf);
+        }
     }
 
     public void ChangeCameraAngle()
