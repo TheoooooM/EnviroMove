@@ -121,7 +121,6 @@ public class SceneEditor
 
     public void Update()
     {
-        Debug.Log("Update SceneEditor");
         if (_camera == null) _camera = Camera.main;
         if (parent == null) parent = new GameObject();
         // if (directionGrid != null)
@@ -250,6 +249,16 @@ public class SceneEditor
         blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
     }
 
+    private void DragToChangeDirectionGrid()
+    {
+
+        if (Input.GetTouch(0).phase == TouchPhase.Moved)
+        {
+            
+        }
+
+    }
+
     private void Delete()
     {
         if (IsPointerOverUIObject() || 
@@ -286,8 +295,7 @@ public class SceneEditor
         data = new LevelData(size, blockGrid, blocksUsed.ToArray(), Enums.SideToIntArray(blockHorizontalRotationGrid), Enums.SideToIntArray(blockVerticalRotationGrid),Enums.SideToVector3Array(directionGrid));
         curentLevelData = data;
         Debug.Log("data: " + (string)data);
-        m_Data.GenerateDataLevel(data, name);
-    }
+     }
 
     public LevelData GetData()
     {
