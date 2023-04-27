@@ -93,7 +93,7 @@ public class Enums
 
   public enum blockType
   {
-    empty, ground, playerStart, playerEnd, box, breakableBlock, chariot, frog, ice, penguin, rabbit, directionBlock
+    empty, ground, playerStart, playerEnd, box, breakableBlock, chariot, frog, ice, penguin, rabbit, directionBlock, panelStart, panelEnd
   }
 
   public enum MajorCanvas

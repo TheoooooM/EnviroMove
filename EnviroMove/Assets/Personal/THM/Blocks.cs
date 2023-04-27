@@ -15,7 +15,9 @@ public struct Blocks
         { Enums.blockType.ice , "ice"},
         { Enums.blockType.penguin , "penguin"},
         { Enums.blockType.rabbit , "rabbit"},
-        { Enums.blockType.directionBlock, "ground8"}
+        { Enums.blockType.directionBlock, "ground8"},
+        { Enums.blockType.panelStart, "panelStart"},
+        { Enums.blockType.panelEnd, "panelEnd"}
     };
     
     public static readonly Dictionary<string,Enums.blockType> BlockAdressType = new()
@@ -31,6 +33,8 @@ public struct Blocks
         { "ice", Enums.blockType.ice},
         { "penguin", Enums.blockType.penguin},
         { "rabbit", Enums.blockType.rabbit},
-        { "ground8", Enums.blockType.directionBlock}
+        { "ground8", Enums.blockType.directionBlock},
+        { "panelStart", Enums.blockType.panelStart},
+        { "panelEnd", Enums.blockType.panelEnd}
     };
 }
