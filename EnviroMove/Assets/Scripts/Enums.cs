@@ -49,11 +49,11 @@ public class Enums
         for (int _x = 0; _x < array.GetLength(0); _x++)
         {
           intArray[_x, _y, _z] = (int)array[_x, _y, _z];
-          if (array[_x, _y, _z] != Side.none) UnityEngine.Debug.Log("SideToIntArray: " + array[_x, _y, _z]);
-          else
-          {
-            UnityEngine.Debug.Log("Side is none");
-          }
+          // if (array[_x, _y, _z] != Side.none) UnityEngine.Debug.Log("SideToIntArray: " + array[_x, _y, _z]);
+          // else
+          // {
+          //   UnityEngine.Debug.Log("Side is none");
+          // }
         }
       }
     }

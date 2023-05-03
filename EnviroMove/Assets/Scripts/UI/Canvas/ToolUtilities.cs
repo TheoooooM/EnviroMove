@@ -45,6 +45,7 @@ namespace UI.Canvas
         public void SaveDataOnDevice()
         {
             var data = m_Tool.GetDataCreation();
+            Debug.Log((string)data);
             m_data.GenerateDataLevel(data, inputField.text);
             //m_Tool.SaveData(inputField.text);
         }
