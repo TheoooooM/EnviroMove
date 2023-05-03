@@ -8,16 +8,9 @@ namespace BlockBehaviors
         private bool isInteractible = true;
 
         public bool IsInteractible() => isInteractible;
-
-        public void Select()
-        {
-            //throw new System.NotImplementedException();
-        }
-
-        public void Deselect()
-        {
-            //throw new System.NotImplementedException();
-        }
+        
+        public void Select() { }
+        public void Deselect(IBoardable releaseBoardable) { }
 
         public void Swipe(Enums.Side side)
         {

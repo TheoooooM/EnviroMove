@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Interfaces;
@@ -32,11 +33,14 @@ namespace BlockBehaviors
         {
             boardPos = newBoardPos;
         }
-
-        public virtual bool TryMoveOn(IBoardable move, Enums.Side commingSide)
+        
+        public virtual bool TryMoveOn(IBoardable move, Enums.Side commingSide, Vector3Int pos)
         {
             return false;
         }
+
+        public void AddOnFinishMove(Action<IBoardable> action)=>onMoveFinish += () => action?.Invoke(this);
+        public void RemoveOnFinishMove(Action<IBoardable> action) => onMoveFinish -= () => action?.Invoke(this);
 
         public virtual void StartBoard()
         { }

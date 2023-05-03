@@ -5,7 +5,7 @@
         bool IsInteractible(); 
    
         void Select();
-        void Deselect();
+        void Deselect(IBoardable releaseBoardable);
         void Swipe(Enums.Side side);
     }
 }

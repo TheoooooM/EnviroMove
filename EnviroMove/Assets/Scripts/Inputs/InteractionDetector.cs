@@ -28,7 +28,14 @@ namespace Inputs
             }
         }
 
-        void ReleasetouchEffect(Vector2 position)=>selectEntity?.Deselect();
+        void ReleasetouchEffect(Vector2 position)
+        {
+            IBoardable boardable = null;
+            Ray ray = Camera.main.ScreenPointToRay(position);
+            if(Physics.Raycast(ray, out RaycastHit hit)) boardable = hit.transform.GetComponent<IBoardable>();
+            selectEntity?.Deselect(boardable);
+        }
+
 
         void SwipEffect(Enums.Side side)=> selectEntity?.Swipe(side);
     }

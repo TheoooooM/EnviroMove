@@ -6,7 +6,7 @@ using UnityEngine;
 namespace BlockBehaviors
 {
     
-    public class BoxBehavior : BlockBehavior, IInteractable
+    public class BoxBehavior : InteractiveBlockBehavior
     {
         private Vector3 _startScale;
         bool isInteractible = true;
@@ -21,11 +21,11 @@ namespace BlockBehaviors
 
 
         public bool IsInteractible() => isInteractible;
-        public void Select()=>transform.localScale = _startScale * 1.2f;
-        public void Deselect()=>transform.localScale = _startScale;
+        public override void Select()=>transform.localScale = _startScale * 1.2f;
+        public override void Deselect(IBoardable releaseBoardable)=>transform.localScale = _startScale;
 
 
-        public void Swipe(Enums.Side side)
+        public override void Swipe(Enums.Side side)
         {
             isInteractible = false;
             if (boardMaster.TryMove(boardPos, side, out Vector3 newPos))

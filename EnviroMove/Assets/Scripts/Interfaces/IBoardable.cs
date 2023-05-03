@@ -12,7 +12,10 @@ namespace Interfaces
         public void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board);
         public void SetPosition(Vector3Int newBoardPos);
 
-        bool TryMoveOn(IBoardable move, Enums.Side commingSide);
+        bool TryMoveOn(IBoardable move, Enums.Side commingSide, Vector3Int pos);
+
+        void AddOnFinishMove(Action<IBoardable> action);
+        void RemoveOnFinishMove(Action<IBoardable> action);
 
         void StopCoroutineAction();
         public void MoveToPoint(Vector3 newPos, float speed = 0);

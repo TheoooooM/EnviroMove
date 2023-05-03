@@ -90,6 +90,21 @@ public class Enums
       default: throw new ArgumentOutOfRangeException(nameof(side), side, null);
     }
   }
+  
+  public static Vector3Int SideVector3Int(Side side)
+  {
+    switch (side)
+    {
+      case Side.none: return Vector3Int.zero;
+      case Side.forward: return Vector3Int.forward;
+      case Side.left: return Vector3Int.left;
+      case Side.right: return Vector3Int.right;
+      case Side.back: return Vector3Int.back;
+      case Side.up: return Vector3Int.up;
+      case Side.down: return Vector3Int.down;
+      default: throw new ArgumentOutOfRangeException(nameof(side), side, null);
+    }
+  }
 
   public enum blockType
   {
