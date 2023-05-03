@@ -232,9 +232,9 @@ public class SceneEditor
         position.x = Mathf.Round(position.x / sizeOfGridSpace) * sizeOfGridSpace;
         position.y = Mathf.Round(position.y / sizeOfGridSpace) * sizeOfGridSpace;
         position.z = Mathf.Round(position.z / sizeOfGridSpace) * sizeOfGridSpace;
-        if (blockHit == null || position.x < blockHit.transform.parent.transform.position.x || position.x >= blockHit.transform.parent.transform.position.x + size.x || 
-            position.y < blockHit.transform.parent.transform.position.y || position.y >= blockHit.transform.parent.transform.position.y + size.y || 
-            position.z < blockHit.transform.parent.transform.position.z || position.z >= blockHit.transform.parent.transform.position.z + size.z) return;
+        if (blockHit == null || position.x < blockHit.transform.position.x || position.x >= blockHit.transform.position.x + size.x || 
+            position.y < blockHit.transform.position.y || position.y >= blockHit.transform.position.y + size.y || 
+            position.z < blockHit.transform.position.z || position.z >= blockHit.transform.position.z + size.z) return;
         var newGo = Object.Instantiate(selectedPrefab, position, Quaternion.identity);
         newGo.transform.parent = parent.transform;
 
