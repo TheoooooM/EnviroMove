@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
+using Vector3 = UnityEngine.Vector3;
 #if UNITY_STANDALONE && !UNITY_EDITOR
 using JsonUtility = UnityEngine.JsonUtility;
 #endif
@@ -35,6 +36,7 @@ public class SceneEditor
     //LevelData
     public Vector3Int size;
     public Vector3Int defaultSize = new(500, 4, 500);
+    public Vector2Int tileSize = new(6,12);
     public int[,,] blockGrid;
     public Enums.Side[,,] blockHorizontalRotationGrid;
     public Enums.Side[,,] blockVerticalRotationGrid;
@@ -47,6 +49,10 @@ public class SceneEditor
 
     //Path
     public Enums.Side[,,] directionGrid;
+    
+    //alaid
+    private Vector2Int firstBlockPosition;
+    private Vector2Int[,] gridPositions;
 
     private enum EditorMode
     {
@@ -92,7 +98,7 @@ public class SceneEditor
 
     private void PlaceCamera()
     {
-        _camera.transform.position = new Vector3(size.x / 2, _camera.transform.position.y, size.z / 2);
+        _camera.transform.position = new Vector3(size.x / 2 - tileSize.x / 2, _camera.transform.position.y, size.z / 2 - tileSize.y / 2);
         _camera.transform.rotation = Quaternion.Euler(80, 0, 0);
     }
 
@@ -113,19 +119,32 @@ public class SceneEditor
 
     private void PlaceDefaultGround()
     {
-        for (int x = (size.x/2 - 8); x < size.x - (size.x/2 - 8) ; x++)
-        {
-            for (int z = (size.z/2 - 8); z < size.z - (size.z/2 - 8); z++)
-            {
-                var block = Object.Instantiate(prefabs[1], new Vector3(x, 0, z), Quaternion.identity);
-                block.transform.parent = parent.transform;
-                blockGrid[x, 0, z] = 1;
-                blockVerticalRotationGrid[x, 0, z] = 0;
-                blockHorizontalRotationGrid[x, 0, z] = 0;
-            }
-        }
+        var posX = size.x / 2 - tileSize.x;
+        var posZ = size.z / 2 - tileSize.y;
+        MakePlatform(posX, posZ);
 
         blocksUsed.Add("groundBlock");
+    }
+
+    private void MakePlatform(int posX, int posZ)
+    {
+        for (int x = posX; x < posX + tileSize.x; x++)
+        {
+            for (int z = posZ; z < posZ + tileSize.y; z++)
+            {
+                var block = Object.Instantiate(prefabs[(int)Enums.blockType.ground], new Vector3(x, 0, z), Quaternion.identity);
+                block.transform.SetParent(parent.transform);
+                blockGrid[x, 0, z] = (int)Enums.blockType.ground;
+                blockHorizontalRotationGrid[x, 0, z] = Enums.Side.none;
+                blockVerticalRotationGrid[x, 0, z] = Enums.Side.none;
+            }
+        }
+        
+        firstBlockPosition = new Vector2Int(posX, posZ);
+        while (firstBlockPosition.x > 0) firstBlockPosition.x -= tileSize.x;
+        while (firstBlockPosition.y > 0) firstBlockPosition.y -= tileSize.y;
+        firstBlockPosition.x += tileSize.x;
+        firstBlockPosition.y += tileSize.y;
     }
 
     public void Update()
@@ -253,6 +272,64 @@ public class SceneEditor
             case 11:
                 directionGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
                 newGo.name = "directionBlock";
+                break;
+            case 13:
+                GameObject newground = null;
+                Vector3 posOfnewPanelStart = new Vector3();
+                Enums.Side sideToInstantiateNewGrid = Enums.Side.none;
+                for (int i = 1; i <= 3; i++)
+                {
+                    Debug.Log("position.x % tileSize.x : " + position.x % tileSize.x + " position.z % tileSize.y: " + position.z % tileSize.y);
+                    //left x = 4, right = 3, back = 10, forward = 9
+                    if (position.x % tileSize.x == 4)
+                    {
+                        newground = Object.Instantiate(prefabs[1], new Vector3(position.x - i ,0, position.z), Quaternion.identity);
+                        posOfnewPanelStart = new Vector3(position.x - i - 1, position.y, position.z);
+                        sideToInstantiateNewGrid = Enums.Side.right;
+                    }
+                    else if (position.x % tileSize.x == 3)
+                    {
+                        newground = Object.Instantiate(prefabs[1], new Vector3(position.x + i, 0, position.z), Quaternion.identity);
+                        posOfnewPanelStart = new Vector3(position.x + i + 1, position.y, position.z);
+                        sideToInstantiateNewGrid = Enums.Side.left;
+                    }
+                    else if (position.z % tileSize.y == 10)
+                    {
+                        newground = Object.Instantiate(prefabs[1], new Vector3(position.x, 0, position.z - i), Quaternion.identity);
+                        posOfnewPanelStart = new Vector3(position.x, position.y, position.z - i - 1);
+                        sideToInstantiateNewGrid = Enums.Side.forward;
+                    }
+                    else if (position.z % tileSize.y == 9)
+                    {
+                        newground = Object.Instantiate(prefabs[1], new Vector3(position.x, 0, position.z + i), Quaternion.identity);
+                        posOfnewPanelStart = new Vector3(position.x, position.y, position.z + i + 1);
+                        sideToInstantiateNewGrid = Enums.Side.back;
+                    }
+                }
+                
+                Debug.Log("sideToInstantiateNewGrid: " + sideToInstantiateNewGrid);
+                if (newground != null)
+                {
+                    var newPanelStart = Object.Instantiate(prefabs[12], posOfnewPanelStart, Quaternion.identity);
+                }
+                //offset for the position of the MakePlatform function
+                Vector2 offset = new Vector2();
+                switch (sideToInstantiateNewGrid)
+                {
+                    case Enums.Side.left:
+                        offset = new Vector2(-4, 0);
+                        break;
+                    case Enums.Side.right:
+                        offset = new Vector2(4, 0);
+                        break;
+                    case Enums.Side.back:
+                        offset = new Vector2(0, 4);
+                        break;
+                    case Enums.Side.forward:
+                        offset = new Vector2(0, -4);
+                        break;
+                }
+                MakePlatform((int)(posOfnewPanelStart.x + offset.x), (int)(posOfnewPanelStart.z + offset.y));
                 break;
         }
 
@@ -535,84 +612,3 @@ public class SceneEditor
         isMoveCamera = !isMoveCamera;
     }
 }
-
-//Cimetiere
-// case 13:
-            //     GameObject newground = null;
-            //     Vector3 posOfNewGrid = new Vector3();
-            //     Vector3 posOfnewPanelStart = new Vector3();
-            //     var position1 = newGo.gameObject.transform.parent.gameObject.transform.position;
-            //     Vector3 parentPos = new Vector3(position1.x, 0, position1.z);
-            //     Enums.Side sideToInstantiateNewGrid = Enums.Side.none;
-            //     for (int i = 0; i < 3; i++)
-            //     {
-            //         if (position.x == parentPos.x)
-            //         {
-            //             newground = Object.Instantiate(prefabs[1], new Vector3(parentPos.x - 1 - i, 0, position.z), Quaternion.identity);
-            //             posOfnewPanelStart = new Vector3(parentPos.x - 2 - i, position.y, position.z);
-            //             sideToInstantiateNewGrid = Enums.Side.left;
-            //         }
-            //         else if (position.x == parentPos.x + size.x - 1)
-            //         {
-            //             newground = Object.Instantiate(prefabs[1], new Vector3(size.x + i, 0, position.z), Quaternion.identity);
-            //             posOfnewPanelStart = new Vector3(parentPos.x + size.x + 1 + i, position.y, position.z);
-            //             sideToInstantiateNewGrid = Enums.Side.right;
-            //         }
-            //         else if (position.z == parentPos.z)
-            //         {
-            //             newground = Object.Instantiate(prefabs[1], new Vector3(position.x, 0, parentPos.z - 1 - i), Quaternion.identity);
-            //             posOfnewPanelStart = new Vector3(position.x, position.y, parentPos.z - 2 - i);
-            //             sideToInstantiateNewGrid = Enums.Side.back;
-            //         }
-            //         else if (position.z == parentPos.x + size.z - 1)
-            //         {
-            //             newground = Object.Instantiate(prefabs[1], new Vector3(position.x, 0, size.z + i), Quaternion.identity);
-            //             posOfnewPanelStart = new Vector3(position.x, position.y, parentPos.z + size.z + 1 + i);
-            //             sideToInstantiateNewGrid = Enums.Side.forward;
-            //         }
-            //     }
-            //     var newGrid = new GameObject();
-            //     if (newground != null)
-            //     {
-            //         var newPanelStart = Object.Instantiate(prefabs[12], posOfnewPanelStart, Quaternion.identity);
-            //     }
-            //     
-            //
-            //     newGrid.transform.position = new Vector3(posOfNewGrid.x, position.y, posOfNewGrid.z);
-            //     var transformPosition = newGrid.transform.position;
-            //     for (int x = 0; x < size.x; x++)
-            //     {
-            //         for (int y = 0; y < size.y; y++)
-            //         {
-            //             for (int z = 0; z < size.z; z++)
-            //             {
-            //                 if (blockGrid[x, y, z] != 0)
-            //                 {
-            //                     switch (sideToInstantiateNewGrid)
-            //                     {
-            //                         case (Enums.Side.forward):
-            //                             var newBlock = Object.Instantiate(prefabs[1],
-            //                                 new Vector3(x + transformPosition.x, transformPosition.y - 1 , z + transformPosition.z + 1), Quaternion.identity);
-            //                             newBlock.transform.parent = newGrid.transform;
-            //                             break;
-            //                         case (Enums.Side.right):
-            //                             var newBlock1 = Object.Instantiate(prefabs[1],
-            //                                 new Vector3(size.x - x + transformPosition.x, transformPosition.y - 1, z + transformPosition.z), Quaternion.identity);
-            //                             newBlock1.transform.parent = newGrid.transform;
-            //                             break;
-            //                         case (Enums.Side.left):
-            //                             var newBlock2 = Object.Instantiate(prefabs[1],
-            //                                 new Vector3(- x + transformPosition.x - 1, transformPosition.y - 1, transformPosition.z + z), Quaternion.identity);
-            //                             newBlock2.transform.parent = newGrid.transform;
-            //                             break;
-            //                         case (Enums.Side.back):
-            //                             var newBlock3 = Object.Instantiate(prefabs[1],
-            //                                 new Vector3(transformPosition.x + x , transformPosition.y - 1, -z + transformPosition.z - 1), Quaternion.identity);
-            //                             newBlock3.transform.parent = newGrid.transform;
-            //                             break;
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     }
-            //     break;
