@@ -74,6 +74,7 @@ namespace Archi.Service
 
         public LevelData GetDataCreation()
         {
+            Debug.Log("GetDataCreation");
             return sceneEditor.GetData();
         }
 
