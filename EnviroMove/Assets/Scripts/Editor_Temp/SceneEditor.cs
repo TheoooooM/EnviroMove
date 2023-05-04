@@ -53,6 +53,7 @@ public class SceneEditor
     //alaid
     private Vector2Int firstBlockPosition;
     private Vector2Int[,] gridPositions;
+    private int tailleBridge = 4;
 
     private enum EditorMode
     {
@@ -98,7 +99,8 @@ public class SceneEditor
 
     private void PlaceCamera()
     {
-        _camera.transform.position = new Vector3((tileSize.x + 3) * (size.x / (tileSize.x + 3) / 2 ), _camera.transform.position.y, (tileSize.y + 3) * (size.z / (tileSize.y + 3) / 2));
+        _camera.transform.position = new Vector3((tileSize.x + tailleBridge) * (size.x / (tileSize.x + tailleBridge) / 2 ), 
+            _camera.transform.position.y, (tileSize.y + tailleBridge) * (size.z / (tileSize.y + tailleBridge) / 2));
         _camera.transform.rotation = Quaternion.Euler(80, 0, 0);
     }
 
@@ -119,8 +121,8 @@ public class SceneEditor
 
     private void PlaceDefaultGround()
     {
-        var posX = (tileSize.x + 3) * (size.x / (tileSize.x + 3) / 2);
-        var posZ = (tileSize.y + 3) * (size.z / (tileSize.y + 3) / 2);
+        var posX = (tileSize.x + tailleBridge) * (size.x / (tileSize.x + tailleBridge) / 2);
+        var posZ = (tileSize.y + tailleBridge) * (size.z / (tileSize.y + tailleBridge) / 2);
         MakePlatform(posX, posZ);
 
         blocksUsed.Add("groundBlock");
@@ -133,14 +135,8 @@ public class SceneEditor
         {
             for (int z = posZ; z < posZ + tileSize.y; z++)
             {
-                if (x == posX && z == posZ)
-                {
-                    block = Object.Instantiate(prefabs[5],new Vector3(x,0,z), Quaternion.identity);
-                }
-                else
-                {
-                    block = Object.Instantiate(prefabs[(int)Enums.blockType.ground], new Vector3(x, 0, z), Quaternion.identity);
-                }
+               
+                block = Object.Instantiate(prefabs[(int)Enums.blockType.ground], new Vector3(x, 0, z), Quaternion.identity);
                 block.transform.SetParent(parent.transform);
                 blockGrid[x, 0, z] = (int)Enums.blockType.ground;
                 blockHorizontalRotationGrid[x, 0, z] = Enums.Side.none;
@@ -285,10 +281,9 @@ public class SceneEditor
                 GameObject newground = null;
                 Vector3 posOfnewPanelStart = new Vector3();
                 Enums.Side sideToInstantiateNewGrid = Enums.Side.none;
-                for (int i = 1; i <= 3; i++)
+                for (int i = 1; i <= tailleBridge; i++)
                 {
-                    Debug.Log($"position.x {position.x} % tileSize.x {tileSize.x + 3} : " + position.x % (tileSize.x  + 3) + $" position.z {position.z + 3} % tileSize.y {tileSize.y + 3}: " + position.z % (tileSize.y + 3));
-                    switch (position.x % (tileSize.x + 3))
+                    switch (position.x % (tileSize.x + tailleBridge))
                     {
                         //left x = 0, right = 5, back = 0, forward = 15
                         case 0:
@@ -302,7 +297,7 @@ public class SceneEditor
                             sideToInstantiateNewGrid = Enums.Side.right;
                             break;
                         default:
-                            switch (position.z % (tileSize.y + 3))
+                            switch (position.z % (tileSize.y + tailleBridge))
                             {
                                 case 0:
                                     newground = Object.Instantiate(prefabs[1], new Vector3(position.x, 0, position.z - i), Quaternion.identity);
@@ -319,8 +314,6 @@ public class SceneEditor
                             break;
                     }
                 }
-                Debug.Log("position.x - position.x % (tileSize.x - 3)" + (position.x - position.x % (tileSize.x - 3)));
-                Debug.Log("sideToInstantiateNewGrid: " + sideToInstantiateNewGrid);
                 if (newground != null)
                 {
                     var newPanelStart = Object.Instantiate(prefabs[13], posOfnewPanelStart, Quaternion.identity);
@@ -328,10 +321,10 @@ public class SceneEditor
                 //offset for the position of the MakePlatform function
                 Vector2 offset = sideToInstantiateNewGrid switch
                 {
-                    Enums.Side.left => new Vector2(-tileSize.x + 1 + posOfnewPanelStart.x, position.z - position.z % (tileSize.y + 3)),
-                    Enums.Side.right => new Vector2(posOfnewPanelStart.x, position.z - position.z % (tileSize.y + 3)),
-                    Enums.Side.back => new Vector2(position.x - position.x % (tileSize.x + 3) , -tileSize.y + posOfnewPanelStart.z + 1),
-                    Enums.Side.forward => new Vector2(position.x - position.x % (tileSize.x + 3) , posOfnewPanelStart.z),
+                    Enums.Side.left => new Vector2(-tileSize.x + 1 + posOfnewPanelStart.x, position.z - position.z % (tileSize.y + tailleBridge)),
+                    Enums.Side.right => new Vector2(posOfnewPanelStart.x, position.z - position.z % (tileSize.y + tailleBridge)),
+                    Enums.Side.back => new Vector2(position.x - position.x % (tileSize.x + tailleBridge) , -tileSize.y + posOfnewPanelStart.z + 1),
+                    Enums.Side.forward => new Vector2(position.x - position.x % (tileSize.x + tailleBridge) , posOfnewPanelStart.z),
                     _ => new Vector2()
                 };
                 if (blockGrid[(int)offset.x, 0, (int)offset.y] == 1) { break; }
