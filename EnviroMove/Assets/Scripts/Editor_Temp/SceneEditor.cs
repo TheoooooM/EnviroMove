@@ -334,7 +334,7 @@ public class SceneEditor
                     Enums.Side.forward => new Vector2(position.x - position.x % (tileSize.x + 3) , posOfnewPanelStart.z),
                     _ => new Vector2()
                 };
-                if (blockGrid[(int)offset.x, 0, (int)position.z] == 1) { break; }
+                if (blockGrid[(int)offset.x, 0, (int)offset.y] == 1) { break; }
                 MakePlatform((int)offset.x, (int)offset.y);
                 break;
         }
