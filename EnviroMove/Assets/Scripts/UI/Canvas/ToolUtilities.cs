@@ -72,6 +72,7 @@ namespace UI.Canvas
         {
             dataToTest = m_Tool.GetDataCreation();
             SceneManager.sceneLoaded += AsyncTestLevel;
+            m_Tool.DesactivateTool();
             ChangeScene(sceneName);
             
             //throw new NotImplementedException();
