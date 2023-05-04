@@ -21,6 +21,8 @@ namespace Archi.Service.Interface
         public void ChangeMoveCamera();
 
         public void PlaceBlock(int indexBlock);
+
+        public void DesactivateTool();
         
         
         //public void SaveData(string name);
