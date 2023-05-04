@@ -1,4 +1,4 @@
-﻿using Interfaces;
+using Interfaces;
 using UnityEngine;
 
 namespace BlockBehaviors

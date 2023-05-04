@@ -18,7 +18,7 @@ namespace Interfaces
         void RemoveOnFinishMove(Action<IBoardable> action);
 
         void StopCoroutineAction();
-        public void MoveToPoint(Vector3 newPos, float speed = 0);
+        public void MoveToPoint(Vector3 newPos, float speed = 0, bool InstanteMove = false);
 
         public void StartBoard();
     }
