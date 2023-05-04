@@ -330,7 +330,7 @@ public class SceneEditor
                 {
                     Enums.Side.left => new Vector2(-tileSize.x + 1 + posOfnewPanelStart.x, position.z - position.z % (tileSize.y + 3)),
                     Enums.Side.right => new Vector2(posOfnewPanelStart.x, position.z - position.z % (tileSize.y + 3)),
-                    Enums.Side.back => new Vector2(position.x - position.x % (tileSize.x + 3) , -tileSize.y + posOfnewPanelStart.z),
+                    Enums.Side.back => new Vector2(position.x - position.x % (tileSize.x + 3) , -tileSize.y + posOfnewPanelStart.z + 1),
                     Enums.Side.forward => new Vector2(position.x - position.x % (tileSize.x + 3) , posOfnewPanelStart.z),
                     _ => new Vector2()
                 };
