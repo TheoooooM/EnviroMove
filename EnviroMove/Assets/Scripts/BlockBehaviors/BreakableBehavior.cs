@@ -2,20 +2,20 @@
 
 namespace BlockBehaviors
 {
-    public class BreakableBehavior : BlockBehavior, IInteractable
+    public class BreakableBehavior : InteractiveBlockBehavior
     {
         private bool _isInteractible = true;
 
 
         public bool IsInteractible() => _isInteractible;
-        public void Select()
+        public override void Select()
         {
             boardMaster.RemoveBoardable(this);
             Destroy(gameObject);
         }
 
-        public void Deselect() { }
+        public override void Deselect(IBoardable releaseBoardable){}
 
-        public void Swipe(Enums.Side side) { }
+        public override void Swipe(Enums.Side side) {}
     }
 }

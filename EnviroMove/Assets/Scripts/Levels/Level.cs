@@ -178,6 +178,11 @@ namespace Levels
             default: return null;*/
       }
 
+      Vector3Int IBoard.GetPosition(IBoardable boardable)
+      {
+         return GetPosition(boardable);
+      }
+
       void SetBoardable(IBoardable boardable, Vector3Int boardPos, Enums.Side side = Enums.Side.none)
       {
          throw new NotImplementedException();
@@ -202,6 +207,11 @@ namespace Levels
          }
       }
 
+      public void SetAt(IBoardable boardable, Vector3Int position)
+      {
+         _board[position.x, position.y, position.z] = boardable;
+      }
+
       public void RemoveBoardable(IBoardable boardable)
       {
          var pos = GetPosition(boardable);
@@ -221,7 +231,7 @@ namespace Levels
          if (boardLimit) return false;
          if (neighboor != null)
          {
-            if(!neighboor.TryMoveOn(mover, Enums.InverseSide(side))) return false;
+            if(!neighboor.TryMoveOn(mover, Enums.InverseSide(side), boardablePosition + Enums.SideVector3Int(side))) return false;
          }
          position = transform.position + neighborPos;
          _board[neighborPos.x, neighborPos.y, neighborPos.z] = _board[boardablePosition.x, boardablePosition.y, boardablePosition.z];

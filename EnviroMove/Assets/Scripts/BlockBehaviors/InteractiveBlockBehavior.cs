@@ -6,14 +6,16 @@ namespace BlockBehaviors
 {
     public abstract class InteractiveBlockBehavior : BlockBehavior , IInteractable
     {
+        protected bool isInteractable = true;
+        
         [SerializeField] private float cooldown = 1;
         protected bool onCD;
-        
-        public abstract bool IsInteractible();
+
+        public virtual bool IsInteractible() => isInteractable;
 
         public abstract void Select();
 
-        public abstract void Deselect();
+        public abstract void Deselect(IBoardable releaseBoardable);
 
         public abstract void Swipe(Enums.Side side);
 

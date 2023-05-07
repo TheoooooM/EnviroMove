@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BlockBehaviors
 {
-    public class FrogBehavior : InteractiveBlockBehavior, IInteractable
+    public class FrogBehavior : InteractiveBlockBehavior
     {
 
         [SerializeField] private GameObject tongue;
@@ -15,9 +15,6 @@ namespace BlockBehaviors
         private Vector3Int sideBoardPosition;
         private bool sideSet;
         
-        private bool isInteractable = true;
-
-        public override bool IsInteractible() => isInteractable; 
         
         public override void Select()
         {
@@ -32,14 +29,9 @@ namespace BlockBehaviors
             }
             
         }
-        public override void Deselect()
-        {
-            //throw new System.NotImplementedException();
-        }
-        public override void Swipe(Enums.Side side)
-        {
-            //throw new System.NotImplementedException();
-        }
+
+        public override void Deselect(IBoardable releaseBoardable){}
+        public override void Swipe(Enums.Side side) {}
 
         void Grab()
         {

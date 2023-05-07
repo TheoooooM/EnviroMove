@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Interfaces;
@@ -43,6 +44,8 @@ public class Player : MonoBehaviour, IBoardable
         Destroy(gameObject);
     }
 
+    
+
     public void StopCoroutineAction()
     {
         StopCoroutine(_actionCoroutine);
@@ -53,6 +56,7 @@ public class Player : MonoBehaviour, IBoardable
         _actionCoroutine = StartCoroutine(MoveToPosition(newPos, speed));
     }
     
+    // ReSharper disable Unity.PerformanceAnalysis
     public IEnumerator MoveToPosition(Vector3 newPos, float speed)
     {
         var magnitude = Vector3.Distance(transform.position, newPos);
@@ -67,7 +71,9 @@ public class Player : MonoBehaviour, IBoardable
             }
             transform.position = newPos;
             _moving = false;
+            _actionCoroutine = null;
             _onMoveFinish?.Invoke();
+            if(_actionCoroutine == null) Move();
     }
     public void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board)
     {
@@ -78,12 +84,16 @@ public class Player : MonoBehaviour, IBoardable
     public void SetPosition(Vector3Int newBoardPos)
     {
         _boardPos = newBoardPos;
+        
     }
 
-    public bool TryMoveOn(IBoardable move, Enums.Side commingSide)
+    public bool TryMoveOn(IBoardable move, Enums.Side commingSide, Vector3Int pos)
     {
         return false;
     }
+
+    public void AddOnFinishMove(Action<IBoardable> action) => _onMoveFinish += () => action?.Invoke(this);
+    public void RemoveOnFinishMove(Action<IBoardable> action) => _onMoveFinish -= () => action?.Invoke(this);
 
     public void StartBoard()
     {
@@ -94,6 +104,5 @@ public class Player : MonoBehaviour, IBoardable
     {
         yield return new WaitForSeconds(startDelay);
         Move();
-        _onMoveFinish += Move;
     }
 }
