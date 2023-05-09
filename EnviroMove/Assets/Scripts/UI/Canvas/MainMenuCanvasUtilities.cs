@@ -32,10 +32,11 @@ namespace UI.Canvas
         }
 
 
+        private MovementDirection moveDir = MovementDirection.None;
         private Vector2 startPosition = new();
         private Vector3 viewportStartPosition = new();
-        private Vector3 targetPosition = new();
         private bool hasMove = false;
+        private int pageID = 0;
         
         private void Update() {
             MoveCurrentPageWithInput();
@@ -47,18 +48,30 @@ namespace UI.Canvas
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         private void MoveCurrentPageWithInput() {
             if (Input.touchCount == 0) {
-                viewportTransform.localPosition = Vector3.Lerp(viewportTransform.localPosition, targetPosition, changeScreenSpeed);
+                moveDir = MovementDirection.None;
+                viewportTransform.localPosition = Vector3.Lerp(viewportTransform.localPosition, GetTargetPosition(), changeScreenSpeed);
+                return;
+            }
+
+            Vector2 delatPos = Input.GetTouch(0).deltaPosition;
+            Vector2 position = Input.GetTouch(0).position;
+            if (moveDir == MovementDirection.Y) {
+                if (Input.GetTouch(0).phase == TouchPhase.Ended) moveDir = MovementDirection.None;
                 return;
             }
             
             switch (Input.GetTouch(0).phase) {
                 case TouchPhase.Began:
-                    startPosition = Input.GetTouch(0).position;
+                    startPosition = position;
                     viewportStartPosition = viewportTransform.localPosition;
                     break;
                 
                 case TouchPhase.Moved:
-                    viewportTransform.position += new Vector3(Input.GetTouch(0).deltaPosition.x, 0, 0);
+                    if (viewportTransform.localPosition.x >= minMaxViewportXValue.y && delatPos.x > 0 || viewportTransform.localPosition.x <= minMaxViewportXValue.x && delatPos.x < 0) return;
+                    if (Mathf.Abs(delatPos.y) > Mathf.Abs(delatPos.x) && moveDir == MovementDirection.None) moveDir = MovementDirection.Y;
+                    else if(Mathf.Abs(delatPos.y) <= Mathf.Abs(delatPos.x) && moveDir == MovementDirection.None) moveDir = MovementDirection.X;
+                    
+                    viewportTransform.localPosition += new Vector3(delatPos.x, 0, 0);
                     hasMove = true;
                     break;
                 
@@ -66,35 +79,33 @@ namespace UI.Canvas
                     if (!hasMove) return;
                     hasMove = false;
                     
-                    if (Mathf.Abs(viewportTransform.localPosition.x - viewportStartPosition.x) < mainMenuTransform.sizeDelta.x / 2f) {
-                        targetPosition = viewportStartPosition;
-                        return;
-                    }
-
-                    Vector3 addPosition = new Vector3(mainMenuTransform.sizeDelta.x, 0, 0);
-                    if (Input.GetTouch(0).position.x - startPosition.x < 0 && viewportTransform.localPosition.x > minMaxViewportXValue.x) {
-                        targetPosition = viewportStartPosition - addPosition;
-                    }
-                    else if(Input.GetTouch(0).position.x - startPosition.x > 0 && viewportTransform.localPosition.x < minMaxViewportXValue.y) {
-                        targetPosition = viewportStartPosition + addPosition;
-                    }
-                    else {
-                        targetPosition = viewportStartPosition;
-                    }
-
+                    if (Mathf.Abs(viewportTransform.localPosition.x - viewportStartPosition.x) < mainMenuTransform.sizeDelta.x / 3f) return;
+                    pageID = (position.x - startPosition.x) switch {
+                        < 0 when viewportTransform.localPosition.x > minMaxViewportXValue.x => Mathf.Clamp(pageID - 1, -2, 1),
+                        > 0 when viewportTransform.localPosition.x < minMaxViewportXValue.y => Mathf.Clamp(pageID + 1, -2, 1),
+                        _ => pageID
+                    };
                     break;
                 
-                default: throw new ArgumentOutOfRangeException();
+                case TouchPhase.Stationary:
+                    if (!hasMove) {
+                        viewportTransform.localPosition = Vector3.Lerp(viewportTransform.localPosition, GetTargetPosition(), changeScreenSpeed);
+                    }
+                    break;
+                case TouchPhase.Canceled: break;
             }
         }
-        
+
+        /// <summary>
+        /// Get the target position of the viewport
+        /// </summary>
+        private Vector3 GetTargetPosition() => new (mainMenuTransform.sizeDelta.x * pageID, 0, 0);
+
         /// <summary>
         /// Switch page when button is pressed
         /// </summary>
         /// <param name="id"></param>
-        public void MoveToPage(int id) {
-            targetPosition = new Vector3(mainMenuTransform.sizeDelta.x * id, 0, 0);
-        }
+        public void MoveToPage(int id) => pageID = id;
 
         public void ShowLevelSelector()
         {
@@ -104,6 +115,10 @@ namespace UI.Canvas
         public void SetUsername()
         {
             if(inputField.text != "")m_Data.SetUsername(inputField.text);
-        }
+        } 
     }
+}
+
+public enum MovementDirection {
+    X, Y, None
 }
