@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Archi.Service.Interface;
 using Attributes;
@@ -19,13 +20,9 @@ namespace Levels
       private IBoardable[,,] _board;
       private Enums.Side[,,] _playerDirBoard;
       private Dictionary<int, GameObject> _blocksUsed;
+      private Dictionary<Vector3Int, Enums.Side> _cameraMovesSides = new();
 
       private Vector3Int _destinationPos;
-
-      void LoadBlocks()
-      {
-         throw new System.NotImplementedException();
-      }
 
 
       public async void GenerateLevel(LevelData data)
@@ -61,10 +58,11 @@ namespace Levels
 
          _blocksUsed.Add((int)Enums.blockType.empty, null);
          _blocksUsed.Add((int)Enums.blockType.playerEnd, null);
+         _blocksUsed.Add((int)Enums.blockType.panelEnd, null);
          foreach (var index in data.blockGrid)
          {
             Enums.blockType type = (Enums.blockType)index;
-            if(type is Enums.blockType.playerEnd or  Enums.blockType.empty) continue;
+            if(type is Enums.blockType.playerEnd or  Enums.blockType.empty or Enums.blockType.panelEnd) continue;
             string key = Blocks.BlockType[type];
             if (type == Enums.blockType.playerStart) key = "Player";
             if (!_blocksUsed.ContainsKey(index))
@@ -96,6 +94,7 @@ namespace Levels
                   if (_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]] == null)
                   {
                      if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] == (int)Enums.blockType.playerEnd) _destinationPos = currentPos;
+                     if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] == (int)Enums.blockType.panelEnd) _cameraMovesSides.Add(currentPos, (Enums.Side)data.blockHorizontalRotationGrid[x, y, z]);
                      continue;
                   }
 
@@ -132,6 +131,7 @@ namespace Levels
 
          throw new NullReferenceException($"{name} board Doesn't Countain {boardable}");
       }
+      
       
       public IBoardable GetNeighbor(Vector3Int boardPos, Enums.Side side, out bool boardLimit)
       {
@@ -171,19 +171,6 @@ namespace Levels
             default:
                throw new ArgumentOutOfRangeException(nameof(side), side, null);
          }
-            /*case Enums.Side.up :
-               if (boardPos.y+1 == levelSize.y) return null;
-               return  blockGrid[(int)boardPos.x,(int)boardPos.y+1];
-            case Enums.Side.left :
-               if (boardPos.x == 0) return null;
-               return  blockGrid[(int)boardPos.x-1,(int)boardPos.y];
-            case Enums.Side.right :
-               if (boardPos.x+1 == levelSize.x) return null;
-               return  blockGrid[(int)boardPos.x+1,(int)boardPos.y];
-            case Enums.Side.down :
-               if (boardPos.y == 0) return null;
-               return  blockGrid[(int)boardPos.x,(int)boardPos.y-1];
-            default: return null;*/
       }
 
       Vector3Int IBoard.GetPosition(IBoardable boardable)
@@ -231,6 +218,11 @@ namespace Levels
       public Vector3 GetWorldPos(Vector3Int boardPos) => transform.position+boardPos;
 
       public Enums.Side GetPlayerDirection(Vector3Int pos)=>_playerDirBoard[pos.x, pos.y, pos.z];
+      
+      public void CheckCameraMovement(Vector3Int pos)
+      {
+         if (_cameraMovesSides.ContainsKey(pos)) StartCoroutine(MoveCamera(_cameraMovesSides[pos]));
+      }
 
       public bool TryMove(Vector3Int boardablePosition, Enums.Side side, out Vector3 position)
       {
@@ -248,6 +240,35 @@ namespace Levels
          _board[boardablePosition.x, boardablePosition.y, boardablePosition.z] = null;
          
          return true;
+      }
+
+      IEnumerator MoveCamera( Enums.Side side)
+      {
+         float camSpeed = 10f* Time.deltaTime;
+         Camera cam = Camera.main;
+         var camDist = Enums.SideVector3(side);
+         switch (side)
+         {
+            case Enums.Side.forward:
+            case Enums.Side.back: camDist *= 16f;
+               break;
+            case Enums.Side.left:
+            case Enums.Side.right: camDist *= 10f;
+               break;
+            default:
+               throw new ArgumentOutOfRangeException(nameof(side), side, null);
+         }
+
+         var newCamPos = cam.transform.position + camDist;
+
+         while (Vector3.Distance(cam.transform.position, newCamPos)> camSpeed)
+         {
+            cam.transform.position += Enums.SideVector3(side) * camSpeed ; 
+            yield return new WaitForEndOfFrame();
+         }
+
+         cam.transform.position = newCamPos;
+         
       }
    }
 }
