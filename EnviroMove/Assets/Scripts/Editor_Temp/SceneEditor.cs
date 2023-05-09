@@ -339,9 +339,9 @@ public class SceneEditor
     {
         Start();
         CleanScene();
-        Debug.Log((string)dataToLoad);
+        //Debug.Log((string)dataToLoad);
         blocksUsed = new List<string>(dataToLoad.blocksUsed);
-        blocksUsed.ForEach(x => Debug.Log(x));
+        //blocksUsed.ForEach(x => Debug.Log(x));
         blockGrid = dataToLoad.blockGrid;
         directionGrid = Enums.IntToSideArray(dataToLoad.playerDir);
         blockHorizontalRotationGrid = Enums.IntToSideArray(dataToLoad.blockHorizontalRotationGrid);
@@ -355,8 +355,8 @@ public class SceneEditor
                     if (blockGrid[x, y, z] == 0) continue;
                     int prefabIndex = blockGrid[x, y, z];
                     var block = Object.Instantiate(prefabs[prefabIndex/*blockGrid[x, y, z]*/], new Vector3(x, y, z), Quaternion.identity);
-                    if (blockHorizontalRotationGrid[x, y, z] != Enums.Side.none) Debug.Log("Rotate" + blockHorizontalRotationGrid[x, y, z]);
-                    if (blockVerticalRotationGrid[x, y, z] != Enums.Side.none) Debug.Log("Rotate" + blockHorizontalRotationGrid[x, y, z]);
+                    //if (blockHorizontalRotationGrid[x, y, z] != Enums.Side.none) Debug.Log("Rotate" + blockHorizontalRotationGrid[x, y, z]);
+                    //if (blockVerticalRotationGrid[x, y, z] != Enums.Side.none) Debug.Log("Rotate" + blockHorizontalRotationGrid[x, y, z]);
                     block.transform.Rotate(Enums.SideVector3(blockHorizontalRotationGrid[x, y, z])*90f);
                     block.transform.Rotate(Enums.SideVector3(blockVerticalRotationGrid[x, y, z])*90f);
                     block.transform.parent = parent.transform;

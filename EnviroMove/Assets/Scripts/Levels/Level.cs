@@ -209,6 +209,7 @@ namespace Levels
                      _board[position.x, position.y, position.z] = _board[x, y, z];
                      _board[position.x, position.y, position.z].SetPosition(position);
                      _board[x, y, z] = null;
+                     break;
                   }
                }
             }

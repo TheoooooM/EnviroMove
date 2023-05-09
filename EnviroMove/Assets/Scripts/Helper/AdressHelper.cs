@@ -25,7 +25,7 @@ public static class AdresseHelper
         var callback = Addressables.LoadAssetAsync<T>(adress);
         callback.Completed += (_) =>
         {
-            Debug.Log("address " + adress + " callbackAction " + callbackAction + " index " + index);
+            //Debug.Log("address " + adress + " callbackAction " + callbackAction + " index " + index);
             OnLoadedAssetAsyncIndexed(adress, _, callbackAction, index);
         };
     }

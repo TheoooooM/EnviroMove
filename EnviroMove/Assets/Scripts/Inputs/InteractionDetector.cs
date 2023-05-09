@@ -9,7 +9,6 @@ namespace Inputs
         // Start is called before the first frame update
         void Start()
         {
-            Debug.Log("Init Interaction callBacks");
             Inputs.Instance.OnTouch += TouchEffect;
             Inputs.Instance.OnRelease += ReleasetouchEffect;
             Inputs.Instance.OnSwip += SwipEffect;

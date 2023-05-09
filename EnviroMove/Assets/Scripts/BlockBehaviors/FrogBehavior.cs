@@ -54,6 +54,7 @@ namespace BlockBehaviors
                 }
                 else WithdrawTongue();
             }
+            else if(boardLimit) WithdrawTongue();
             else
             {
                 tonguePos = neightboorPos;
@@ -90,7 +91,6 @@ namespace BlockBehaviors
         IEnumerator MoveTongue(Vector3 position)
         {
             int index = tongueMoveCount;
-            Debug.Log($"Start move tongue n°{index}");
             index++;
             var magnitude = Vector3.Distance(tongue.transform.position, position);
             var step = tongueSpeed * Time.deltaTime;
@@ -102,7 +102,6 @@ namespace BlockBehaviors
             }
             tongue.transform.position = position;
             onTongueMoveFinish?.Invoke();
-            Debug.Log($"End move tongue n°{index}");
         }
     }
 }
