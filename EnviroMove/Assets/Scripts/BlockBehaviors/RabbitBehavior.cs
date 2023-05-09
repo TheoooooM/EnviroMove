@@ -34,6 +34,7 @@ namespace BlockBehaviors
             secondPos = tunnelPos;
             hole2.transform.position = boardMaster.GetWorldPos(tunnelPos) + hole2.transform.localPosition;
             rabbitMesh.enabled = false;
+            isInteractable = false;
             tunnelSet = true;
         }
 
