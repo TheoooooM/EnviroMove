@@ -21,7 +21,7 @@ namespace Archi.Service
 
         protected override void OnSceneInit(Scene scene, LoadSceneMode loadMode)
         {
-            Debug.Log($"LoadScene : {scene.name}");
+            //Debug.Log($"LoadScene : {scene.name}");
             if (scene.name == "Levels")
             {
                 m_Interface.DrawCanvas(Enums.MajorCanvas.levels);

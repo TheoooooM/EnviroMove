@@ -38,6 +38,7 @@ namespace Archi.Service
 
            //dbReference.Child("Levels").RemoveValueAsync();
             container.Init(this);
+            UpdateData();
         }
 
         public string LevelPath() {return levelPath;}
@@ -82,6 +83,11 @@ namespace Archi.Service
             if (info == default) throw new NullReferenceException($"Level of Name {levelName} doesn't exist on Device");
             return (LevelData)File.ReadAllText(info.levelFilePath);
         }
+
+        public LevelInfo GetInfoByID(string id)
+        {
+            return container.allInfoDatas.FirstOrDefault(i => i.id == id);
+        }
         
 
         
@@ -95,10 +101,13 @@ namespace Archi.Service
         /// <exception cref="NotImplementedException"></exception>
         public void CreateData(string data, string id)
         {
+            var info = GetInfoByID(id);
+            if (info == default) throw new NullReferenceException($"Missing Info from level : {id}");
             string username = PlayerPrefs.GetString("Username");
             if (username == string.Empty) username = "unnamed";
             Debug.Log($"username:{username}, id:{id}, data:{data}");
            dbReference.Child("Levels").Child(username).Child(id).SetRawJsonValueAsync(data);
+           dbReference.Child("Infos").Child(username).Child(id).SetRawJsonValueAsync(JsonUtility.ToJson(info));
         }
 
         /// <summary>
@@ -115,10 +124,25 @@ namespace Archi.Service
         ///  Update Data On Device from DataBase
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
-        public void UpdateData()
+        public async void UpdateData()
         {
-            //dbReference.Child("Levels").;
-            
+            var startTime = Time.time;
+            Debug.Log("Start Load Levels");
+            DataSnapshot dataFiles = await dbReference.Child("Levels").GetValueAsync();
+            Debug.Log($"Load Levels in {Time.time - startTime} sec" );
+            foreach (var user in dataFiles.Children)
+            {
+                foreach (var level in user.Children)
+                {
+                    var data = JsonUtility.ToJson(level.Value);
+                    var levelData = JsonUtility.FromJson<LevelData>(data);
+
+                    if (!container.allInfoDatas.Any(i => i.id == levelData.id))
+                    {
+                        GenerateDataLevel(levelData,levelData.levelName);
+                    }
+                }
+            }
             
             throw new System.NotImplementedException();
         }
@@ -132,7 +156,7 @@ namespace Archi.Service
         {
             if (data.id == default) data.id = GetUniqueIdentifier();
             data.levelName = levelName;
-            data.creator = PlayerPrefs.GetString("Username");
+            if(data.creator == default)data.creator = PlayerPrefs.GetString("Username");
             string currentLevelPath =  $"{levelPath}{data.id}.json";
             FileStream ft = File.Create(currentLevelPath);
             ft.Close();
@@ -144,7 +168,7 @@ namespace Archi.Service
             
             string currentInfoPath =  $"{infoPath}{data.id}.json";
             Debug.Log($"Save At {currentInfoPath}");
-            var currentInfo = new LevelInfo(levelName, PlayerPrefs.GetString("Username"), currentLevelPath);
+            var currentInfo = new LevelInfo(levelName, data.id, data.creator, currentLevelPath);
             FileStream ftInfo = File.Create(currentInfoPath);
             ftInfo.Close();
             TextWriter twInfo = new StreamWriter($"{infoPath}{data.id}.json");

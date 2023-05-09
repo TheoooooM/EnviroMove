@@ -23,9 +23,9 @@ public class LevelBox : MonoBehaviour
     
     public void LoadLevelInTool()
     {
-        Debug.Log(info.levelFilePath);
-        Debug.Log(m_dataBase.GetLevel(info.levelFilePath));
-        Debug.Log(m_dataBase.GetLevel(info.levelFilePath).id);
+        //Debug.Log(info.levelFilePath);
+        //Debug.Log(m_dataBase.GetLevel(info.levelFilePath));
+        //Debug.Log(m_dataBase.GetLevel(info.levelFilePath).id);
         m_Tool.OpenLevel(m_dataBase.GetLevel(info.levelFilePath));
     }
 }
