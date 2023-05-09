@@ -15,25 +15,25 @@ MonoBehaviour:
   active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {x: 0.723088, y: 0.7473452, z: 1, w: 0.58295965}
+    m_Value: {x: 0.6994342, y: 0.586781, z: 1, w: 0.42152467}
   midtones:
     m_OverrideState: 1
-    m_Value: {x: 0.6805826, y: 0.61160386, z: 1, w: 0.5470852}
+    m_Value: {x: 1, y: 0.81820345, z: 0.6348957, w: 0.22421525}
   highlights:
     m_OverrideState: 1
-    m_Value: {x: 0.91024715, y: 0.9485688, z: 1, w: -0.02690583}
+    m_Value: {x: 1, y: 0.84157586, z: 0.65284514, w: -0.11659192}
   shadowsStart:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   shadowsEnd:
-    m_OverrideState: 0
-    m_Value: 0.3
+    m_OverrideState: 1
+    m_Value: 0.13
   highlightsStart:
-    m_OverrideState: 0
-    m_Value: 0.55
+    m_OverrideState: 1
+    m_Value: 0.73
   highlightsEnd:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 2.38
 --- !u!114 &-8548001719868346143
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -49,19 +49,19 @@ MonoBehaviour:
   active: 1
   postExposure:
     m_OverrideState: 1
-    m_Value: -1
+    m_Value: -2
   contrast:
     m_OverrideState: 1
-    m_Value: -2
+    m_Value: 18
   colorFilter:
     m_OverrideState: 1
     m_Value: {r: 0.98346794, g: 1, b: 0.7783019, a: 1}
   hueShift:
     m_OverrideState: 1
-    m_Value: -14
+    m_Value: -4
   saturation:
     m_OverrideState: 1
-    m_Value: -12
+    m_Value: 7
 --- !u!114 &-2259855469911545810
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -181,10 +181,10 @@ MonoBehaviour:
   active: 1
   lift:
     m_OverrideState: 0
-    m_Value: {x: 0.6606395, y: 0.7323127, z: 1, w: -0.053811662}
+    m_Value: {x: 0.5712043, y: 0.71266484, z: 1, w: -0.026905831}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 0.5782087, y: 0.68102497, z: 1, w: 0.05381166}
+    m_Value: {x: 0.63235873, y: 0.46708572, z: 1, w: -0.10762332}
   gain:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.8088075, z: 0.9337422, w: -0.044843048}
+    m_Value: {x: 0.9840476, y: 0.8377024, z: 1, w: -0.044843048}
