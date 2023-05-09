@@ -35,7 +35,7 @@ public class SceneEditor
 
     //LevelData
     public Vector3Int size;
-    public Vector3Int defaultSize = new(500, 4, 500);
+    public Vector3Int defaultSize = new(80, 2, 80);
     public Vector2Int tileSize = new(6,12);
     public int[,,] blockGrid;
     public Enums.Side[,,] blockHorizontalRotationGrid;
@@ -403,6 +403,7 @@ public class SceneEditor
         data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGridIntArray,
             blockVerticalRotationGridIntArray, playerDirGridVector3Array);
         Debug.Log("LevelData created");
+        Debug.Log("data: " + (string)data);
         curentLevelData = data;
         return data;
     }
