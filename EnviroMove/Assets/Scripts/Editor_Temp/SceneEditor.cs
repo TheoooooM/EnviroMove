@@ -35,7 +35,7 @@ public class SceneEditor
 
     //LevelData
     public Vector3Int size;
-    public Vector3Int defaultSize = new(500, 4, 500);
+    public Vector3Int defaultSize = new(80, 2, 80);
     public Vector2Int tileSize = new(6,12);
     public int[,,] blockGrid;
     public Enums.Side[,,] blockHorizontalRotationGrid;
@@ -331,7 +331,7 @@ public class SceneEditor
                 MakePlatform((int)offset.x, (int)offset.y);
                 break;
         }
-
+        if (selectedPrefabIndex == 11) return;
         var blockPlacedAddress = Blocks.BlockType[(Enums.blockType)selectedPrefabIndex];
         if (!blocksUsed.Contains(blockPlacedAddress)) blocksUsed.Add(blockPlacedAddress);
         blockGrid[(int)position.x, (int)position.y, (int)position.z] = selectedPrefabIndex;
@@ -403,6 +403,7 @@ public class SceneEditor
         data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGridIntArray,
             blockVerticalRotationGridIntArray, playerDirGridVector3Array);
         Debug.Log("LevelData created");
+        Debug.Log("data: " + (string)data);
         curentLevelData = data;
         return data;
     }
@@ -464,7 +465,7 @@ public class SceneEditor
                         Debug.Log("Rotate" + blockHorizontalRotationGrid[x, y, z]);
                     if (blockVerticalRotationGrid[x, y, z] != Enums.Side.none)
                         Debug.Log("Rotate" + blockHorizontalRotationGrid[x, y, z]);
-                    block.transform.Rotate(Enums.SideVector3(blockHorizontalRotationGrid[x, y, z]) * 90f);
+                    block.transform.Rotate(Enums.SideVector3(blockHorizontalRotationGrid[x, y, z]) * -90f);
                     block.transform.Rotate(Enums.SideVector3(blockVerticalRotationGrid[x, y, z]) * 90f);
                     block.transform.parent = parent.transform;
                     if (directionGrid[x, y, z] != Enums.Side.none)
