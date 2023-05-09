@@ -331,7 +331,7 @@ public class SceneEditor
                 MakePlatform((int)offset.x, (int)offset.y);
                 break;
         }
-
+        if (selectedPrefabIndex == 11) return;
         var blockPlacedAddress = Blocks.BlockType[(Enums.blockType)selectedPrefabIndex];
         if (!blocksUsed.Contains(blockPlacedAddress)) blocksUsed.Add(blockPlacedAddress);
         blockGrid[(int)position.x, (int)position.y, (int)position.z] = selectedPrefabIndex;
@@ -464,7 +464,7 @@ public class SceneEditor
                         Debug.Log("Rotate" + blockHorizontalRotationGrid[x, y, z]);
                     if (blockVerticalRotationGrid[x, y, z] != Enums.Side.none)
                         Debug.Log("Rotate" + blockHorizontalRotationGrid[x, y, z]);
-                    block.transform.Rotate(Enums.SideVector3(blockHorizontalRotationGrid[x, y, z]) * 90f);
+                    block.transform.Rotate(Enums.SideVector3(blockHorizontalRotationGrid[x, y, z]) * -90f);
                     block.transform.Rotate(Enums.SideVector3(blockVerticalRotationGrid[x, y, z]) * 90f);
                     block.transform.parent = parent.transform;
                     if (directionGrid[x, y, z] != Enums.Side.none)
