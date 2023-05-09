@@ -160,6 +160,14 @@ namespace Levels
                if (boardPos.z == 0) { boardLimit = true; return null;}
                neighborPos = new Vector3Int(boardPos.x, boardPos.y, boardPos.z - 1);
                return _board[neighborPos.x, neighborPos.y, neighborPos.z];
+            case Enums.Side.up :
+               if (boardPos.y == _board.GetLength(1) - 1) { boardLimit = true; return null;}
+               neighborPos = new Vector3Int(boardPos.x, boardPos.y + 1, boardPos.z);
+               return _board[neighborPos.x, neighborPos.y, neighborPos.z];
+            case Enums.Side.down :
+               if (boardPos.y == 0) { boardLimit = true; return null;}
+               neighborPos = new Vector3Int(boardPos.x, boardPos.y - 1, boardPos.z);
+               return _board[neighborPos.x, neighborPos.y, neighborPos.z];
             default:
                throw new ArgumentOutOfRangeException(nameof(side), side, null);
          }

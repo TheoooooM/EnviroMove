@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
 
@@ -9,13 +9,18 @@ namespace BlockBehaviors
         private bool tunnelSet;
         private Vector3Int secondPos;
 
+        [SerializeField] private MeshRenderer rabbitMesh;
+        [Space]
+        [SerializeField] private GameObject hole1;
+        [SerializeField] private GameObject hole2;
+
         private Dictionary<IBoardable, Vector3Int> boardableEnters = new();
 
         public override void Select() { }
 
         public override void Deselect(IBoardable releaseBoardable)
         {
-            if (releaseBoardable == null) return;
+            if (releaseBoardable == null || releaseBoardable == (IBoardable)this) return;
             Vector3Int pos = boardMaster.GetPosition(releaseBoardable);
             var topblock = boardMaster.GetNeighbor(pos, Enums.Side.up, out _);
             if (topblock == null) CreateTunnel(pos + Vector3Int.up);
@@ -24,6 +29,11 @@ namespace BlockBehaviors
         void CreateTunnel(Vector3Int tunnelPos)
         {
             boardMaster.SetAt(this, tunnelPos);
+            hole1.SetActive(true);
+            hole2.SetActive(true);
+            secondPos = tunnelPos;
+            hole2.transform.position = boardMaster.GetWorldPos(tunnelPos) + hole2.transform.localPosition;
+            rabbitMesh.enabled = false;
             tunnelSet = true;
         }
 
@@ -43,8 +53,10 @@ namespace BlockBehaviors
         void Teleport(IBoardable boardable)
         {
             boardable.RemoveOnFinishMove(Teleport);
-            Vector3Int newPos = boardableEnters[boardable] == boardPos? secondPos : boardPos;
-            boardable.MoveToPoint(newPos, 99999f);
+            Vector3Int newPos = boardableEnters[boardable] == boardPos ? secondPos : boardPos;
+            boardable.MoveToPoint(boardMaster.GetWorldPos(newPos), 0, true);
+            boardable.SetPosition(newPos);
+            boardMaster.SetAt(boardable, newPos);
         }
     }
 }

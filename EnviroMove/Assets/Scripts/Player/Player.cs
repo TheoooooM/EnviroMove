@@ -51,9 +51,10 @@ public class Player : MonoBehaviour, IBoardable
         StopCoroutine(_actionCoroutine);
     }
 
-    public void MoveToPoint(Vector3 newPos, float speed)
+    public void MoveToPoint(Vector3 newPos, float speed, bool instanteMove = false)
     {
-        _actionCoroutine = StartCoroutine(MoveToPosition(newPos, speed));
+        if (!instanteMove) _actionCoroutine = StartCoroutine(MoveToPosition(newPos, speed));
+        else transform.position = newPos;
     }
     
     // ReSharper disable Unity.PerformanceAnalysis
@@ -73,6 +74,7 @@ public class Player : MonoBehaviour, IBoardable
             _moving = false;
             _actionCoroutine = null;
             _onMoveFinish?.Invoke();
+            _onMoveFinish = null;
             if(_actionCoroutine == null) Move();
     }
     public void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board)

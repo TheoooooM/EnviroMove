@@ -45,7 +45,7 @@ namespace BlockBehaviors
         public virtual void StartBoard()
         { }
 
-        public void MoveToPoint(Vector3 newPos, float speed)
+        public void MoveToPoint(Vector3 newPos, float speed, bool instanteMove)
         {
             if (speed == 0) speed = moveSpeed;
             _actionCoroutine = StartCoroutine(MoveToPosition(newPos, speed));
