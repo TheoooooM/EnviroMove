@@ -279,10 +279,10 @@ public class SceneEditor
                 break;
             case 13:
                 if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] == 0 || 
-                    position.x + 4 >= size.x && position.x % (tileSize.x + tailleBridge) == 5 || 
-                    position.x - 4 < 0 && position.x % (tileSize.x + tailleBridge) == 0 || 
-                    position.z + 4 >= size.z && position.x % (tileSize.x + tailleBridge) == 11 || 
-                    position.z - 4 < 0 && position.x % (tileSize.x + tailleBridge) == 0)
+                    position.x + 8 >= size.x && position.x % (tileSize.x + tailleBridge) == 5 || 
+                    position.x - 8 < 0 && position.x % (tileSize.x + tailleBridge) == 0 || 
+                    position.z + 8 >= size.z && position.x % (tileSize.y + tailleBridge) == 11 || 
+                    position.z - 8 < 0 && position.x % (tileSize.y + tailleBridge) == 0)
                 {
                     Object.Destroy(newGo);
                     return;
@@ -326,6 +326,9 @@ public class SceneEditor
                 if (newground != null)
                 {
                     var newPanelStart = Object.Instantiate(prefabs[13], posOfnewPanelStart, Quaternion.identity);
+                    newPanelStart.transform.parent = parent.transform;
+                    newPanelStart.transform.Rotate(0, -90 * ((int)sideToInstantiateNewGrid + 1), 0);
+                    newGo.transform.Rotate(0, 90 * ((int)sideToInstantiateNewGrid + 1), 0);
                 }
                 //offset for the position of the MakePlatform function
                 Vector2 offset = sideToInstantiateNewGrid switch
@@ -348,6 +351,7 @@ public class SceneEditor
         blockGrid[(int)position.x, (int)position.y, (int)position.z] = selectedPrefabIndex;
         blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
         blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
+        Debug.Log("blockHorizontalRotationGrid[" + (int)position.x + ", " + (int)position.y + ", " + (int)position.z + "] = " + blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z]);
     }
 
     private void DragToChangeDirectionGrid()
