@@ -278,6 +278,15 @@ public class SceneEditor
                 newGo.name = "directionBlock";
                 break;
             case 13:
+                if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] == 0 || 
+                    position.x + 4 >= size.x && position.x % (tileSize.x + tailleBridge) == 5 || 
+                    position.x - 4 < 0 && position.x % (tileSize.x + tailleBridge) == 0 || 
+                    position.z + 4 >= size.z && position.x % (tileSize.x + tailleBridge) == 11 || 
+                    position.z - 4 < 0 && position.x % (tileSize.x + tailleBridge) == 0)
+                {
+                    Object.Destroy(newGo);
+                    return;
+                }
                 GameObject newground = null;
                 Vector3 posOfnewPanelStart = new Vector3();
                 Enums.Side sideToInstantiateNewGrid = Enums.Side.none;
@@ -327,6 +336,8 @@ public class SceneEditor
                     Enums.Side.forward => new Vector2(position.x - position.x % (tileSize.x + tailleBridge) , posOfnewPanelStart.z),
                     _ => new Vector2()
                 };
+                if(offset.x < 0 || offset.y < 0) return;
+                if (offset.x >= blockGrid.GetLength(0) || offset.y >= blockGrid.GetLength(2)) return;
                 if (blockGrid[(int)offset.x, 0, (int)offset.y] == 1) { break; }
                 MakePlatform((int)offset.x, (int)offset.y);
                 break;
