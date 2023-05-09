@@ -125,7 +125,7 @@ public class SceneEditor
         var posZ = (tileSize.y + tailleBridge) * (size.z / (tileSize.y + tailleBridge) / 2);
         MakePlatform(posX, posZ);
 
-        blocksUsed.Add("groundBlock");
+        blocksUsed.Add("M1_Block1");
     }
 
     private void MakePlatform(int posX, int posZ)
@@ -136,9 +136,9 @@ public class SceneEditor
             for (int z = posZ; z < posZ + tileSize.y; z++)
             {
                
-                block = Object.Instantiate(prefabs[(int)Enums.blockType.ground], new Vector3(x, 0, z), Quaternion.identity);
+                block = Object.Instantiate(prefabs[(int)Enums.blockType.M1_Block1], new Vector3(x, 0, z), Quaternion.identity);
                 block.transform.SetParent(parent.transform);
-                blockGrid[x, 0, z] = (int)Enums.blockType.ground;
+                blockGrid[x, 0, z] = (int)Enums.blockType.M1_Block1;
                 blockHorizontalRotationGrid[x, 0, z] = Enums.Side.none;
                 blockVerticalRotationGrid[x, 0, z] = Enums.Side.none;
             }
@@ -488,7 +488,7 @@ public class SceneEditor
     {
         foreach (Transform child in parent.transform)
         {
-            if (child.gameObject.name == "Ground(Clone)") continue;
+            if (child.gameObject.name == "M1_Block1(Clone)") continue;
             child.gameObject.SetActive(!child.gameObject.activeSelf);
         }
     }
