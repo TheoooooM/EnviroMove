@@ -12,6 +12,8 @@ namespace Archi.Service
     {
         [DependeOnService] private IInterfaceService m_Interface;
 
+        private LevelData currentDataLevel;
+
         protected override void Initialize()
         {
             SceneManager.sceneLoaded += OnSceneInit;
@@ -40,6 +42,7 @@ namespace Archi.Service
             level.onFinishGenerate += OnLoadLevel;
             level.levelData = data;
             level.GenerateLevel(data);
+            currentDataLevel = data;
             return level;
         }
 
@@ -51,6 +54,11 @@ namespace Archi.Service
         public LevelData GetData(Level level)
         {
             return level.levelData;
+        }
+
+        public LevelData GetCurrentLevelData()
+        {
+            return currentDataLevel;
         }
     }
 }

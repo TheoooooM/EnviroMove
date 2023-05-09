@@ -115,7 +115,7 @@ public class Enums
 
   public enum MajorCanvas
   {
-    menu, inGame, tool, toolLevels, levels
+    menu, inGame, tool, toolLevels, levels, gameover
   }
 
   public enum BlockTag

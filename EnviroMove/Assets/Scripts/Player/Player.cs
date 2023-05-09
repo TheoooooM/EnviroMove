@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Interfaces;
+using Levels;
 using UnityEngine;
 
 delegate void basicDelegate();
@@ -30,6 +31,7 @@ public class Player : MonoBehaviour, IBoardable
     void Move()
     {
         _board.CheckCameraMovement(_boardPos);
+        _board.CheckFinishLevel(_boardPos);
         var dir = _board.GetPlayerDirection(_boardPos);
         if (dir != Enums.Side.none) _lastDir = dir;
         if (_board.TryMove(_boardPos, _lastDir, out Vector3 movePosition))
@@ -42,6 +44,7 @@ public class Player : MonoBehaviour, IBoardable
 
     private void GameOver()
     {
+        _board.FinishLevel();
         Destroy(gameObject);
     }
 

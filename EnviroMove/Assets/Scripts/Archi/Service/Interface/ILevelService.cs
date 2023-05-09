@@ -9,5 +9,7 @@ namespace Archi.Service.Interface
         Level LoadLevel(Levels.LevelData data, GameObject levelContainer = null); //Instantiate Level with Level script
         
         LevelData GetData(Level data); //Get Level From Data
+
+        LevelData GetCurrentLevelData();
     }
 }

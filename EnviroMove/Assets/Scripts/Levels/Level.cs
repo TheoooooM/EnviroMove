@@ -13,6 +13,8 @@ namespace Levels
    public delegate void LevelDelegate();
    public class Level : MonoBehaviour, IBoard
    {
+      [ServiceDependency] private IInterfaceService m_interface;
+      
       public LevelDelegate onFinishGenerate;
       
       
@@ -23,6 +25,8 @@ namespace Levels
       private Dictionary<Vector3Int, Enums.Side> _cameraMovesSides = new();
 
       private Vector3Int _destinationPos;
+
+      private GameObject _player;
 
 
       public async void GenerateLevel(LevelData data)
@@ -102,6 +106,7 @@ namespace Levels
                   GameObject currentGo = Instantiate(_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]],
                         transform.position + currentPos, rotation, transform);
                   currentGo.name = currentGo.name + currentPos;
+                  if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] == (int)Enums.blockType.playerStart) _player = currentGo;
                   IBoardable currentBoardable = currentGo.GetComponent<IBoardable>();
                   if (currentBoardable == null) throw new MissingMemberException($"{currentGo.name} isn't Boardable");
                   currentBoardable.SetOnBoard(currentPos,(Enums.Side)data.blockHorizontalRotationGrid[x, y, z] , this);
@@ -221,7 +226,18 @@ namespace Levels
       
       public void CheckCameraMovement(Vector3Int pos)
       {
-         if (_cameraMovesSides.ContainsKey(pos)) StartCoroutine(MoveCamera(_cameraMovesSides[pos]));
+         if (_cameraMovesSides.TryGetValue(pos, out var side)) StartCoroutine(MoveCamera(side));
+      }
+
+      public void CheckFinishLevel(Vector3Int pos)
+      {
+         if(pos == _destinationPos) FinishLevel();
+      }
+
+      public void FinishLevel()
+      { 
+         Destroy(_player);
+         m_interface.DrawCanvas(Enums.MajorCanvas.gameover);
       }
 
       public bool TryMove(Vector3Int boardablePosition, Enums.Side side, out Vector3 position)

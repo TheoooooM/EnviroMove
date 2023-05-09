@@ -16,5 +16,8 @@ namespace Interfaces
 
         Enums.Side GetPlayerDirection(Vector3Int pos);
         void CheckCameraMovement(Vector3Int pos);
+        void CheckFinishLevel(Vector3Int pos);
+
+        void FinishLevel();
     }
 }
