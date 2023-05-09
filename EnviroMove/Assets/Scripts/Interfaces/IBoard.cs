@@ -15,5 +15,6 @@ namespace Interfaces
         Vector3 GetWorldPos(Vector3Int boardPos);
 
         Enums.Side GetPlayerDirection(Vector3Int pos);
+        void CheckCameraMovement(Vector3Int pos);
     }
 }

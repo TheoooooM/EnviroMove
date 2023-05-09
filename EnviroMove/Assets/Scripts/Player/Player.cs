@@ -29,6 +29,7 @@ public class Player : MonoBehaviour, IBoardable
 
     void Move()
     {
+        _board.CheckCameraMovement(_boardPos);
         var dir = _board.GetPlayerDirection(_boardPos);
         if (dir != Enums.Side.none) _lastDir = dir;
         if (_board.TryMove(_boardPos, _lastDir, out Vector3 movePosition))
