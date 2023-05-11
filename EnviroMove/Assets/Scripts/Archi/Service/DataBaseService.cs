@@ -38,7 +38,7 @@ namespace Archi.Service
 
            //dbReference.Child("Levels").RemoveValueAsync();
             container.Init(this);
-            UpdateData();
+            // UpdateData();
         }
 
         public string LevelPath() {return levelPath;}
