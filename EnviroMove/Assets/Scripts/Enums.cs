@@ -110,7 +110,7 @@ public class Enums
   {
     empty, ground, playerStart, playerEnd, box, breakableBlock, chariot, frog, ice, penguin, rabbit, directionBlock, panelStart, panelEnd,
     M1_Block1, M1_Block2, M1_Block3, M1_Block4, M1_Block5, M1_Block6, M1_Block7, M1_Block8, M1_Block9, M1_Block10, M1_Block11, M1_Block12,
-    M1_Block13, M1_Block14, M1_Block15, M1_Block16, M1_Block17, M1_Block18
+    M1_Block13, M1_Block14, M1_Block15, M1_Block16, M1_Block17, M1_Block18, M1_Border,
   }
 
   public enum MajorCanvas
