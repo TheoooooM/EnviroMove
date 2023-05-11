@@ -69,6 +69,11 @@ public class SceneEditor
 
     private LevelData curentLevelData;
 
+    public SceneEditor()
+    {
+        
+    }
+
     public void Start()
     {
         size = defaultSize;

@@ -30,6 +30,7 @@ namespace UI.Canvas
         public void ReturnButton()
         {
             m_Tool.ShowLevels();
+            m_Tool.DesactivateTool();
         }
     
         public void ChangePrefab(int index)
