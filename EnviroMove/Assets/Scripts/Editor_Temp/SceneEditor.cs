@@ -278,6 +278,7 @@ public class SceneEditor
                 newGo.name = "directionBlock";
                 break;
             case 13:
+                int rotation = 0;
                 if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] == 0 || 
                     position.x + 8 >= size.x && position.x % (tileSize.x + tailleBridge) == 5 || 
                     position.x - 8 < 0 && position.x % (tileSize.x + tailleBridge) == 0 || 
@@ -299,11 +300,17 @@ public class SceneEditor
                             newground = Object.Instantiate(prefabs[1], new Vector3(position.x - i ,0, position.z), Quaternion.identity);
                             posOfnewPanelStart = new Vector3(position.x - i - 1, 1, position.z);
                             sideToInstantiateNewGrid = Enums.Side.left;
+                            blockGrid[(int)position.x - i, (int)position.y, (int)position.z] = 1;
+                            rotation = 270;
+                            directionGrid[(int)position.x - i, (int)position.y, (int)position.z] = Enums.Side.left;
                             break;
                         case 5:
                             newground = Object.Instantiate(prefabs[1], new Vector3(position.x + i, 0, position.z), Quaternion.identity);
                             posOfnewPanelStart = new Vector3(position.x + i + 1, 1, position.z);
                             sideToInstantiateNewGrid = Enums.Side.right;
+                            blockGrid[(int)position.x + i, (int)position.y, (int)position.z] = 1;
+                            rotation = 90;
+                            directionGrid[(int)position.x + i, (int)position.y, (int)position.z] = Enums.Side.right;
                             break;
                         default:
                             switch (position.z % (tileSize.y + tailleBridge))
@@ -312,11 +319,17 @@ public class SceneEditor
                                     newground = Object.Instantiate(prefabs[1], new Vector3(position.x, 0, position.z - i), Quaternion.identity);
                                     posOfnewPanelStart = new Vector3(position.x, 1, position.z - i - 1);
                                     sideToInstantiateNewGrid = Enums.Side.back;
+                                    blockGrid[(int)position.x, (int)position.y, (int)position.z - i] = 1;
+                                    rotation = 180;
+                                    directionGrid[(int)position.x, (int)position.y, (int)position.z - i] = Enums.Side.back;
                                     break;
                                 case 11:
                                     newground = Object.Instantiate(prefabs[1], new Vector3(position.x, 0, position.z + i), Quaternion.identity);
                                     posOfnewPanelStart = new Vector3(position.x, 1, position.z + i + 1);
                                     sideToInstantiateNewGrid = Enums.Side.forward;
+                                    blockGrid[(int)position.x, (int)position.y, (int)position.z + i] = 1;
+                                    rotation = 0;
+                                    directionGrid[(int)position.x, (int)position.y, (int)position.z + i] = Enums.Side.forward;
                                     break;
                             }
 
@@ -327,8 +340,8 @@ public class SceneEditor
                 {
                     var newPanelStart = Object.Instantiate(prefabs[13], posOfnewPanelStart, Quaternion.identity);
                     newPanelStart.transform.parent = parent.transform;
-                    newPanelStart.transform.Rotate(0, -90 * ((int)sideToInstantiateNewGrid + 1), 0);
-                    newGo.transform.Rotate(0, 90 * ((int)sideToInstantiateNewGrid + 1), 0);
+                    newPanelStart.transform.Rotate(0, rotation, 0);
+                    newGo.transform.Rotate(0, rotation, 0);
                 }
                 //offset for the position of the MakePlatform function
                 Vector2 offset = sideToInstantiateNewGrid switch
