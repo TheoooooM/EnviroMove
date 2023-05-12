@@ -154,6 +154,12 @@ public class SceneEditor
         while (firstBlockPosition.y > 0) firstBlockPosition.y -= tileSize.y;
         firstBlockPosition.x += tileSize.x;
         firstBlockPosition.y += tileSize.y;
+        
+        block = Object.Instantiate(prefabs[(int)Enums.blockType.M1_Border], new Vector3(posX + tileSize.x / 2 - .5f, 0, posZ + tileSize.y / 2 - .5f),
+            Quaternion.identity);
+        block.transform.Rotate(0, 90, 0);
+        block.transform.SetParent(parent.transform);
+        block.name = (posX + tileSize.x / 2 - .5f) + " " + 0 + " " + (posZ + tileSize.y / 2 - .5f);
     }
 
     private void DestroyPlatform(int posX, int posZ)
@@ -174,6 +180,9 @@ public class SceneEditor
         while (firstBlockPosition.y > 0) firstBlockPosition.y -= tileSize.y;
         firstBlockPosition.x += tileSize.x;
         firstBlockPosition.y += tileSize.y;
+        
+        // destroy border
+        Object.Destroy(parent.transform.Find((posX + tileSize.x / 2 - .5f) + " " + 0 + " " + (posZ + tileSize.y / 2 - .5f)).gameObject);
     }
 
     public void Update()
@@ -318,6 +327,8 @@ public class SceneEditor
                 if (offset.x < 0 || offset.y < 0 || offset.x >= blockGrid.GetLength(0) ||
                     offset.y >= blockGrid.GetLength(2)) return true;
                 if (blockGrid[(int)offset.x, 0, (int)offset.y] == 1) break;
+                //check if there is already a platform
+                if (blockGrid[(int)offset.x, 0, (int)offset.y] != 0) return true;
                 MakePlatform((int)offset.x, (int)offset.y);
                 break;
         }
