@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Archi.Service.Interface;
@@ -8,6 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
+using Object = UnityEngine.Object;
 using Vector3 = UnityEngine.Vector3;
 #if UNITY_STANDALONE && !UNITY_EDITOR
 using JsonUtility = UnityEngine.JsonUtility;
@@ -490,8 +492,7 @@ public class SceneEditor
         var blockHorizontalRotationGridIntArray = Enums.SideToIntArray(blockHorizontalRotationGrid);
         var blockVerticalRotationGridIntArray = Enums.SideToIntArray(blockVerticalRotationGrid);
         var playerDirGridVector3Array = Enums.SideToVector3Array(directionGrid);
-        data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGridIntArray,
-            blockVerticalRotationGridIntArray, playerDirGridVector3Array);
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGridIntArray, blockVerticalRotationGridIntArray, playerDirGridVector3Array);
         curentLevelData = data;
         return data;
     }
@@ -518,6 +519,11 @@ public class SceneEditor
         blockGrid = dataToLoad.blockGrid;
         directionGrid = Enums.IntToSideArray(dataToLoad.playerDir);
         blockHorizontalRotationGrid = Enums.IntToSideArray(dataToLoad.blockHorizontalRotationGrid);
+        //debug blockHorizontalRotationGrid = Enums.IntToSideArray(dataToLoad.blockHorizontalRotationGrid);
+        foreach (var block in blockHorizontalRotationGrid)
+        {
+            Debug.Log(block);
+        }
         blockVerticalRotationGrid = Enums.IntToSideArray(dataToLoad.blockVerticalRotationGrid);
         for (int z = 0; z < blockGrid.GetLength(2); z++)
         {
@@ -537,13 +543,50 @@ public class SceneEditor
         int prefabIndex = blockGrid[x, y, z];
         var block = Object.Instantiate(prefabs[prefabIndex], new Vector3(x, y, z),
             Quaternion.identity);
-        block.transform.Rotate(Enums.SideVector3(blockHorizontalRotationGrid[x, y, z]) * 90f);
-        block.transform.Rotate(Enums.SideVector3(blockVerticalRotationGrid[x, y, z]) * 90f);
+        switch (blockHorizontalRotationGrid[x, y, z])
+        {
+            case Enums.Side.right:
+                block.transform.Rotate(0, 90, 0);
+                break;
+            case Enums.Side.left:
+                block.transform.Rotate(0, -90, 0);
+                break;
+            case Enums.Side.forward:
+                
+                break;
+            case Enums.Side.back:
+                block.transform.Rotate(0, 180, 0);
+                break;
+            case Enums.Side.none:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        switch (blockVerticalRotationGrid[x, y, z])
+        {
+            case Enums.Side.forward:
+                break;
+            case Enums.Side.back:
+                block.transform.Rotate(180, 0, 0);
+                break;
+            case Enums.Side.up:
+                block.transform.Rotate(90, 0, 0);
+                break;
+            case Enums.Side.down:
+                block.transform.Rotate(-90, 0, 0);
+                break;
+            case Enums.Side.none:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        Debug.Log(blockHorizontalRotationGrid[x, y, z]);
+        Debug.Log(blockVerticalRotationGrid[x, y, z]);
         block.transform.parent = parent.transform;
         if (directionGrid[x, y, z] != Enums.Side.none)
         {
             var directionBlock = Object.Instantiate(prefabs[11], new Vector3(x, y, z), Quaternion.identity);
-            directionBlock.transform.Rotate(Enums.SideVector3(directionGrid[x, y, z]));
+            directionBlock.transform.Rotate(Enums.SideVector3(directionGrid[x, y, z] - 1));
             directionBlock.transform.parent = parent.transform;
         }
     }
@@ -594,7 +637,7 @@ public class SceneEditor
         if (Physics.Raycast(ray, out hitRay))
         {
             if (hitRay.transform.gameObject.transform.name == "Plane") return;
-            hitRay.transform.Rotate(90, 0, 0);
+            hitRay.transform.Rotate(-90, 0, 0);
             if (RotateInDirectionGridVertical(hitRay)) return;
 
             RotateBlockVertical(hitRay);
@@ -607,10 +650,10 @@ public class SceneEditor
         blockVerticalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] =
             blockVerticalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] switch
             {
-                Enums.Side.forward => Enums.Side.up,
-                Enums.Side.up => Enums.Side.back,
-                Enums.Side.back => Enums.Side.down,
-                Enums.Side.down => Enums.Side.forward,
+                Enums.Side.forward => Enums.Side.down,
+                Enums.Side.up => Enums.Side.forward,
+                Enums.Side.back => Enums.Side.up,
+                Enums.Side.down => Enums.Side.back,
                 _ => blockVerticalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z]
             };
     }
@@ -622,13 +665,13 @@ public class SceneEditor
         directionGrid[(int)position2.x, (int)position2.y, (int)position2.z] =
             directionGrid[(int)position2.x, (int)position2.y, (int)position2.z] switch
             {
-                Enums.Side.forward => Enums.Side.up,
-                Enums.Side.up => Enums.Side.back,
-                Enums.Side.back => Enums.Side.down,
-                Enums.Side.down => Enums.Side.forward,
+                Enums.Side.forward => Enums.Side.down,
+                Enums.Side.up => Enums.Side.forward,
+                Enums.Side.back => Enums.Side.up,
+                Enums.Side.down => Enums.Side.back,
                 _ => directionGrid[(int)position2.x, (int)position2.y, (int)position2.z]
             };
-        hitRay.transform.Rotate(0, 0, 90);
+        hitRay.transform.Rotate(90, 0, 0);
         return true;
 
     }
@@ -643,7 +686,7 @@ public class SceneEditor
         if (Physics.Raycast(ray, out hitRay))
         {
             if (hitRay.transform.gameObject.transform.name == "Plane") return;
-            hitRay.transform.Rotate(0, 90, 0);
+            hitRay.transform.Rotate(0, -90, 0);
             RotateInDirectionGridHorizontal(hitRay);
             RotateBlockHorizontal(hitRay);
         }
@@ -656,12 +699,16 @@ public class SceneEditor
         blockHorizontalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] =
             blockHorizontalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] switch
             {
-                Enums.Side.forward => Enums.Side.right,
-                Enums.Side.right => Enums.Side.back,
-                Enums.Side.back => Enums.Side.left,
-                Enums.Side.left => Enums.Side.forward,
+                Enums.Side.forward => Enums.Side.left,
+                Enums.Side.right => Enums.Side.forward,
+                Enums.Side.back => Enums.Side.right,
+                Enums.Side.left => Enums.Side.back,
                 _ => blockHorizontalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z]
             };
+        Debug.Log("Horizontal Rotation at " + blockPosition + " is " +
+                  blockHorizontalRotationGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z] +
+                  " and direction is " +
+                  directionGrid[(int)blockPosition.x, (int)blockPosition.y, (int)blockPosition.z]);
     }
 
     private void RotateInDirectionGridHorizontal(RaycastHit hitRay)
@@ -672,10 +719,10 @@ public class SceneEditor
             directionGrid[(int)position1.x, (int)position1.y, (int)position1.z] =
                 directionGrid[(int)position1.x, (int)position1.y, (int)position1.z] switch
                 {
-                    Enums.Side.forward => Enums.Side.right,
-                    Enums.Side.right => Enums.Side.back,
-                    Enums.Side.back => Enums.Side.left,
-                    Enums.Side.left => Enums.Side.forward,
+                    Enums.Side.forward => Enums.Side.left,
+                    Enums.Side.right => Enums.Side.forward,
+                    Enums.Side.back => Enums.Side.right,
+                    Enums.Side.left => Enums.Side.back,
                     _ => directionGrid[(int)position1.x, (int)position1.y, (int)position1.z]
                 };
         }
