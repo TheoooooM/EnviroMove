@@ -25,6 +25,8 @@ public class Player : MonoBehaviour, IBoardable
     [SerializeField] protected List<Enums.BlockTag> tags;
     public List<Enums.BlockTag> GetTags() => tags;
 
+    [SerializeField] private Animator _animator;
+
 
     
 
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour, IBoardable
         if (_board.TryMove(_boardPos, _lastDir, out Vector3 movePosition))
         {
             _moving = true;
+            _animator.SetTrigger("Walk");
             MoveToPoint(movePosition, moveSpeed);
         }
         else GameOver();
@@ -44,15 +47,27 @@ public class Player : MonoBehaviour, IBoardable
 
     private void GameOver()
     {
+        _animator.SetTrigger("Death");
+        StopCoroutineAction();
+        enabled = false;
+    }
+
+    public void AsyncGameOver()
+    {
         _board.FinishLevel();
         Destroy(gameObject);
     }
-
     
 
     public void StopCoroutineAction()
     {
-        StopCoroutine(_actionCoroutine);
+        if(_actionCoroutine != null)StopCoroutine(_actionCoroutine);
+    }
+
+    public void Grab(Vector3 newPos, float speed = 0)
+    {
+        _animator.SetTrigger("Grab");
+        MoveToPoint(newPos, speed);
     }
 
     public void MoveToPoint(Vector3 newPos, float speed, bool instanteMove = false)

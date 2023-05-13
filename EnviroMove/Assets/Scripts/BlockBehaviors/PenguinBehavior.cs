@@ -5,6 +5,8 @@ namespace BlockBehaviors
 {
     public class PenguinBehavior : BlockBehavior, IInteractable
     {
+        [SerializeField] private Animator _animator;
+        
         private bool isInteractible = true;
 
         public bool IsInteractible() => isInteractible;
@@ -20,9 +22,9 @@ namespace BlockBehaviors
 
         void Slide(Enums.Side side)
         {
-            Debug.Log("Slide");
-           Move(side);
-           onMoveFinish += ()=>Move(side);
+            _animator.SetTrigger("Slide");
+            Move(side);
+            onMoveFinish += () => Move(side);
         }
 
         void Move(Enums.Side side)
