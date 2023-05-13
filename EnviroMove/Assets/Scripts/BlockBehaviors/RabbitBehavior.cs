@@ -6,36 +6,47 @@ namespace BlockBehaviors
 {
     public class RabbitBehavior : InteractiveBlockBehavior
     {
+        [SerializeField] private Animator _animator;
         private bool tunnelSet;
         private Vector3Int secondPos;
 
-        [SerializeField] private MeshRenderer rabbitMesh;
+        [SerializeField] private GameObject rabbitMesh;
         [Space]
         [SerializeField] private GameObject hole1;
         [SerializeField] private GameObject hole2;
 
         private Dictionary<IBoardable, Vector3Int> boardableEnters = new();
 
-        public override void Select() { }
+        public override void Select()
+        {
+            Debug.Log("Select Rabbit");
+        }
 
+        public Vector3Int tempPos;
         public override void Deselect(IBoardable releaseBoardable)
         {
             if (releaseBoardable == null || releaseBoardable == (IBoardable)this) return;
             Vector3Int pos = boardMaster.GetPosition(releaseBoardable);
             var topblock = boardMaster.GetNeighbor(pos, Enums.Side.up, out _);
-            if (topblock == null) CreateTunnel(pos + Vector3Int.up);
+            if (topblock == null)
+            {
+                Debug.Log("Dig");
+                _animator.SetTrigger("Dig");
+                tempPos = pos + Vector3Int.up;
+            }
         }
 
-        void CreateTunnel(Vector3Int tunnelPos)
+        public void CreateTunnel(Vector3Int tunnelPos)
         {
             boardMaster.SetAt(this, tunnelPos);
             hole1.SetActive(true);
             hole2.SetActive(true);
             secondPos = tunnelPos;
             hole2.transform.position = boardMaster.GetWorldPos(tunnelPos) + hole2.transform.localPosition;
-            rabbitMesh.enabled = false;
+            rabbitMesh.SetActive(false);
             isInteractable = false;
             tunnelSet = true;
+            tempPos = default;
         }
 
         public override void Swipe(Enums.Side side) { }
