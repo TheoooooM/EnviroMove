@@ -274,8 +274,8 @@ public class SceneEditor
         var blockPlacedAddress = Blocks.BlockType[(Enums.blockType)selectedPrefabIndex];
         if (!blocksUsed.Contains(blockPlacedAddress)) blocksUsed.Add(blockPlacedAddress);
         blockGrid[(int)position.x, (int)position.y, (int)position.z] = selectedPrefabIndex;
-        blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
-        blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
+        if (blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] == Enums.Side.none) blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
+        if (blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] == Enums.Side.none) blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
         Debug.Log("blockHorizontalRotationGrid[" + (int)position.x + ", " + (int)position.y + ", " + (int)position.z +
                   "] = " + blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z]);
     }
@@ -333,8 +333,7 @@ public class SceneEditor
                         posOfnewPanelStart.z),
                     _ => new Vector2()
                 };
-                if (offset.x < 0 || offset.y < 0 || offset.x >= blockGrid.GetLength(0) ||
-                    offset.y >= blockGrid.GetLength(2)) return true;
+                if (offset.x < 0 || offset.y < 0 || offset.x >= blockGrid.GetLength(0) || offset.y >= blockGrid.GetLength(2)) return true;
                 if (blockGrid[(int)offset.x, 0, (int)offset.y] == 1) break;
                 //check if there is already a platform
                 if (blockGrid[(int)offset.x, 0, (int)offset.y] != 0) return true;
@@ -352,7 +351,31 @@ public class SceneEditor
             var newPanelStart = Object.Instantiate(prefabs[13], posOfnewPanelStart, Quaternion.identity);
             newPanelStart.transform.parent = parent.transform;
             newPanelStart.transform.Rotate(0, rotation, 0);
+            var newGoGridPos = newGo.transform.position;
+            Debug.Log("newGoGridPos: " + newGoGridPos);
+            blockHorizontalRotationGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z] = rotation switch
+            {
+                0 => Enums.Side.forward,
+                90 => Enums.Side.right,
+                180 => Enums.Side.back,
+                270 => Enums.Side.left,
+                _ => blockHorizontalRotationGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z]
+            };
+            Debug.Log("blockHorizontalRotationGrid[" + (int)newGoGridPos.x + ", " + (int)newGoGridPos.y + ", " +
+                      (int)newGoGridPos.z + "] = " +
+                      blockHorizontalRotationGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z]);
             newGo.transform.Rotate(0, rotation, 0);
+            blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = rotation switch
+            {
+                0 => Enums.Side.forward,
+                90 => Enums.Side.right,
+                180 => Enums.Side.back,
+                270 => Enums.Side.left,
+                _ => blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z]
+            };
+            Debug.Log("blockHorizontalRotationGrid[" + (int)posOfnewPanelStart.x + ","+ (int)posOfnewPanelStart.y + " , " +
+                      (int)posOfnewPanelStart.z + "] = " +
+                      blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z]);
         }
     }
 
@@ -440,8 +463,13 @@ public class SceneEditor
         if (blockHit == null || position.x < blockHit.transform.position.x ||
             position.x >= blockHit.transform.position.x + size.x ||
             position.y < blockHit.transform.position.y || position.y >= blockHit.transform.position.y + size.y ||
-            position.z < blockHit.transform.position.z || position.z >= blockHit.transform.position.z + size.z ||
-            Math.Abs(blockHit.transform.position.y - defaultSize.y) < 0.01f)
+            position.z < blockHit.transform.position.z || position.z >= blockHit.transform.position.z + size.z)
+        {
+            newGo = null;
+            return true;
+        }
+        
+        if (position.y >= size.y || position.y < 0)
         {
             newGo = null;
             return true;
