@@ -290,10 +290,10 @@ public class SceneEditor
                 break;
             case 13:
                 int rotation = 0;
-                if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] == 0 || 
-                    position.x + 8 >= size.x && position.x % (tileSize.x + tailleBridge) == 5 || 
-                    position.x - 8 < 0 && position.x % (tileSize.x + tailleBridge) == 0 || 
-                    position.z + 8 >= size.z && position.x % (tileSize.y + tailleBridge) == 11 || 
+                if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] == 0 ||
+                    position.x + 8 >= size.x && position.x % (tileSize.x + tailleBridge) == 5 ||
+                    position.x - 8 < 0 && position.x % (tileSize.x + tailleBridge) == 0 ||
+                    position.z + 8 >= size.z && position.x % (tileSize.y + tailleBridge) == 11 ||
                     position.z - 8 < 0 && position.x % (tileSize.y + tailleBridge) == 0)
                 {
                     Object.Destroy(newGo);
@@ -305,44 +305,12 @@ public class SceneEditor
                 Enums.Side sideToInstantiateNewGrid = Enums.Side.none;
                 for (int i = 1; i <= tailleBridge; i++)
                 {
-                    switch (position.x % (tileSize.x + tailleBridge))
-                    {
-                        //left x = 0, right = 5, back = 0, forward = 15
-                        case 0:
-                            newground = Object.Instantiate(prefabs[1], new Vector3(position.x - i ,0, position.z), Quaternion.identity);
-                            posOfnewPanelStart = new Vector3(position.x - i - 1, 1, position.z);
-                            sideToInstantiateNewGrid = Enums.Side.left;
-                            break;
-                        case 5:
-                            newground = Object.Instantiate(prefabs[1], new Vector3(position.x + i, 0, position.z), Quaternion.identity);
-                            posOfnewPanelStart = new Vector3(position.x + i + 1, 1, position.z);
-                            sideToInstantiateNewGrid = Enums.Side.right;
-                            break;
-                        default:
-                            switch (position.z % (tileSize.y + tailleBridge))
-                            {
-                                case 0:
-                                    newground = Object.Instantiate(prefabs[1], new Vector3(position.x, 0, position.z - i), Quaternion.identity);
-                                    posOfnewPanelStart = new Vector3(position.x, 1, position.z - i - 1);
-                                    sideToInstantiateNewGrid = Enums.Side.back;
-                                    break;
-                                case 11:
-                                    newground = Object.Instantiate(prefabs[1], new Vector3(position.x, 0, position.z + i), Quaternion.identity);
-                                    posOfnewPanelStart = new Vector3(position.x, 1, position.z + i + 1);
-                                    sideToInstantiateNewGrid = Enums.Side.forward;
-                                    break;
-                            }
+                    newground = SwitchBridgePlacement(position, newground, i, ref posOfnewPanelStart,
+                        ref sideToInstantiateNewGrid, ref rotation);
+                }
 
-                            break;
-                    }
-                }
-                if (newground != null)
-                {
-                    var newPanelStart = Object.Instantiate(prefabs[13], posOfnewPanelStart, Quaternion.identity);
-                    newPanelStart.transform.parent = parent.transform;
-                    newPanelStart.transform.Rotate(0, -90 * ((int)sideToInstantiateNewGrid + 1), 0);
-                    newGo.transform.Rotate(0, 90 * ((int)sideToInstantiateNewGrid + 1), 0);
-                }
+                PlacePanelEnd(newGo, newground, posOfnewPanelStart, rotation);
+
                 //offset for the position of the MakePlatform function
                 Vector2 offset = sideToInstantiateNewGrid switch
                 {
