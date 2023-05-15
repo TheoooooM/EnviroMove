@@ -32,6 +32,20 @@ namespace Levels
             this.blockHorizontalRotationGrid = blockHorizontalRotationGrid;
             this.blockVerticalRotationGrid = blockVerticalRotationGrid;
         }
+        
+        public LevelData(Vector3Int size, int[] blockEnumerable, string[] levelBlocksUsed, int[] blockHorizontalRotationEnumerable, int[] blockVerticalRotationEnumerable, int[] playerDirEnumerable)
+        {
+            this.size = size;
+            this.blockEnumerable = blockEnumerable;
+            blockGrid = BlockEnumerable(blockEnumerable, size);
+            blocksUsed = levelBlocksUsed;
+            _blockHorizontalRotationEnumerable = blockHorizontalRotationEnumerable;
+            blockHorizontalRotationGrid = BlockEnumerable(blockHorizontalRotationEnumerable, size);
+            _blockVerticalRotationEnumerable = blockVerticalRotationEnumerable;
+            blockVerticalRotationGrid = BlockEnumerable(blockVerticalRotationEnumerable, size);
+            this.playerDirEnumerable = playerDirEnumerable;
+            playerDir = BlockEnumerable(this.playerDirEnumerable, size);
+        }
 
         public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed, int[,,] blockHorizontalRotationGrid, int[,,] blockVerticalRotationGrid, Vector3[,,] playerDirGrid)
         {

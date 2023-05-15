@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Archi.Service.Interface;
@@ -36,10 +37,10 @@ namespace Archi.Service
 
            dbReference = FirebaseDatabase.DefaultInstance.RootReference;
 
-           //dbReference.Child("Levels").RemoveValueAsync();
             container.Init(this);
-            // UpdateData();
+            UpdateData();
         }
+        // Remove DB : dbReference.Child("Levels").RemoveValueAsync();
 
         public string LevelPath() {return levelPath;}
         public string InfoPath() {return infoPath;}
@@ -134,8 +135,18 @@ namespace Archi.Service
             {
                 foreach (var level in user.Children)
                 {
-                    var data = JsonUtility.ToJson(level.Value);
-                    var levelData = JsonUtility.FromJson<LevelData>(data);
+                    var values = (Dictionary<string, object>)level.Value;
+                    var items = values["blockEnumerable"];
+                    int[] blockEnumerable = ConvertObjects<int>((List<object>)values["blockEnumerable"]) ;
+                    //Vector3Int size = new Vector3Int(values["size"][0],values["size"][1] ,values["size"][2]);
+                    string[] blockUsed = ConvertObjects<string>((List<object>)values["blocksUsed"]);
+                    int[] blockHorizontalRotationEnumerable = ConvertObjects<int>((List<object>)values["_blockHorizontalRotationEnumerable"]);
+                    int[] blockVerticalRotationEnumerable = ConvertObjects<int>((List<object>)values["_blockVerticalRotationEnumerable"]);
+                    int[] playerDirEnumerable = ConvertObjects<int>((List<object>)values["playerDirEnumerable"]);
+                    
+                    var newLevel = new LevelData( new Vector3Int(0,0,0), blockEnumerable , blockUsed, blockHorizontalRotationEnumerable, blockVerticalRotationEnumerable,playerDirEnumerable ) ;
+                    return;
+                    var levelData = newLevel;
 
                     if (!container.allInfoDatas.Any(i => i.id == levelData.id))
                     {
@@ -219,5 +230,36 @@ namespace Archi.Service
             id += $"-{DateTime.Now.Hour}{DateTime.Now.Minute}{DateTime.Now.Second}";
             return id;
         }
+
+        T[] ConvertObjects<T>(IEnumerable<object> objects)
+        {
+            IEnumerator<T> enumerator = (IEnumerator<T>)objects.GetEnumerator();
+            List<T> values = new();
+            while (enumerator.MoveNext())
+            {
+                values.Add(enumerator.Current);
+            }
+
+            return values.ToArray();
+            
+            /*
+            var list = new List<bool>();
+            do
+            {
+                if(enumerator.Current == null) ints.Add(default);
+                else ints.Add((int)enumerator.Current);
+            } while (enumerator.MoveNext());
+
+            return ints.ToArray();
+            */
+        }
     }
 }
+
+public partial struct Int64
+{
+    public static explicit operator int(Int64 value)
+    {
+        return Convert.ToInt32(value);
+    }
+} 
