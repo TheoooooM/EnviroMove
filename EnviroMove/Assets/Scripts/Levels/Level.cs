@@ -102,7 +102,7 @@ namespace Levels
                      continue;
                   }
 
-                  Quaternion rotation = Quaternion.LookRotation(Enums.SideVector3((Enums.Side)data.blockHorizontalRotationGrid[x, y, z]), Enums.SideVector3((Enums.Side)data.blockVerticalRotationGrid[x, y, z]));
+                  Quaternion rotation = Quaternion.LookRotation(Enums.SideVector3((Enums.Side)data.blockHorizontalRotationGrid[x, y, z]), Vector3.up);
                   GameObject currentGo = Instantiate(_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]],
                         transform.position + currentPos, rotation, transform);
                   currentGo.name = currentGo.name + currentPos;

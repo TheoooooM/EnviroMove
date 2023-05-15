@@ -284,15 +284,6 @@ public class SceneEditor
     {
         switch (selectedPrefabIndex)
         {
-            case 6:
-                Debug.Log("case 6 block below: " + blockGrid[(int)position.x, (int)position.y - 1, (int)position.z]);
-                if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] != 1)
-                {
-                    Object.Destroy(newGo);
-                    return true;
-                }
-
-                break;
             case 11:
                 directionGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
                 newGo.name = "directionBlock";
