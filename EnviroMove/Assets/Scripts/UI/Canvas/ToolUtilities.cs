@@ -1,13 +1,10 @@
-using System;
 using Archi.Service.Interface;
 using Attributes;
-using Levels;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using LevelData = Levels.LevelData;
-
 namespace UI.Canvas
 {
     public class ToolUtilities : CanvasUtilities
@@ -62,6 +59,12 @@ namespace UI.Canvas
             var data = m_Tool.GetDataCreation();
             if (data.id == null) data.id = m_data.GetUniqueIdentifier();
             m_data.CreateData((string)data, data.id);
+        }
+        
+        public void SliderCamera(GameObject slider)
+        {
+            var value = slider.GetComponent<Slider>().value;
+            m_Tool.SliderCamera(value);
         }
         
         public void SwitchMode(int index)
