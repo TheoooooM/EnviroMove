@@ -72,7 +72,9 @@ public class SceneEditor
     private EditorMode Mode = EditorMode.create;
 
     private LevelData curentLevelData;
-    
+
+    public float cameraSpeed = 0.5f;
+
     #endregion
 
     public void Start()
@@ -219,8 +221,13 @@ public class SceneEditor
         if (Input.GetTouch(0).phase == TouchPhase.Moved)
         {
             Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
-            _camera.transform.position += new Vector3(-touchDeltaPosition.x, 0, -touchDeltaPosition.y) * Time.deltaTime;
+            _camera.transform.position += new Vector3(-touchDeltaPosition.x * cameraSpeed * Time.deltaTime, 0, -touchDeltaPosition.y * cameraSpeed * Time.deltaTime);
         }
+    }
+
+    public void SliderCamera(float value)
+    {
+        cameraSpeed = value;
     }
 
     private void Create()
@@ -429,10 +436,12 @@ public class SceneEditor
         position.x = Mathf.Round(position.x / sizeOfGridSpace) * sizeOfGridSpace;
         position.y = Mathf.Round(position.y / sizeOfGridSpace) * sizeOfGridSpace;
         position.z = Mathf.Round(position.z / sizeOfGridSpace) * sizeOfGridSpace;
+        
         if (blockHit == null || position.x < blockHit.transform.position.x ||
             position.x >= blockHit.transform.position.x + size.x ||
             position.y < blockHit.transform.position.y || position.y >= blockHit.transform.position.y + size.y ||
-            position.z < blockHit.transform.position.z || position.z >= blockHit.transform.position.z + size.z)
+            position.z < blockHit.transform.position.z || position.z >= blockHit.transform.position.z + size.z ||
+            Math.Abs(blockHit.transform.position.y - defaultSize.y) < 0.01f)
         {
             newGo = null;
             return true;

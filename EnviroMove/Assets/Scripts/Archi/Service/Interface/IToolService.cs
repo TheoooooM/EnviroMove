@@ -29,5 +29,7 @@ namespace Archi.Service.Interface
         //public void TestLevel();
         void ToggleLevelElements();
         void ChangeCameraAngle();
+        
+        void SliderCamera(float value);
     }
 }

@@ -107,6 +107,11 @@ namespace Archi.Service
 
 
         #region SceneEditor
+        
+        public void SliderCamera(float value)
+        {
+            sceneEditor.SliderCamera(value);
+        }
         public void CleanScene()
         {
             // parent = GameObject.Find(inputField.text);
