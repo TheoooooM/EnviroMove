@@ -22,6 +22,7 @@ namespace BlockBehaviors
 
         void Slide(Enums.Side side)
         {
+            transform.rotation = Quaternion.LookRotation(Enums.SideVector3(Enums.InverseSide(side)), Vector3.up);
             _animator.SetTrigger("Slide");
             Move(side);
             onMoveFinish += () => Move(side);

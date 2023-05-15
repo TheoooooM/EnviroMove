@@ -38,6 +38,7 @@ public class Player : MonoBehaviour, IBoardable
         if (dir != Enums.Side.none) _lastDir = dir;
         if (_board.TryMove(_boardPos, _lastDir, out Vector3 movePosition))
         {
+            transform.rotation = Quaternion.LookRotation(Enums.SideVector3(_lastDir), Vector3.up);
             _moving = true;
             _animator.SetTrigger("Walk");
             MoveToPoint(movePosition, moveSpeed);
