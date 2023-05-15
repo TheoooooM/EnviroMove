@@ -22,11 +22,12 @@ namespace UI.Canvas
         }
 
         private LevelData dataToTest;
-        public void LoadLevelData(int i)
+        public void LoadLevelData(string data)
         {
             //m_Level.LoadLevel((LevelData)constantLevels.GetLevel(i));
 
-            dataToTest = (LevelData)constantLevels.GetLevel(i);
+            //dataToTest = (LevelData)constantLevels.GetLevel(i);
+            dataToTest = (LevelData)data;
             SceneManager.sceneLoaded += AsyncTestLevel;
             ChangeScene("InGame");
             
