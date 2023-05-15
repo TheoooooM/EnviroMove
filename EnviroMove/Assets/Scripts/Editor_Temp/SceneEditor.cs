@@ -547,11 +547,6 @@ public class SceneEditor
         blockGrid = dataToLoad.blockGrid;
         directionGrid = Enums.IntToSideArray(dataToLoad.playerDir);
         blockHorizontalRotationGrid = Enums.IntToSideArray(dataToLoad.blockHorizontalRotationGrid);
-        //debug blockHorizontalRotationGrid = Enums.IntToSideArray(dataToLoad.blockHorizontalRotationGrid);
-        foreach (var block in blockHorizontalRotationGrid)
-        {
-            Debug.Log(block);
-        }
         blockVerticalRotationGrid = Enums.IntToSideArray(dataToLoad.blockVerticalRotationGrid);
         for (int z = 0; z < blockGrid.GetLength(2); z++)
         {
@@ -559,10 +554,38 @@ public class SceneEditor
             {
                 for (int x = 0; x < blockGrid.GetLength(0); x++)
                 {
+                    if (directionGrid[x, y, z] != Enums.Side.none)
+                    {
+                        Debug.Log("Direction block instantiated" + x + y + z);
+                        InstantiateDirectionPrefab(x, y, z);
+                    }
                     if (blockGrid[x, y, z] == 0) continue;
                     InstantiateBlock(x, y, z);
                 }
             }
+        }
+    }
+
+    private void InstantiateDirectionPrefab(int i, int i1, int i2)
+    {
+        var block = Object.Instantiate(prefabs[11], new Vector3(i, i1, i2), Quaternion.identity);
+        switch (directionGrid[i, i1, i2])
+        {
+            case Enums.Side.right:
+                block.transform.Rotate(0, 90, 0);
+                break;
+            case Enums.Side.left:
+                block.transform.Rotate(0, -90, 0);
+                break;
+            case Enums.Side.forward:
+                break;
+            case Enums.Side.back:
+                block.transform.Rotate(0, 180, 0);
+                break;
+            case Enums.Side.none:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
@@ -608,8 +631,6 @@ public class SceneEditor
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        Debug.Log(blockHorizontalRotationGrid[x, y, z]);
-        Debug.Log(blockVerticalRotationGrid[x, y, z]);
         block.transform.parent = parent.transform;
         if (directionGrid[x, y, z] != Enums.Side.none)
         {
