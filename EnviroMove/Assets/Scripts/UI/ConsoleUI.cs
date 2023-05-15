@@ -8,6 +8,7 @@ using UnityEngine;
 public class ConsoleUI : MonoBehaviour
 {
     [SerializeField] private TMP_Text text;
+    [SerializeField] private TMP_Text DebugFPS;
     [SerializeField] private int maxLines = 10;
     private int lineCount = 0;
 
@@ -24,6 +25,7 @@ public class ConsoleUI : MonoBehaviour
         {
             Debug.Log("Hello World");
         }
+        DebugFPS.text = "FPS: " + (int)(1.0f / Time.unscaledDeltaTime);
     }
     
     public void OnEnable()
