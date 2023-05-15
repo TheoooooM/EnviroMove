@@ -6,6 +6,7 @@ using Attributes;
 using Cysharp.Threading.Tasks;
 using Interfaces;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using static AdresseHelper;
 
 namespace Levels
@@ -35,6 +36,8 @@ namespace Levels
          
          _board = new IBoardable[data.size.x,data.size.y,data.size.z];
          _playerDirBoard = new Enums.Side[data.size.x,data.size.y,data.size.z];
+
+         var dirBlock = await Addressables.LoadAssetAsync<GameObject>("DirectionBlock");
          
          for (int z = 0; z < data.size.z ; z++)
          {
@@ -42,7 +45,10 @@ namespace Levels
             {
                for (int x = 0; x < data.size.x; x++)
                {
-                  _playerDirBoard[x,y,z] = (Enums.Side)data.playerDir[x, y, z];
+                  var dir = (Enums.Side)data.playerDir[x, y, z];
+                  _playerDirBoard[x,y,z] = dir;
+                  if(dir != Enums.Side.none) Instantiate(dirBlock, transform.position + new Vector3(x, y, z),
+                     Quaternion.LookRotation(Enums.SideVector3(dir), Vector3.up));
                }
             }
          }
