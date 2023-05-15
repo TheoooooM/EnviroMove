@@ -73,7 +73,7 @@ public class SceneEditor
 
     private LevelData curentLevelData;
 
-    public float cameraSpeed;
+    public float cameraSpeed = 0.5f;
 
     #endregion
 
