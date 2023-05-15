@@ -5,12 +5,10 @@ using Archi.Service.Interface;
 using Attributes;
 using Levels;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
-using Vector3 = UnityEngine.Vector3;
 #if UNITY_STANDALONE && !UNITY_EDITOR
 using JsonUtility = UnityEngine.JsonUtility;
 #endif
@@ -26,7 +24,7 @@ public class SceneEditor
     private GameObject selectedPrefab;
     public int selectedPrefabIndex = 1;
 
-    private int sizeOfGridSpace = 1;
+    private readonly int sizeOfGridSpace = 1;
 
     private Camera _camera;
 
@@ -57,7 +55,7 @@ public class SceneEditor
     //alaid
     private Vector2Int firstBlockPosition;
     private Vector2Int[,] gridPositions;
-    private int tailleBridge = 4;
+    private readonly int tailleBridge = 4;
 
     private enum EditorMode
     {
@@ -66,7 +64,7 @@ public class SceneEditor
         moveCamera,
         snapMode,
         horizontalRotation,
-        verticalRotation,
+        verticalRotation
     }
 
     private EditorMode Mode = EditorMode.create;
@@ -116,16 +114,10 @@ public class SceneEditor
     private void InitializeDirectionGrid()
     {
         directionGrid = new Enums.Side[size.x, size.y, size.z];
-        for (int x = 0; x < size.x; x++)
-        {
-            for (int y = 0; y < size.y - 1; y++)
-            {
-                for (int z = 0; z < size.z; z++)
-                {
-                    directionGrid[x, y, z] = Enums.Side.none;
-                }
-            }
-        }
+        for (var x = 0; x < size.x; x++)
+        for (var y = 0; y < size.y - 1; y++)
+        for (var z = 0; z < size.z; z++)
+            directionGrid[x, y, z] = Enums.Side.none;
     }
 
     private void PlaceDefaultGround()
@@ -140,17 +132,15 @@ public class SceneEditor
     private void MakePlatform(int posX, int posZ)
     {
         GameObject block = null;
-        for (int x = posX; x < posX + tileSize.x; x++)
+        for (var x = posX; x < posX + tileSize.x; x++)
+        for (var z = posZ; z < posZ + tileSize.y; z++)
         {
-            for (int z = posZ; z < posZ + tileSize.y; z++)
-            {
-                block = Object.Instantiate(prefabs[(int)Enums.blockType.M1_Block1], new Vector3(x, 0, z),
-                    Quaternion.identity);
-                block.transform.SetParent(parent.transform);
-                blockGrid[x, 0, z] = (int)Enums.blockType.M1_Block1;
-                blockHorizontalRotationGrid[x, 0, z] = Enums.Side.none;
-                blockVerticalRotationGrid[x, 0, z] = Enums.Side.none;
-            }
+            block = Object.Instantiate(prefabs[(int)Enums.blockType.M1_Block1], new Vector3(x, 0, z),
+                Quaternion.identity);
+            block.transform.SetParent(parent.transform);
+            blockGrid[x, 0, z] = (int)Enums.blockType.M1_Block1;
+            blockHorizontalRotationGrid[x, 0, z] = Enums.Side.none;
+            blockVerticalRotationGrid[x, 0, z] = Enums.Side.none;
         }
 
         firstBlockPosition = new Vector2Int(posX, posZ);
@@ -158,35 +148,35 @@ public class SceneEditor
         while (firstBlockPosition.y > 0) firstBlockPosition.y -= tileSize.y;
         firstBlockPosition.x += tileSize.x;
         firstBlockPosition.y += tileSize.y;
-        
-        block = Object.Instantiate(prefabs[(int)Enums.blockType.M1_Border], new Vector3(posX + tileSize.x / 2 - .5f, 0, posZ + tileSize.y / 2 - .5f),
+
+        block = Object.Instantiate(prefabs[(int)Enums.blockType.M1_Border],
+            new Vector3(posX + tileSize.x / 2 - .5f, 0, posZ + tileSize.y / 2 - .5f),
             Quaternion.identity);
         block.transform.Rotate(0, 90, 0);
         block.transform.SetParent(parent.transform);
-        block.name = (posX + tileSize.x / 2 - .5f) + " " + 0 + " " + (posZ + tileSize.y / 2 - .5f);
+        block.name = posX + tileSize.x / 2 - .5f + " " + 0 + " " + (posZ + tileSize.y / 2 - .5f);
     }
 
     private void DestroyPlatform(int posX, int posZ)
     {
-        for (int x = posX; x < posX + tileSize.x; x++)
+        for (var x = posX; x < posX + tileSize.x; x++)
+        for (var z = posZ; z < posZ + tileSize.y; z++)
         {
-            for (int z = posZ; z < posZ + tileSize.y; z++)
-            {
-                Object.Destroy(parent.transform.Find(x + " " + 0 + " " + z).gameObject);
-                blockGrid[x, 0, z] = 0;
-                blockHorizontalRotationGrid[x, 0, z] = Enums.Side.none;
-                blockVerticalRotationGrid[x, 0, z] = Enums.Side.none;
-            }
+            Object.Destroy(parent.transform.Find(x + " " + 0 + " " + z).gameObject);
+            blockGrid[x, 0, z] = 0;
+            blockHorizontalRotationGrid[x, 0, z] = Enums.Side.none;
+            blockVerticalRotationGrid[x, 0, z] = Enums.Side.none;
         }
-        
+
         firstBlockPosition = new Vector2Int(posX, posZ);
         while (firstBlockPosition.x > 0) firstBlockPosition.x -= tileSize.x;
         while (firstBlockPosition.y > 0) firstBlockPosition.y -= tileSize.y;
         firstBlockPosition.x += tileSize.x;
         firstBlockPosition.y += tileSize.y;
-        
+
         // destroy border
-        Object.Destroy(parent.transform.Find((posX + tileSize.x / 2 - .5f) + " " + 0 + " " + (posZ + tileSize.y / 2 - .5f)).gameObject);
+        Object.Destroy(parent.transform
+            .Find(posX + tileSize.x / 2 - .5f + " " + 0 + " " + (posZ + tileSize.y / 2 - .5f)).gameObject);
     }
 
     public void Update()
@@ -220,8 +210,9 @@ public class SceneEditor
     {
         if (Input.GetTouch(0).phase == TouchPhase.Moved)
         {
-            Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
-            _camera.transform.position += new Vector3(-touchDeltaPosition.x * cameraSpeed * Time.deltaTime, 0, -touchDeltaPosition.y * cameraSpeed * Time.deltaTime);
+            var touchDeltaPosition = Input.GetTouch(0).deltaPosition;
+            _camera.transform.position += new Vector3(-touchDeltaPosition.x * cameraSpeed * Time.deltaTime, 0,
+                -touchDeltaPosition.y * cameraSpeed * Time.deltaTime);
         }
     }
 
@@ -234,35 +225,27 @@ public class SceneEditor
     {
         if (IsPointerOverUIObject()) return;
         if (Input.GetTouch(0).phase == TouchPhase.Began && isMoveCamera)
-        {
             InstantiateNewBlock();
-        }
-        else if (Input.GetTouch(0).phase == TouchPhase.Moved && !isMoveCamera)
-        {
-            InstantiateNewBlock();
-        }
+        else if (Input.GetTouch(0).phase == TouchPhase.Moved && !isMoveCamera) InstantiateNewBlock();
     }
 
     private bool IsPointerOverUIObject()
     {
         //if (EventSystem.current)
         {
-            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+            var eventDataCurrentPosition = new PointerEventData(EventSystem.current);
             eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            List<RaycastResult> results = new List<RaycastResult>();
+            var results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
             return results.Count > 0;
         }
-
-        return false;
     }
 
     private void InstantiateNewBlock()
     {
         Vector3 position = Input.GetTouch(0).position;
         GameObject blockHit = null;
-        RaycastHit hitRay;
-        Ray ray = _camera.ScreenPointToRay(position);
+        var ray = _camera.ScreenPointToRay(position);
         if (RaycastNewBlockPos(ray, blockHit, ref position, out var newGo)) return;
         if (SpecificBlockActions(position, newGo)) return;
         StoreBlockData(position);
@@ -274,8 +257,10 @@ public class SceneEditor
         var blockPlacedAddress = Blocks.BlockType[(Enums.blockType)selectedPrefabIndex];
         if (!blocksUsed.Contains(blockPlacedAddress)) blocksUsed.Add(blockPlacedAddress);
         blockGrid[(int)position.x, (int)position.y, (int)position.z] = selectedPrefabIndex;
-        if (blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] == Enums.Side.none) blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
-        if (blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] == Enums.Side.none) blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
+        if (blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] == Enums.Side.none)
+            blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
+        if (blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] == Enums.Side.none)
+            blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
         Debug.Log("blockHorizontalRotationGrid[" + (int)position.x + ", " + (int)position.y + ", " + (int)position.z +
                   "] = " + blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z]);
     }
@@ -289,30 +274,28 @@ public class SceneEditor
                 newGo.name = "directionBlock";
                 break;
             case 13:
-                int rotation = 0;
+                var rotation = 0;
                 if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] == 0 ||
-                    position.x + 8 >= size.x && position.x % (tileSize.x + tailleBridge) == 5 ||
-                    position.x - 8 < 0 && position.x % (tileSize.x + tailleBridge) == 0 ||
-                    position.z + 8 >= size.z && position.x % (tileSize.y + tailleBridge) == 11 ||
-                    position.z - 8 < 0 && position.x % (tileSize.y + tailleBridge) == 0)
+                    (position.x + 8 >= size.x && position.x % (tileSize.x + tailleBridge) == 5) ||
+                    (position.x - 8 < 0 && position.x % (tileSize.x + tailleBridge) == 0) ||
+                    (position.z + 8 >= size.z && position.x % (tileSize.y + tailleBridge) == 11) ||
+                    (position.z - 8 < 0 && position.x % (tileSize.y + tailleBridge) == 0))
                 {
                     Object.Destroy(newGo);
                     return true;
                 }
 
                 GameObject newground = null;
-                Vector3 posOfnewPanelStart = new Vector3();
-                Enums.Side sideToInstantiateNewGrid = Enums.Side.none;
-                for (int i = 1; i <= tailleBridge; i++)
-                {
+                var posOfnewPanelStart = new Vector3();
+                var sideToInstantiateNewGrid = Enums.Side.none;
+                for (var i = 1; i <= tailleBridge; i++)
                     newground = SwitchBridgePlacement(position, newground, i, ref posOfnewPanelStart,
                         ref sideToInstantiateNewGrid, ref rotation);
-                }
 
                 PlacePanelEnd(newGo, newground, posOfnewPanelStart, rotation);
 
                 //offset for the position of the MakePlatform function
-                Vector2 offset = sideToInstantiateNewGrid switch
+                var offset = sideToInstantiateNewGrid switch
                 {
                     Enums.Side.left => new Vector2(-tileSize.x + 1 + posOfnewPanelStart.x,
                         position.z - position.z % (tileSize.y + tailleBridge)),
@@ -324,7 +307,8 @@ public class SceneEditor
                         posOfnewPanelStart.z),
                     _ => new Vector2()
                 };
-                if (offset.x < 0 || offset.y < 0 || offset.x >= blockGrid.GetLength(0) || offset.y >= blockGrid.GetLength(2)) return true;
+                if (offset.x < 0 || offset.y < 0 || offset.x >= blockGrid.GetLength(0) ||
+                    offset.y >= blockGrid.GetLength(2)) return true;
                 if (blockGrid[(int)offset.x, 0, (int)offset.y] == 1) break;
                 //check if there is already a platform
                 if (blockGrid[(int)offset.x, 0, (int)offset.y] != 0) return true;
@@ -356,17 +340,21 @@ public class SceneEditor
                       (int)newGoGridPos.z + "] = " +
                       blockHorizontalRotationGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z]);
             newGo.transform.Rotate(0, rotation, 0);
-            blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = rotation switch
+            blockHorizontalRotationGrid
+                [(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = rotation switch
             {
                 0 => Enums.Side.forward,
                 90 => Enums.Side.right,
                 180 => Enums.Side.back,
                 270 => Enums.Side.left,
-                _ => blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z]
+                _ => blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y,
+                    (int)posOfnewPanelStart.z]
             };
-            Debug.Log("blockHorizontalRotationGrid[" + (int)posOfnewPanelStart.x + ","+ (int)posOfnewPanelStart.y + " , " +
+            Debug.Log("blockHorizontalRotationGrid[" + (int)posOfnewPanelStart.x + "," + (int)posOfnewPanelStart.y +
+                      " , " +
                       (int)posOfnewPanelStart.z + "] = " +
-                      blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z]);
+                      blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y,
+                          (int)posOfnewPanelStart.z]);
         }
     }
 
@@ -450,7 +438,7 @@ public class SceneEditor
         position.x = Mathf.Round(position.x / sizeOfGridSpace) * sizeOfGridSpace;
         position.y = Mathf.Round(position.y / sizeOfGridSpace) * sizeOfGridSpace;
         position.z = Mathf.Round(position.z / sizeOfGridSpace) * sizeOfGridSpace;
-        
+
         if (blockHit == null || position.x < blockHit.transform.position.x ||
             position.x >= blockHit.transform.position.x + size.x ||
             position.y < blockHit.transform.position.y || position.y >= blockHit.transform.position.y + size.y ||
@@ -459,7 +447,7 @@ public class SceneEditor
             newGo = null;
             return true;
         }
-        
+
         if (position.y >= size.y || position.y < 0)
         {
             newGo = null;
@@ -486,7 +474,7 @@ public class SceneEditor
             EventSystem.current.currentSelectedGameObject) return;
         Vector3 position = Input.GetTouch(0).position;
         RaycastHit hitRay;
-        Ray ray = _camera.ScreenPointToRay(position);
+        var ray = _camera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out hitRay))
         {
             if (hitRay.transform.gameObject.transform.name == "Plane") return;
@@ -499,8 +487,8 @@ public class SceneEditor
 
             var position1 = hitRay.transform.position;
             blockGrid[(int)position1.x, (int)position1.y, (int)position1.z] = 0;
-            blockHorizontalRotationGrid[(int)position1.x, (int)position1.y, (int)position1.z] = 0;
-            blockVerticalRotationGrid[(int)position1.x, (int)position1.y, (int)position1.z] = 0;
+            blockHorizontalRotationGrid[(int)position1.x, (int)position1.y, (int)position1.z] = Enums.Side.none;
+            blockVerticalRotationGrid[(int)position1.x, (int)position1.y, (int)position1.z] = Enums.Side.none;
             Object.Destroy(hitRay.transform.gameObject);
         }
     }
@@ -520,7 +508,8 @@ public class SceneEditor
         var blockHorizontalRotationGridIntArray = Enums.SideToIntArray(blockHorizontalRotationGrid);
         var blockVerticalRotationGridIntArray = Enums.SideToIntArray(blockVerticalRotationGrid);
         var playerDirGridVector3Array = Enums.SideToVector3Array(directionGrid);
-        data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGridIntArray, blockVerticalRotationGridIntArray, playerDirGridVector3Array);
+        data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGridIntArray,
+            blockVerticalRotationGridIntArray, playerDirGridVector3Array);
         curentLevelData = data;
         return data;
     }
@@ -548,21 +537,18 @@ public class SceneEditor
         directionGrid = Enums.IntToSideArray(dataToLoad.playerDir);
         blockHorizontalRotationGrid = Enums.IntToSideArray(dataToLoad.blockHorizontalRotationGrid);
         blockVerticalRotationGrid = Enums.IntToSideArray(dataToLoad.blockVerticalRotationGrid);
-        for (int z = 0; z < blockGrid.GetLength(2); z++)
+        for (var z = 0; z < blockGrid.GetLength(2); z++)
+        for (var y = 0; y < blockGrid.GetLength(1); y++)
+        for (var x = 0; x < blockGrid.GetLength(0); x++)
         {
-            for (int y = 0; y < blockGrid.GetLength(1); y++)
+            if (directionGrid[x, y, z] != Enums.Side.none)
             {
-                for (int x = 0; x < blockGrid.GetLength(0); x++)
-                {
-                    if (directionGrid[x, y, z] != Enums.Side.none)
-                    {
-                        Debug.Log("Direction block instantiated" + x + y + z);
-                        InstantiateDirectionPrefab(x, y, z);
-                    }
-                    if (blockGrid[x, y, z] == 0) continue;
-                    InstantiateBlock(x, y, z);
-                }
+                Debug.Log("Direction block instantiated" + x + y + z);
+                InstantiateDirectionPrefab(x, y, z);
             }
+
+            if (blockGrid[x, y, z] == 0) continue;
+            InstantiateBlock(x, y, z);
         }
     }
 
@@ -591,7 +577,7 @@ public class SceneEditor
 
     private void InstantiateBlock(int x, int y, int z)
     {
-        int prefabIndex = blockGrid[x, y, z];
+        var prefabIndex = blockGrid[x, y, z];
         var block = Object.Instantiate(prefabs[prefabIndex], new Vector3(x, y, z),
             Quaternion.identity);
         switch (blockHorizontalRotationGrid[x, y, z])
@@ -603,7 +589,7 @@ public class SceneEditor
                 block.transform.Rotate(0, -90, 0);
                 break;
             case Enums.Side.forward:
-                
+
                 break;
             case Enums.Side.back:
                 block.transform.Rotate(0, 180, 0);
@@ -613,6 +599,7 @@ public class SceneEditor
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
         switch (blockVerticalRotationGrid[x, y, z])
         {
             case Enums.Side.forward:
@@ -631,6 +618,7 @@ public class SceneEditor
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
         block.transform.parent = parent.transform;
         if (directionGrid[x, y, z] != Enums.Side.none)
         {
@@ -642,10 +630,7 @@ public class SceneEditor
 
     public void CleanScene()
     {
-        foreach (Transform child in parent.transform)
-        {
-            Object.Destroy(child.gameObject);
-        }
+        foreach (Transform child in parent.transform) Object.Destroy(child.gameObject);
     }
 
     public void ToggleLevelElements()
@@ -682,7 +667,7 @@ public class SceneEditor
         if (Input.GetTouch(0).phase != TouchPhase.Began) return;
         Vector3 position = Input.GetTouch(0).position;
         RaycastHit hitRay;
-        Ray ray = _camera.ScreenPointToRay(position);
+        var ray = _camera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out hitRay))
         {
             if (hitRay.transform.gameObject.transform.name == "Plane") return;
@@ -722,7 +707,6 @@ public class SceneEditor
             };
         hitRay.transform.Rotate(90, 0, 0);
         return true;
-
     }
 
     private void HorizontalRotation()
@@ -731,7 +715,7 @@ public class SceneEditor
         if (Input.GetTouch(0).phase != TouchPhase.Began) return;
         Vector3 position = Input.GetTouch(0).position;
         RaycastHit hitRay;
-        Ray ray = _camera.ScreenPointToRay(position);
+        var ray = _camera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out hitRay))
         {
             if (hitRay.transform.gameObject.transform.name == "Plane") return;
@@ -739,7 +723,6 @@ public class SceneEditor
             RotateInDirectionGridHorizontal(hitRay);
             RotateBlockHorizontal(hitRay);
         }
-
     }
 
     private void RotateBlockHorizontal(RaycastHit hitRay)
