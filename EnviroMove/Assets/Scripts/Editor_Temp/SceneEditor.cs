@@ -361,18 +361,18 @@ public class SceneEditor
                     Quaternion.identity);
                 posOfnewPanelStart = new Vector3(position.x - i - 1, 1, position.z);
                 sideToInstantiateNewGrid = Enums.Side.left;
-                blockGrid[(int)position.x - i, (int)position.y, (int)position.z] = 1;
+                blockGrid[(int)position.x - i, (int)position.y - 1, (int)position.z] = 1;
                 rotation = 270;
-                directionGrid[(int)position.x - i, (int)position.y, (int)position.z] = Enums.Side.left;
+                directionGrid[(int)position.x - i, (int)position.y - 1, (int)position.z] = Enums.Side.left;
                 break;
             case 5:
                 newground = Object.Instantiate(prefabs[1], new Vector3(position.x + i, 0, position.z),
                     Quaternion.identity);
                 posOfnewPanelStart = new Vector3(position.x + i + 1, 1, position.z);
                 sideToInstantiateNewGrid = Enums.Side.right;
-                blockGrid[(int)position.x + i, (int)position.y, (int)position.z] = 1;
+                blockGrid[(int)position.x + i, (int)position.y - 1, (int)position.z] = 1;
                 rotation = 90;
-                directionGrid[(int)position.x + i, (int)position.y, (int)position.z] = Enums.Side.right;
+                directionGrid[(int)position.x + i, (int)position.y - 1, (int)position.z] = Enums.Side.right;
                 break;
             default:
                 switch (position.z % (tileSize.y + tailleBridge))
@@ -382,18 +382,18 @@ public class SceneEditor
                             Quaternion.identity);
                         posOfnewPanelStart = new Vector3(position.x, 1, position.z - i - 1);
                         sideToInstantiateNewGrid = Enums.Side.back;
-                        blockGrid[(int)position.x, (int)position.y, (int)position.z - i] = 1;
+                        blockGrid[(int)position.x, (int)position.y - 1, (int)position.z - i] = 1;
                         rotation = 180;
-                        directionGrid[(int)position.x, (int)position.y, (int)position.z - i] = Enums.Side.back;
+                        directionGrid[(int)position.x, (int)position.y - 1, (int)position.z - i] = Enums.Side.back;
                         break;
                     case 11:
                         newground = Object.Instantiate(prefabs[1], new Vector3(position.x, 0, position.z + i),
                             Quaternion.identity);
                         posOfnewPanelStart = new Vector3(position.x, 1, position.z + i + 1);
                         sideToInstantiateNewGrid = Enums.Side.forward;
-                        blockGrid[(int)position.x, (int)position.y, (int)position.z + i] = 1;
+                        blockGrid[(int)position.x, (int)position.y - 1, (int)position.z + i] = 1;
                         rotation = 0;
-                        directionGrid[(int)position.x, (int)position.y, (int)position.z + i] =
+                        directionGrid[(int)position.x, (int)position.y - 1, (int)position.z + i] =
                             Enums.Side.forward;
                         break;
                 }
