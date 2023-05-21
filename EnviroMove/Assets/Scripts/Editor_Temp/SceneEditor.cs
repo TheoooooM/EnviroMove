@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 #if UNITY_STANDALONE && !UNITY_EDITOR
 using JsonUtility = UnityEngine.JsonUtility;
 #endif
@@ -139,8 +140,11 @@ public class SceneEditor
                 Quaternion.identity);
             block.transform.SetParent(parent.transform);
             blockGrid[x, 0, z] = (int)Enums.blockType.M1_Block1;
-            blockHorizontalRotationGrid[x, 0, z] = Enums.Side.none;
-            blockVerticalRotationGrid[x, 0, z] = Enums.Side.none;
+            //random rotation
+            var randomX = Random.Range(0, 4);
+            var RandomY = Random.Range(0, 4);
+            block.transform.Rotate(randomX * 90, 0, RandomY * 90);
+            
         }
 
         firstBlockPosition = new Vector2Int(posX, posZ);
@@ -267,8 +271,32 @@ public class SceneEditor
 
     private bool SpecificBlockActions(Vector3 position, GameObject newGo)
     {
+        int randomRotation;
         switch (selectedPrefabIndex)
         {
+            case 1:
+                // random rotation
+                randomRotation = Random.Range(0, 4);
+                newGo.transform.Rotate(0, randomRotation * 90, 0);
+                blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = randomRotation switch
+                {
+                    0 => Enums.Side.forward,
+                    1 => Enums.Side.right,
+                    2 => Enums.Side.back,
+                    3 => Enums.Side.left,
+                    _ => blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z]
+                };
+                randomRotation = Random.Range(0, 4);
+                newGo.transform.Rotate(0, 0, randomRotation * 90);
+                blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = randomRotation switch
+                {
+                    0 => Enums.Side.forward,
+                    1 => Enums.Side.right,
+                    2 => Enums.Side.back,
+                    3 => Enums.Side.left,
+                    _ => blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z]
+                };
+                break;
             case 11:
                 directionGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
                 newGo.name = "directionBlock";
