@@ -179,7 +179,7 @@ namespace Archi.Service
             tw.WriteLine((string)data);
             tw.Close();
 
-            if(createInfo)GenerateInfoLevel(new LevelInfo(levelName, data.id, data.creator, currentLevelPath));
+            GenerateInfoLevel(new LevelInfo(levelName, data.id, data.creator, currentLevelPath));
         }
 
         void GenerateInfoLevel(LevelInfo info)
