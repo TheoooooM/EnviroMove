@@ -2,14 +2,18 @@ using System.Collections.Generic;
 using Archi.Service.Interface;
 using Attributes;
 using DG.Tweening;
+using Levels;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI.Canvas
 {
     public class MainMenuCanvasUtilities : CanvasUtilities
     {
+        [ServiceDependency] private ILevelService m_Level;
         [ServiceDependency] private IToolService m_Tool;
         [ServiceDependency] private IDataBaseService m_Data;
         [SerializeField] private float animationDuration = 0.5f;
@@ -37,11 +41,27 @@ namespace UI.Canvas
         [SerializeField] private float animationAmplitude = 1.25f;
         private bool isLevelSelectionOpen = false;
         private int levelSelectionID = 0;
+
+        [Header("Level Create Information")]
+        [SerializeField] private Transform layout;
+        [SerializeField] private GameObject levelBox;
+        [SerializeField] private GameObject contentBox;
         
         public override void Init()
         {
             var saver = GetComponentInChildren<SaveTester>();
             if (saver){ saver.m_Database = m_Data; }
+            
+            LevelInfo[] infos = m_Data.GetAllLevelInfos();
+            Debug.Log($"Get {infos.Length} infos");
+            foreach (var info in infos)
+            {
+                var go = Object.Instantiate(levelBox, layout);
+                go.transform.SetParent(contentBox.transform);
+                
+                var box = go.GetComponent<LevelBox>();
+                box.SetupBox(info, m_Tool, m_Data);
+            }
         }
         
         private MovementDirection moveDir = MovementDirection.None;
@@ -223,6 +243,43 @@ namespace UI.Canvas
         }
 
         public void GoToCreate(bool goCreate) => isInCreateMenu = goCreate;
+        
+        
+        #region LoadLevel
+        public void LoadLevel(string levelName)
+        {
+            m_Level.LoadLevel(m_Data.GetLevelByName(levelName));
+        }
+
+        private LevelData dataToTest;
+        public void LoadLevelData(string data)
+        {
+            //m_Level.LoadLevel((LevelData)constantLevels.GetLevel(i));
+
+            //dataToTest = (LevelData)constantLevels.GetLevel(i);
+            dataToTest = (LevelData)data;
+            SceneManager.sceneLoaded += AsyncTestLevel;
+            ChangeScene("InGame");
+            
+            //throw new NotImplementedException();
+            /*
+            m_Tool.TestLevel();
+            m_Tool.SetServiceState(false);
+            SceneManager.sceneLoaded += (_,_) => m_Tool.TestLevel();*/
+        }
+
+        private void AsyncTestLevel(Scene arg0, LoadSceneMode arg1)
+        {
+            m_Level.LoadLevel(dataToTest);
+            SceneManager.sceneLoaded -= AsyncTestLevel;
+            
+        }
+        #endregion LoadLevel
+        
+        public void OpenTool() {
+            m_Tool.ShowTool();
+        }
+
     }
 }
 

@@ -24,9 +24,8 @@ namespace UI.Canvas
             m_Tool.ShowTool();
         }
 
-        public void ReturnButton()
-        {
-            m_Tool.ShowLevels();
+        public void ReturnButton() {
+            SceneManager.LoadScene(0);
             m_Tool.DesactivateTool();
         }
     

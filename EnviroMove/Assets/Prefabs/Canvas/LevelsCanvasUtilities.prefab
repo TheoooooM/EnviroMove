@@ -635,7 +635,7 @@ RectTransform:
   m_GameObject: {fileID: 1152740288879206570}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1229457127020173018}
@@ -721,7 +721,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4f892f388e76f459064a659984efbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  constantLevels: {fileID: 11400000, guid: 0b51cdf6b4885214e929efc4c8a84038, type: 2}
 --- !u!1 &1312061810295773675
 GameObject:
   m_ObjectHideFlags: 0
@@ -4221,7 +4220,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Any Season
+  m_text: Spring
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
