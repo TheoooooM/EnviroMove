@@ -21804,6 +21804,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4471322013630267848, guid: 7e34f3ea28e15a842abe5f7a6c034487,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4471322013630267848, guid: 7e34f3ea28e15a842abe5f7a6c034487,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4471322013630267848, guid: 7e34f3ea28e15a842abe5f7a6c034487,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4471322013630267848, guid: 7e34f3ea28e15a842abe5f7a6c034487,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -21862,15 +21877,40 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4943082799300935439, guid: 7e34f3ea28e15a842abe5f7a6c034487,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 792
+      objectReference: {fileID: 0}
     - target: {fileID: 8492377493197187625, guid: 7e34f3ea28e15a842abe5f7a6c034487,
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8492377493197187625, guid: 7e34f3ea28e15a842abe5f7a6c034487,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.00014974804
+      objectReference: {fileID: 0}
     - target: {fileID: 8675909667523282876, guid: 7e34f3ea28e15a842abe5f7a6c034487,
         type: 3}
       propertyPath: m_Name
       value: LevelSelector
+      objectReference: {fileID: 0}
+    - target: {fileID: 8689766198377176278, guid: 7e34f3ea28e15a842abe5f7a6c034487,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2571987851534749092}
+    - target: {fileID: 8689766198377176278, guid: 7e34f3ea28e15a842abe5f7a6c034487,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenTool
+      objectReference: {fileID: 0}
+    - target: {fileID: 8689766198377176278, guid: 7e34f3ea28e15a842abe5f7a6c034487,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UI.Canvas.MainMenuCanvasUtilities, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e34f3ea28e15a842abe5f7a6c034487, type: 3}
