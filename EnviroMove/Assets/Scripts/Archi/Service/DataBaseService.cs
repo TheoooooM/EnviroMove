@@ -137,12 +137,12 @@ namespace Archi.Service
                 {
                     var values = (Dictionary<string, object>)level.Value;
                     var items = values["blockEnumerable"];
-                    int[] blockEnumerable = ConvertObjects<int>((List<object>)values["blockEnumerable"]) ;
+                    int[] blockEnumerable = ConvertObjectsToInt((List<object>)values["blockEnumerable"]) ;
                     //Vector3Int size = new Vector3Int(values["size"][0],values["size"][1] ,values["size"][2]);
-                    string[] blockUsed = ConvertObjects<string>((List<object>)values["blocksUsed"]);
-                    int[] blockHorizontalRotationEnumerable = ConvertObjects<int>((List<object>)values["_blockHorizontalRotationEnumerable"]);
-                    int[] blockVerticalRotationEnumerable = ConvertObjects<int>((List<object>)values["_blockVerticalRotationEnumerable"]);
-                    int[] playerDirEnumerable = ConvertObjects<int>((List<object>)values["playerDirEnumerable"]);
+                    string[] blockUsed = ConvertObjectsToString((List<object>)values["blocksUsed"]);
+                    int[] blockHorizontalRotationEnumerable = ConvertObjectsToInt((List<object>)values["_blockHorizontalRotationEnumerable"]);
+                    int[] blockVerticalRotationEnumerable = ConvertObjectsToInt((List<object>)values["_blockVerticalRotationEnumerable"]);
+                    int[] playerDirEnumerable = ConvertObjectsToInt((List<object>)values["playerDirEnumerable"]);
                     
                     var newLevel = new LevelData( new Vector3Int(0,0,0), blockEnumerable , blockUsed, blockHorizontalRotationEnumerable, blockVerticalRotationEnumerable,playerDirEnumerable ) ;
                     return;
@@ -231,13 +231,13 @@ namespace Archi.Service
             return id;
         }
 
-        T[] ConvertObjects<T>(IEnumerable<object> objects)
+        int[] ConvertObjectsToInt(IEnumerable<object> objects)
         {
-            IEnumerator<T> enumerator = (IEnumerator<T>)objects.GetEnumerator();
-            List<T> values = new();
+            IEnumerator<object> enumerator = objects.GetEnumerator();
+            List<int> values = new();
             while (enumerator.MoveNext())
             {
-                values.Add(enumerator.Current);
+                values.Add(Convert.ToInt32((long)enumerator.Current));
             }
 
             return values.ToArray();
@@ -253,6 +253,29 @@ namespace Archi.Service
             return ints.ToArray();
             */
         }
+        
+        string[] ConvertObjectsToString(IEnumerable<object> objects)
+        {
+            IEnumerator<object> enumerator = objects.GetEnumerator();
+            List<string> values = new();
+            while (enumerator.MoveNext())
+            {
+                values.Add(Convert.ToString(enumerator.Current));
+            }
+            return values.ToArray();
+            
+            /*
+            var list = new List<bool>();
+            do
+            {
+                if(enumerator.Current == null) ints.Add(default);
+                else ints.Add((int)enumerator.Current);
+            } while (enumerator.MoveNext());
+
+            return ints.ToArray();
+            */
+        }
+        
     }
 }
 
