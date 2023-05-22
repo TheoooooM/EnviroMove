@@ -608,6 +608,11 @@ public class SceneEditor
         var prefabIndex = blockGrid[x, y, z];
         var block = Object.Instantiate(prefabs[prefabIndex], new Vector3(x, y, z),
             Quaternion.identity);
+        if (prefabIndex == (int)Enums.blockType.ground)
+        {
+            blockHorizontalRotationGrid[x, y, z] = (Enums.Side)Random.Range(0, 4);
+            blockVerticalRotationGrid[x, y, z] = (Enums.Side)Random.Range(0, 4);
+        }
         switch (blockHorizontalRotationGrid[x, y, z])
         {
             case Enums.Side.right:
