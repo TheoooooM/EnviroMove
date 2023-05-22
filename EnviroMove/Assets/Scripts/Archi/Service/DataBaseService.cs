@@ -106,9 +106,14 @@ namespace Archi.Service
             if (info == default) throw new NullReferenceException($"Missing Info from level : {id}");
             string username = PlayerPrefs.GetString("Username");
             if (username == string.Empty) username = "unnamed";
-            Debug.Log($"username:{username}, id:{id}, data:{data}");
-           dbReference.Child("Levels").Child(username).Child(id).SetRawJsonValueAsync(data);
-           dbReference.Child("Infos").Child(username).Child(id).SetRawJsonValueAsync(JsonUtility.ToJson(info));
+            Debug.Log($"username:{username}, id:{id}");
+            dbReference.Child("Levels").Child(username).Child(id).SetRawJsonValueAsync(data);
+            dbReference.Child("Infos").Child(username).Child(id).SetRawJsonValueAsync(JsonUtility.ToJson(info));
+        }
+
+        void CreateInfoOnCloud(string username, string id, LevelInfo info)
+        {
+            dbReference.Child("Infos").Child(username).Child(id).SetRawJsonValueAsync(JsonUtility.ToJson(info));  
         }
 
         /// <summary>
