@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Archi.Service.Interface;
@@ -36,10 +37,10 @@ namespace Archi.Service
 
            dbReference = FirebaseDatabase.DefaultInstance.RootReference;
 
-           //dbReference.Child("Levels").RemoveValueAsync();
             container.Init(this);
-            // UpdateData();
+            //UpdateData();
         }
+        // Remove DB : dbReference.Child("Levels").RemoveValueAsync();
 
         public string LevelPath() {return levelPath;}
         public string InfoPath() {return infoPath;}
@@ -134,8 +135,9 @@ namespace Archi.Service
             {
                 foreach (var level in user.Children)
                 {
-                    var data = JsonUtility.ToJson(level.Value);
-                    var levelData = JsonUtility.FromJson<LevelData>(data);
+                    var newLevel = ConvertObjectToLevelData(level.Value);
+                    return;
+                    var levelData = newLevel;
 
                     if (!container.allInfoDatas.Any(i => i.id == levelData.id))
                     {
@@ -219,5 +221,74 @@ namespace Archi.Service
             id += $"-{DateTime.Now.Hour}{DateTime.Now.Minute}{DateTime.Now.Second}";
             return id;
         }
+
+        int[] ConvertObjectsToInt(IEnumerable<object> objects)
+        {
+            IEnumerator<object> enumerator = objects.GetEnumerator();
+            List<int> values = new();
+            while (enumerator.MoveNext())
+            {
+                values.Add(Convert.ToInt32((long)enumerator.Current));
+            }
+
+            return values.ToArray();
+            
+            /*
+            var list = new List<bool>();
+            do
+            {
+                if(enumerator.Current == null) ints.Add(default);
+                else ints.Add((int)enumerator.Current);
+            } while (enumerator.MoveNext());
+
+            return ints.ToArray();
+            */
+        }
+
+        LevelData ConvertObjectToLevelData(object level)
+        {
+            var values = (Dictionary<string, object>)level;
+            var items = values["blockEnumerable"];
+            int[] blockEnumerable = ConvertObjectsToInt((List<object>)values["blockEnumerable"]) ;
+            Vector3Int size = ConvertObjectToVector3Int(values["size"]);
+            string[] blockUsed = ConvertObjectsToString((List<object>)values["blocksUsed"]);
+            int[] blockHorizontalRotationEnumerable = ConvertObjectsToInt((List<object>)values["_blockHorizontalRotationEnumerable"]);
+            int[] blockVerticalRotationEnumerable = ConvertObjectsToInt((List<object>)values["_blockVerticalRotationEnumerable"]);
+            int[] playerDirEnumerable = ConvertObjectsToInt((List<object>)values["playerDirEnumerable"]);
+                    
+            return new LevelData( size, blockEnumerable , blockUsed, blockHorizontalRotationEnumerable, blockVerticalRotationEnumerable,playerDirEnumerable ) ;
+        }
+
+        Vector3Int ConvertObjectToVector3Int(object value)
+        {
+            var values = (Dictionary<string, object>)value;
+            var x = Convert.ToInt32((long)values["x"]);
+            var y = Convert.ToInt32((long)values["y"]);
+            var z = Convert.ToInt32((long)values["z"]);
+            return new Vector3Int(x,y,z);
+        }
+        
+        string[] ConvertObjectsToString(IEnumerable<object> objects)
+        {
+            IEnumerator<object> enumerator = objects.GetEnumerator();
+            List<string> values = new();
+            while (enumerator.MoveNext())
+            {
+                values.Add(Convert.ToString(enumerator.Current));
+            }
+            return values.ToArray();
+            
+            /*
+            var list = new List<bool>();
+            do
+            {
+                if(enumerator.Current == null) ints.Add(default);
+                else ints.Add((int)enumerator.Current);
+            } while (enumerator.MoveNext());
+
+            return ints.ToArray();
+            */
+        }
+        
     }
-}
+} 
