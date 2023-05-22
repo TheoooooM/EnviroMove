@@ -17,6 +17,8 @@ namespace Archi.Service
         [DependeOnService] private ILevelService m_Level;
         [DependeOnService] private IToolService m_Tool;
         [DependeOnService] private IDataBaseService m_data;
+        
+        
 
         private LoadingScreen loadingScreen;
 
@@ -66,6 +68,9 @@ namespace Archi.Service
             var go = Object.Instantiate(canvas);
             var canvasUtilities = go.GetComponent<CanvasUtilities>();
             if(!canvasUtilities) canvasUtilities = go.GetComponentInChildren<CanvasUtilities>();
+            if (canvasUtilities is MainMenuCanvasUtilities) {
+                //canvasUtilities.GetComponentInChildren<MainMenuCanvasUtilities>().InitValue();
+            }
             SetObjectDependencies(canvasUtilities);
             canvasUtilities.Init();
         }
