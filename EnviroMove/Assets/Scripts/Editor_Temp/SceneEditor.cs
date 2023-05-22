@@ -141,9 +141,26 @@ public class SceneEditor
             block.transform.SetParent(parent.transform);
             blockGrid[x, 0, z] = (int)Enums.blockType.M1_Block1;
             //random rotation
-            var randomX = Random.Range(0, 4);
-            var RandomY = Random.Range(0, 4);
-            block.transform.Rotate(randomX * 90, 0, RandomY * 90);
+            var randomRotation = Random.Range(0, 4);
+            block.transform.Rotate(0, randomRotation * 90, 0);
+            blockHorizontalRotationGrid[posX, 0, posZ] = randomRotation switch
+            {
+                0 => Enums.Side.forward,
+                1 => Enums.Side.right,
+                2 => Enums.Side.back,
+                3 => Enums.Side.left,
+                _ => blockHorizontalRotationGrid[posX, 0, posZ]
+            };
+            randomRotation = Random.Range(0, 4);
+            block.transform.Rotate(0, 0, randomRotation * 90);
+            blockVerticalRotationGrid[posX, 0, posZ] = randomRotation switch
+            {
+                0 => Enums.Side.forward,
+                1 => Enums.Side.right,
+                2 => Enums.Side.back,
+                3 => Enums.Side.left,
+                _ => blockVerticalRotationGrid[posX, 0, posZ]
+            };
             
         }
 
@@ -610,8 +627,25 @@ public class SceneEditor
             Quaternion.identity);
         if (prefabIndex == (int)Enums.blockType.ground)
         {
-            blockHorizontalRotationGrid[x, y, z] = (Enums.Side)Random.Range(0, 4);
-            blockVerticalRotationGrid[x, y, z] = (Enums.Side)Random.Range(0, 4);
+            var randomRotation = Random.Range(0, 4);
+            blockHorizontalRotationGrid[x, y, z] = randomRotation switch
+            {
+                0 => Enums.Side.forward,
+                1 => Enums.Side.right,
+                2 => Enums.Side.back,
+                3 => Enums.Side.left,
+                _ => blockHorizontalRotationGrid[x, y, z]
+            };
+            randomRotation = Random.Range(0, 4);
+            block.transform.Rotate(0, 0, randomRotation * 90);
+            blockVerticalRotationGrid[x, y, z] = randomRotation switch
+            {
+                0 => Enums.Side.forward,
+                1 => Enums.Side.right,
+                2 => Enums.Side.back,
+                3 => Enums.Side.left,
+                _ => blockVerticalRotationGrid[x, y, z]
+            };
         }
         switch (blockHorizontalRotationGrid[x, y, z])
         {
@@ -621,22 +655,15 @@ public class SceneEditor
             case Enums.Side.left:
                 block.transform.Rotate(0, -90, 0);
                 break;
-            case Enums.Side.forward:
-
-                break;
             case Enums.Side.back:
                 block.transform.Rotate(0, 180, 0);
                 break;
-            case Enums.Side.none:
-                break;
             default:
-                throw new ArgumentOutOfRangeException();
+                break;
         }
 
         switch (blockVerticalRotationGrid[x, y, z])
         {
-            case Enums.Side.forward:
-                break;
             case Enums.Side.back:
                 block.transform.Rotate(180, 0, 0);
                 break;
@@ -646,10 +673,8 @@ public class SceneEditor
             case Enums.Side.down:
                 block.transform.Rotate(-90, 0, 0);
                 break;
-            case Enums.Side.none:
-                break;
             default:
-                throw new ArgumentOutOfRangeException();
+                break;
         }
 
         block.transform.parent = parent.transform;
