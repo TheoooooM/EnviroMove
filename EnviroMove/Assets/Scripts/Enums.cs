@@ -170,6 +170,7 @@ public class Enums
         M2_Block17,
         M2_Block18,
         M2_Block19,
+        M1_Caillou
     }
 
     public enum MajorCanvas

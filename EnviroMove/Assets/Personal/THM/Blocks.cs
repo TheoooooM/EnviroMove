@@ -56,6 +56,7 @@ public struct Blocks
         { Enums.blockType.M2_Block17, "M2_Block17"},
         { Enums.blockType.M2_Block18, "M2_Block18"},
         { Enums.blockType.M2_Block19, "M2_Block19"},
+        { Enums.blockType.M1_Caillou, "M1_Caillou"},
     };
     
     public static readonly Dictionary<string,Enums.blockType> BlockAdressType = new()
@@ -112,5 +113,6 @@ public struct Blocks
         { "M2_Block17", Enums.blockType.M2_Block17},
         { "M2_Block18", Enums.blockType.M2_Block18},
         { "M2_Block19", Enums.blockType.M2_Block19},
+        { "M1_Caillou", Enums.blockType.M1_Caillou},
     };
 }
