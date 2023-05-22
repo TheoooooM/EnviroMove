@@ -38,7 +38,7 @@ namespace Archi.Service
            dbReference = FirebaseDatabase.DefaultInstance.RootReference;
 
             container.Init(this);
-            UpdateData();
+            //UpdateData();
         }
         // Remove DB : dbReference.Child("Levels").RemoveValueAsync();
 
@@ -135,16 +135,7 @@ namespace Archi.Service
             {
                 foreach (var level in user.Children)
                 {
-                    var values = (Dictionary<string, object>)level.Value;
-                    var items = values["blockEnumerable"];
-                    int[] blockEnumerable = ConvertObjectsToInt((List<object>)values["blockEnumerable"]) ;
-                    //Vector3Int size = new Vector3Int(values["size"][0],values["size"][1] ,values["size"][2]);
-                    string[] blockUsed = ConvertObjectsToString((List<object>)values["blocksUsed"]);
-                    int[] blockHorizontalRotationEnumerable = ConvertObjectsToInt((List<object>)values["_blockHorizontalRotationEnumerable"]);
-                    int[] blockVerticalRotationEnumerable = ConvertObjectsToInt((List<object>)values["_blockVerticalRotationEnumerable"]);
-                    int[] playerDirEnumerable = ConvertObjectsToInt((List<object>)values["playerDirEnumerable"]);
-                    
-                    var newLevel = new LevelData( new Vector3Int(0,0,0), blockEnumerable , blockUsed, blockHorizontalRotationEnumerable, blockVerticalRotationEnumerable,playerDirEnumerable ) ;
+                    var newLevel = ConvertObjectToLevelData(level.Value);
                     return;
                     var levelData = newLevel;
 
@@ -253,6 +244,29 @@ namespace Archi.Service
             return ints.ToArray();
             */
         }
+
+        LevelData ConvertObjectToLevelData(object level)
+        {
+            var values = (Dictionary<string, object>)level;
+            var items = values["blockEnumerable"];
+            int[] blockEnumerable = ConvertObjectsToInt((List<object>)values["blockEnumerable"]) ;
+            Vector3Int size = ConvertObjectToVector3Int(values["size"]);
+            string[] blockUsed = ConvertObjectsToString((List<object>)values["blocksUsed"]);
+            int[] blockHorizontalRotationEnumerable = ConvertObjectsToInt((List<object>)values["_blockHorizontalRotationEnumerable"]);
+            int[] blockVerticalRotationEnumerable = ConvertObjectsToInt((List<object>)values["_blockVerticalRotationEnumerable"]);
+            int[] playerDirEnumerable = ConvertObjectsToInt((List<object>)values["playerDirEnumerable"]);
+                    
+            return new LevelData( size, blockEnumerable , blockUsed, blockHorizontalRotationEnumerable, blockVerticalRotationEnumerable,playerDirEnumerable ) ;
+        }
+
+        Vector3Int ConvertObjectToVector3Int(object value)
+        {
+            var values = (Dictionary<string, object>)value;
+            var x = Convert.ToInt32((long)values["x"]);
+            var y = Convert.ToInt32((long)values["y"]);
+            var z = Convert.ToInt32((long)values["z"]);
+            return new Vector3Int(x,y,z);
+        }
         
         string[] ConvertObjectsToString(IEnumerable<object> objects)
         {
@@ -276,13 +290,5 @@ namespace Archi.Service
             */
         }
         
-    }
-}
-
-public partial struct Int64
-{
-    public static explicit operator int(Int64 value)
-    {
-        return Convert.ToInt32(value);
     }
 } 
