@@ -107,6 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8799658581414522145}
   - component: {fileID: 1444911414919320004}
+  - component: {fileID: -4602419447463104762}
   m_Layer: 0
   m_Name: M1_Block12
   m_TagString: Untagged
@@ -334,7 +335,7 @@ BoxCollider:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9050062132640770223}
+  m_GameObject: {fileID: 6167656157976737092}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
@@ -366,7 +367,7 @@ PrefabInstance:
     - target: {fileID: 2976108208500431625, guid: 621d2baf3ee92f94db385d46edf0656a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2976108208500431625, guid: 621d2baf3ee92f94db385d46edf0656a,
         type: 3}

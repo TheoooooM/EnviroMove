@@ -17,13 +17,14 @@ namespace Archi.Service
         [DependeOnService] private ILevelService m_Level;
         [DependeOnService] private IToolService m_Tool;
         [DependeOnService] private IDataBaseService m_data;
+        [DependeOnService] private IInterfaceService m_interface;
         
-        
+        private PageDirection pageDirection = PageDirection.Home;
+        private float pageValue = 0f;
 
         private LoadingScreen loadingScreen;
 
-        private readonly Dictionary<Enums.MajorCanvas, string> canvasAddress = new()
-        {
+        private readonly Dictionary<Enums.MajorCanvas, string> canvasAddress = new() {
             {Enums.MajorCanvas.menu, "MainMenuCanvas"},
             {Enums.MajorCanvas.inGame, ""},
             {Enums.MajorCanvas.gameover, "GameOverCanvas"},
@@ -63,13 +64,12 @@ namespace Archi.Service
             LoadAssetWithCallback<GameObject>(canvasAddress[canvas], DrawCanvasAsync);
         }
 
-        void DrawCanvasAsync(GameObject canvas)
-        {
+        private void DrawCanvasAsync(GameObject canvas) {
             var go = Object.Instantiate(canvas);
             var canvasUtilities = go.GetComponent<CanvasUtilities>();
             if(!canvasUtilities) canvasUtilities = go.GetComponentInChildren<CanvasUtilities>();
             if (canvasUtilities is MainMenuCanvasUtilities) {
-                //canvasUtilities.GetComponentInChildren<MainMenuCanvasUtilities>().InitValue();
+                canvasUtilities.GetComponentInChildren<MainMenuCanvasUtilities>().InitValue(pageDirection, pageValue);
             }
             SetObjectDependencies(canvasUtilities);
             canvasUtilities.Init();
@@ -94,6 +94,16 @@ namespace Archi.Service
         public void HideLoadingScreen()
         {
             loadingScreen.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Set the target page
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="value"></param>
+        public void SetTargetPage(PageDirection page, float value) {
+            pageDirection = page; 
+            pageValue = value;
         }
     }
 }

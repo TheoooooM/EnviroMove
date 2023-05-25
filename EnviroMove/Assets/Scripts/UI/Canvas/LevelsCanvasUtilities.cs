@@ -12,7 +12,7 @@ namespace UI.Canvas
         [ServiceDependency] private IDataBaseService m_Data;
         [ServiceDependency] private ILevelService m_Level;
 
-        [SerializeField] private ConstantLevelSO constantLevels;
+        //[SerializeField] private ConstantLevelSO constantLevels;
         
         public override void Init() { }
         

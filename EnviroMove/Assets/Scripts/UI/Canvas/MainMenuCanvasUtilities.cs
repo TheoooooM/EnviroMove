@@ -1,12 +1,14 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using Archi.Service.Interface;
 using Attributes;
 using DG.Tweening;
 using Levels;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI.Canvas
@@ -16,7 +18,10 @@ namespace UI.Canvas
         [ServiceDependency] private ILevelService m_Level;
         [ServiceDependency] private IToolService m_Tool;
         [ServiceDependency] private IDataBaseService m_Data;
+        [ServiceDependency] private IInterfaceService m_thisInterface;
+
         [SerializeField] private float animationDuration = 0.5f;
+        [SerializeField] private float popUpAnimationDuration = 0.25f;
 
         [Header("Viewport Information")]
         [SerializeField] private UnityEngine.Canvas mainCanvas = null;
@@ -25,8 +30,18 @@ namespace UI.Canvas
         [SerializeField] private Vector2 minMaxViewportXValue = new();
         [SerializeField, Range(0, 1)] private float changeScreenSpeed = 0.2f;
         [SerializeField] private TMP_InputField inputField;
+        [SerializeField] private ScrollRect shopScrollRect = null;
+        [SerializeField] private ScrollRect commuScrollRect = null;
         private bool isInCreateMenu = false;
-        
+
+        [FormerlySerializedAs("rewardRect")]
+        [Header("Rewards information")]
+        [SerializeField] private CanvasGroup rewardGroup = null;
+        [SerializeField] private Image rewardImg = null;
+        [SerializeField] private TextMeshProUGUI rewardTxt = null;
+        public bool isInReward = false;
+        private int stageReward = 0;
+
         [Header("Bottom Bar Information")]
         [SerializeField] private List<RectTransform> bottomBarButtonsRect = new();
         [SerializeField] private Vector2 buttonSizes = new();
@@ -43,26 +58,116 @@ namespace UI.Canvas
         private int levelSelectionID = 0;
 
         [Header("Level Create Information")]
-        [SerializeField] private Transform layout;
         [SerializeField] private GameObject levelBox;
-        [SerializeField] private GameObject contentBox;
+        [SerializeField] private Transform contentBox;
         
-        public override void Init()
-        {
+        public override void Init() {
             var saver = GetComponentInChildren<SaveTester>();
             if (saver){ saver.m_Database = m_Data; }
             
             LevelInfo[] infos = m_Data.GetAllLevelInfos();
-            Debug.Log($"Get {infos.Length} infos");
-            foreach (var info in infos)
-            {
-                var go = Object.Instantiate(levelBox, layout);
-                go.transform.SetParent(contentBox.transform);
-                
+            for (var index = 0; index < Mathf.Clamp(infos.Length, 0, 3); index++) {
+                var info = infos[index];
+                GameObject go = Instantiate(levelBox, contentBox);
+
                 var box = go.GetComponent<LevelBox>();
-                box.SetupBox(info, m_Tool, m_Data);
+                box.SetupBox(info, m_Tool, m_Data, this);
             }
         }
+
+        #region SetPage
+        /// <summary>
+        /// Initialize the position of the player based on the last position while the game was open
+        /// </summary>
+        public void InitValue(PageDirection pageDirection, float value) {
+            Debug.Log(pageDirection + " " + value);
+            switch (pageDirection) {
+                case PageDirection.Shop:
+                    pageID = 1;
+                    shopScrollRect.verticalNormalizedPosition = value;
+                    break;
+                
+                case PageDirection.Home:
+                    pageID = 0;
+                    isInCreateMenu = false;
+                    isLevelSelectionOpen = false;
+                    break;
+                
+                case PageDirection.Community:
+                    pageID = -1;
+                    commuScrollRect.verticalNormalizedPosition = value;
+                    break;
+                
+                case PageDirection.Search:
+                    pageID = -2;
+                    break;
+                
+                case PageDirection.LevelSelection_Spring:
+                    pageID = 0;
+                    levelSelectionID = 0;
+                    isInCreateMenu = false;
+                    isLevelSelectionOpen = true;
+                    levelSelectionTransform.localScale = new Vector3(1, 1, 1);
+                    break;
+                
+                case PageDirection.LevelSelection_Autumn:
+                    pageID = 0;
+                    levelSelectionID = -1;
+                    isInCreateMenu = false;
+                    isLevelSelectionOpen = true;
+                    levelSelectionTransform.localScale = new Vector3(1, 1, 1);
+                    break;
+                
+                case PageDirection.LevelSelection_Winter:
+                    pageID = 0;
+                    levelSelectionID = -2;
+                    isInCreateMenu = false;
+                    isLevelSelectionOpen = true;
+                    levelSelectionTransform.localScale = new Vector3(1, 1, 1);
+                    break;
+                
+                case PageDirection.Create:
+                    pageID = 0;
+                    isInCreateMenu = true;
+                    isLevelSelectionOpen = false;
+                    break;
+                
+                default: throw new ArgumentOutOfRangeException(nameof(pageDirection), pageDirection, null);
+            }
+            viewportTransform.localPosition = GetTargetPosition();
+            seasonViewportTransform.localPosition = GetTargetPosition(false);
+        }
+
+        /// <summary>
+        /// Set the current page and value
+        /// </summary>
+        public void SetCurrentPageAndValue() {
+            PageDirection pageDirection = pageID switch {
+                -2 => PageDirection.Search,
+                -1 => PageDirection.Community,
+                0 => isInCreateMenu ? PageDirection.Create : PageDirection.Home,
+                1 => PageDirection.Shop,
+                _ => PageDirection.Home
+            };
+            if (pageDirection == PageDirection.Home) {
+                if (isLevelSelectionOpen) {
+                    pageDirection = levelSelectionID switch {
+                        0 => PageDirection.LevelSelection_Spring,
+                        -1 => PageDirection.LevelSelection_Autumn,
+                        -2 => PageDirection.LevelSelection_Winter,
+                        _ => PageDirection.LevelSelection_Spring
+                    };
+                }
+            }
+            
+            float value = pageDirection switch {
+                PageDirection.Shop => shopScrollRect.verticalNormalizedPosition,
+                PageDirection.Community => commuScrollRect.verticalNormalizedPosition,
+                _ => 0f
+            };
+            m_thisInterface.SetTargetPage(pageDirection, value);
+        }
+        #endregion SetPage
         
         private MovementDirection moveDir = MovementDirection.None;
         private Vector2 startPosition = new();
@@ -80,6 +185,7 @@ namespace UI.Canvas
         private Vector2 delatPos = new();
         private Vector2 position = new();
         private Vector2 minMaxViewportValue = new();
+        private GameObject openedPanel = null;
         
         /// <summary>
         /// Move the current page when the player swipe the screen
@@ -102,6 +208,10 @@ namespace UI.Canvas
                         RectTransformUtility.ScreenPointToLocalPointInRectangle(maskTransform, position, mainCanvas.worldCamera, out Vector2 rectPos);
                         if(!maskTransform.rect.Contains(rectPos)) OpenCloseSelectionlevel(false);
                     }
+
+                    if (isInReward) {
+                        if(stageReward == 3) CloseRewardPanel();
+                    }
                     break;
                 
                 case TouchPhase.Moved:
@@ -110,6 +220,7 @@ namespace UI.Canvas
                     hasMove = true;
                     
                     if (CantMovePanel()) return;
+                    if(isInReward) return;
                     if (moveDir == MovementDirection.Y) {
                         if (pageID != 0) return;
                         if (currentTransform.localPosition.y <= 0 && delatPos.y < 0 && !isInCreateMenu) return; 
@@ -129,12 +240,12 @@ namespace UI.Canvas
                     moveDir = MovementDirection.None;
                     
                     if (currentMove == MovementDirection.Y) {
-                        if (Mathf.Abs(currentTransform.localPosition.y - viewportStartPosition.y) < mainMenuTransform.sizeDelta.y / 10f) return;
+                        if (Mathf.Abs(currentTransform.localPosition.y - viewportStartPosition.y) < mainMenuTransform.sizeDelta.y / 30f) return;
                         isInCreateMenu = !isInCreateMenu;
                         return;
                     }
 
-                    if (Mathf.Abs(currentTransform.localPosition.x - viewportStartPosition.x) < mainMenuTransform.sizeDelta.x / 6f) return;
+                    if (Mathf.Abs(currentTransform.localPosition.x - viewportStartPosition.x) < mainMenuTransform.sizeDelta.x / 20f) return;
                     currentID = (position.x - startPosition.x) switch {
                         < 0 when currentTransform.localPosition.x > minMaxViewportValue.x => Mathf.Clamp(currentID - 1, -2, 1),
                         > 0 when currentTransform.localPosition.x < minMaxViewportValue.y => Mathf.Clamp(currentID + 1, -2, 1),
@@ -171,6 +282,10 @@ namespace UI.Canvas
         private void InitInputs() {
             startPosition = position;
             viewportStartPosition = currentTransform.localPosition;
+            if (openedPanel != null) {
+                openedPanel.transform.DOScale(0, popUpAnimationDuration);
+                StartCoroutine(RemovePanelFromVariable(openedPanel));
+            }
         }
         /// <summary>
         /// Check if the panel can be moved
@@ -185,8 +300,7 @@ namespace UI.Canvas
         private Vector3 GetTargetPosition(bool isMainPage = true) {
             return isMainPage ? new Vector3(mainMenuTransform.sizeDelta.x * pageID, isInCreateMenu ? 4053f : 0, 0) : new Vector3(movePanelXValue * levelSelectionID, 0, 0);
         }
-        #endregion Panel Movement Helper
-
+        
         /// <summary>
         /// Switch page when button is pressed
         /// </summary>
@@ -195,18 +309,40 @@ namespace UI.Canvas
             isInCreateMenu = false;
             pageID = id;
         }
-
-        public void ShowLevelSelector() => m_Tool.ShowLevels();
-
+        /// <summary>
+        /// Move to a certain season
+        /// </summary>
+        /// <param name="id"></param>
+        public void MoveToSeason(int id) => levelSelectionID = id;
+        #endregion Panel Movement Helper
+        
         public void SetUsername()
         {
             if(inputField.text != "")m_Data.SetUsername(inputField.text);
         } 
         
+        #region Information Panel
+        /// <summary>
+        /// Open an information panel
+        /// </summary>
+        /// <param name="informationPanel"></param>
         public void OpenCloseInformationPanel(GameObject informationPanel) {
-            informationPanel.SetActive(!informationPanel.activeSelf);
+            if (openedPanel == informationPanel) return;
+            
+            openedPanel = informationPanel;
+            openedPanel.transform.DOScale(1, popUpAnimationDuration).SetEase(Ease.OutBack);
         }
 
+        /// <summary>
+        /// Remove the panel from the variable
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator RemovePanelFromVariable(GameObject panel) {
+            yield return new WaitForSeconds(.25f);
+            if(openedPanel == panel) openedPanel = null;
+        }
+        #endregion Information Panel
+        
         /// <summary>
         /// Change the size of the buttons at the bottom bar
         /// </summary>
@@ -218,6 +354,10 @@ namespace UI.Canvas
             }
         }
         
+        /// <summary>
+        /// Open or close the selection level panel
+        /// </summary>
+        /// <param name="open"></param>
         public void OpenCloseSelectionlevel(bool open) {
             isLevelSelectionOpen = open;
             
@@ -238,22 +378,31 @@ namespace UI.Canvas
             button.DOPunchScale(new Vector3(-.075f, -.075f, -.075f), animationDuration / 2f, 1);
         }
 
+        /// <summary>
+        /// Go to the currency position in the shop
+        /// </summary>
+        /// <param name="scrollRect"></param>
         public void GoToCurrencyPos(ScrollRect scrollRect) {
             scrollRect.verticalNormalizedPosition = 0;
         }
 
+        /// <summary>
+        /// Go to the create menu
+        /// </summary>
+        /// <param name="goCreate"></param>
         public void GoToCreate(bool goCreate) => isInCreateMenu = goCreate;
         
-        
         #region LoadLevel
-        public void LoadLevel(string levelName)
-        {
+        private LevelData dataToTest;
+        public void LoadLevel(string levelName) {
             m_Level.LoadLevel(m_Data.GetLevelByName(levelName));
         }
 
-        private LevelData dataToTest;
-        public void LoadLevelData(string data)
-        {
+        /// <summary>
+        /// Load the level data
+        /// </summary>
+        /// <param name="data"></param>
+        public void LoadLevelData(string data) {
             //m_Level.LoadLevel((LevelData)constantLevels.GetLevel(i));
 
             //dataToTest = (LevelData)constantLevels.GetLevel(i);
@@ -268,8 +417,7 @@ namespace UI.Canvas
             SceneManager.sceneLoaded += (_,_) => m_Tool.TestLevel();*/
         }
 
-        private void AsyncTestLevel(Scene arg0, LoadSceneMode arg1)
-        {
+        private void AsyncTestLevel(Scene arg0, LoadSceneMode arg1) {
             m_Level.LoadLevel(dataToTest);
             SceneManager.sceneLoaded -= AsyncTestLevel;
             
@@ -279,10 +427,42 @@ namespace UI.Canvas
         public void OpenTool() {
             m_Tool.ShowTool();
         }
+        
+        #region Rewards
+        /// <summary>
+        /// Open the reward panel and show the reward on screen
+        /// </summary>
+        public void GetRewards(Sprite sprite, string rewardName) {
+            Sequence rewardSequence = DOTween.Sequence();
+            rewardGroup.gameObject.SetActive(true);
 
+            rewardSequence.Append(rewardGroup.DOFade(1, popUpAnimationDuration).OnComplete(() => stageReward = 1));
+            rewardSequence.AppendInterval(popUpAnimationDuration);
+            rewardImg.sprite = sprite;
+            rewardTxt.text = rewardName;
+            rewardSequence.Append(rewardImg.rectTransform.DOScale(1, popUpAnimationDuration).SetEase(Ease.OutBack).OnComplete(() => stageReward = 2));
+            rewardSequence.Append(rewardTxt.rectTransform.DOScale(1, popUpAnimationDuration).SetEase(Ease.OutBack).OnComplete(() => stageReward = 3));
+            isInReward = true;
+        }
+
+        /// <summary>
+        /// Close the reward panel
+        /// </summary>
+        private void CloseRewardPanel() {
+            rewardImg.rectTransform.localScale = Vector3.zero;
+            rewardTxt.rectTransform.localScale = Vector3.zero;
+            rewardGroup.DOFade(0, popUpAnimationDuration).OnComplete(() => rewardGroup.gameObject.SetActive(false));
+            isInReward = false;
+            stageReward = 0;
+        }
+        #endregion Rewards
     }
 }
 
 public enum MovementDirection {
     X, Y, None
+}
+
+public enum PageDirection {
+    Shop, Home, Community, Search, LevelSelection_Spring, LevelSelection_Autumn, LevelSelection_Winter, Create
 }
