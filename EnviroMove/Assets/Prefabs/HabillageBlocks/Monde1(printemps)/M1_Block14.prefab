@@ -31,8 +31,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8466850585988134656}
-  - {fileID: 1453181313001008610}
-  - {fileID: 3823905857867292570}
   - {fileID: 1897682723811909964}
   - {fileID: 6183284450107871101}
   m_Father: {fileID: 0}
@@ -170,7 +168,7 @@ PrefabInstance:
     - target: {fileID: 3547074852899849565, guid: 427b01af14388d44ca5a4ecdd432aa79,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3547074852899849565, guid: 427b01af14388d44ca5a4ecdd432aa79,
         type: 3}
@@ -247,6 +245,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mais
       objectReference: {fileID: 0}
+    - target: {fileID: 4211548884459151335, guid: 427b01af14388d44ca5a4ecdd432aa79,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 427b01af14388d44ca5a4ecdd432aa79, type: 3}
 --- !u!4 &1897682723811909964 stripped
@@ -265,7 +268,7 @@ PrefabInstance:
     - target: {fileID: 3547074852899849565, guid: 427b01af14388d44ca5a4ecdd432aa79,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3547074852899849565, guid: 427b01af14388d44ca5a4ecdd432aa79,
         type: 3}
@@ -341,6 +344,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mais_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211548884459151335, guid: 427b01af14388d44ca5a4ecdd432aa79,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 427b01af14388d44ca5a4ecdd432aa79, type: 3}
