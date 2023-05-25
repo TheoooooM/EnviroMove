@@ -3,6 +3,7 @@ using Attributes;
 using Levels;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace UI.Canvas
 {
@@ -11,14 +12,17 @@ namespace UI.Canvas
 
         [ServiceDependency] private IToolService m_tool;
         [ServiceDependency] private ILevelService m_level;
+        [ServiceDependency] private IInterfaceService m_thisInterface;
+
+        [SerializeField] private Button nextLevelButton = null;
+        private LevelSO nextLevel = null;
         
-        public override void Init()
-        {
-            
+        public override void Init() {
+            nextLevel = m_thisInterface.GetNextLevelSO();
+            nextLevelButton.gameObject.SetActive(nextLevel != null);
         }
 
-        public void EditLevel()
-        {
+        public void EditLevel() {
             m_tool.OpenLevel(m_level.GetCurrentLevelData());
         }
 
@@ -36,12 +40,20 @@ namespace UI.Canvas
             SceneManager.sceneLoaded += (_,_) => m_Tool.TestLevel();*/
         }
 
-        private void AsyncTestLevel(Scene arg0, LoadSceneMode arg1)
-        {
+        private void AsyncTestLevel(Scene arg0, LoadSceneMode arg1) {
             m_level.LoadLevel(dataTemp);
             dataTemp = null;
             SceneManager.sceneLoaded -= AsyncTestLevel;
-            
+        }
+
+        /// <summary>
+        /// Load the next level
+        /// </summary>
+        public void LoadNextLevel() {
+            m_thisInterface.SetNextLevelSO(nextLevel.Nextlevel);
+            dataTemp = (LevelData)nextLevel.LevelData;
+            SceneManager.sceneLoaded += AsyncTestLevel;
+            ChangeScene("InGame");
         }
     }
 }

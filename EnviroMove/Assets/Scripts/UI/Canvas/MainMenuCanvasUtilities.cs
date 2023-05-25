@@ -60,6 +60,10 @@ namespace UI.Canvas
         [Header("Level Create Information")]
         [SerializeField] private GameObject levelBox;
         [SerializeField] private Transform contentBox;
+
+        [Header("DoTween Information")]
+        [SerializeField] private float waitTimeShop = 0.4f;
+        [SerializeField] private float timeToGoToShop = 0.75f;
         
         public override void Init() {
             var saver = GetComponentInChildren<SaveTester>();
@@ -186,7 +190,7 @@ namespace UI.Canvas
         private Vector2 position = new();
         private Vector2 minMaxViewportValue = new();
         private GameObject openedPanel = null;
-        
+
         /// <summary>
         /// Move the current page when the player swipe the screen
         /// </summary>
@@ -202,7 +206,7 @@ namespace UI.Canvas
             InitCurrentMovement();
 
             switch (Input.GetTouch(0).phase) {
-                case TouchPhase.Began: 
+                case TouchPhase.Began:
                     InitInputs();
                     if (isLevelSelectionOpen) {
                         RectTransformUtility.ScreenPointToLocalPointInRectangle(maskTransform, position, mainCanvas.worldCamera, out Vector2 rectPos);
@@ -383,7 +387,9 @@ namespace UI.Canvas
         /// </summary>
         /// <param name="scrollRect"></param>
         public void GoToCurrencyPos(ScrollRect scrollRect) {
-            scrollRect.verticalNormalizedPosition = 0;
+            Sequence shopSequence = DOTween.Sequence();
+            shopSequence.AppendInterval(waitTimeShop);
+            shopSequence.Append(shopScrollRect.DONormalizedPos(new Vector2(0, 0), timeToGoToShop));
         }
 
         /// <summary>
@@ -404,7 +410,6 @@ namespace UI.Canvas
         /// <param name="data"></param>
         public void LoadLevelData(string data) {
             //m_Level.LoadLevel((LevelData)constantLevels.GetLevel(i));
-
             //dataToTest = (LevelData)constantLevels.GetLevel(i);
             dataToTest = (LevelData)data;
             SceneManager.sceneLoaded += AsyncTestLevel;
@@ -416,11 +421,16 @@ namespace UI.Canvas
             m_Tool.SetServiceState(false);
             SceneManager.sceneLoaded += (_,_) => m_Tool.TestLevel();*/
         }
+        public void LoadLevelData(LevelSO data) {
+            m_thisInterface.SetNextLevelSO(data.Nextlevel);
+            dataToTest = (LevelData)data.LevelData;
+            SceneManager.sceneLoaded += AsyncTestLevel;
+            ChangeScene("InGame");
+        }
 
         private void AsyncTestLevel(Scene arg0, LoadSceneMode arg1) {
             m_Level.LoadLevel(dataToTest);
             SceneManager.sceneLoaded -= AsyncTestLevel;
-            
         }
         #endregion LoadLevel
         
