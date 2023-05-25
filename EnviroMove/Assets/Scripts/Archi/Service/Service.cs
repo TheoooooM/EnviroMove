@@ -33,8 +33,7 @@ namespace Archi.Service
             return currentServiceState;
         }
 
-        protected void SetObjectDependencies(object obj)
-        {
+        protected void SetObjectDependencies(object obj) {
             var fields = obj.GetType() .GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
             foreach (var field in fields)
             {
@@ -43,18 +42,15 @@ namespace Archi.Service
                 foreach (var _ in dependenceFields)
                 {
                     var varType = field.FieldType;
-                    if (varType.IsInterface && typeof(IService).IsAssignableFrom(varType) &&
-                        varType != typeof(IService))
-                    {
-                        var serviceFields = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public |
-                                                                BindingFlags.Instance | BindingFlags.DeclaredOnly);
-                        foreach (var serviceField in serviceFields)
-                        {
-                            if(serviceField.FieldType == varType) field.SetValue(obj,serviceField.GetValue(this));
+                    if (varType.IsInterface && typeof(IService).IsAssignableFrom(varType) && varType != typeof(IService)) {
+                        var serviceFields = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                        foreach (var serviceField in serviceFields) {
+                            if (serviceField.FieldType == varType) field.SetValue(obj, serviceField.GetValue(this));
                         }
                     }
                 }
             }
+            
         }
     }
 }
