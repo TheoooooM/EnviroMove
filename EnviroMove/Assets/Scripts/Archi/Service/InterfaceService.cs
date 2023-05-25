@@ -18,7 +18,8 @@ namespace Archi.Service
         [DependeOnService] private IToolService m_Tool;
         [DependeOnService] private IDataBaseService m_data;
         [DependeOnService] private IInterfaceService m_interface;
-        
+
+        private LevelSO nextLevel = null;
         private PageDirection pageDirection = PageDirection.Home;
         private float pageValue = 0f;
 
@@ -105,5 +106,15 @@ namespace Archi.Service
             pageDirection = page; 
             pageValue = value;
         }
+
+        /// <summary>
+        /// Set the next level
+        /// </summary>
+        /// <param name="nextLevel"></param>
+        public void SetNextLevelSO(LevelSO nextLevel) {
+            this.nextLevel = nextLevel;
+        }
+
+        public LevelSO GetNextLevelSO() => nextLevel;
     }
 }
