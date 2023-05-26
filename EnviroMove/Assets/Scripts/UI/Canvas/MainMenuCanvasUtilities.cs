@@ -50,7 +50,7 @@ namespace UI.Canvas
         [Header("Level Selection Information")]
         [SerializeField] private RectTransform levelSelectionTransform = null;
         [SerializeField] private RectTransform seasonViewportTransform = null;
-        [SerializeField] private RectTransform maskTransform = null;
+        [SerializeField] private RectTransform maskLevelSelectionTransform = null;
         [SerializeField] private Vector2 minMaxlevelSelectionXValue = new();
         [SerializeField] private float movePanelXValue = 1820;
         [SerializeField] private float animationAmplitude = 1.25f;
@@ -58,25 +58,26 @@ namespace UI.Canvas
         private int levelSelectionID = 0;
 
         [Header("Level Create Information")]
-        [SerializeField] private GameObject levelBox;
-        [SerializeField] private Transform contentBox;
-
+        [SerializeField] private RectTransform moreLevelCreatedTransform = null;
+        [SerializeField] private RectTransform maskLevelCreatedTransform = null;
+        [SerializeField] private GameObject levelBox = null;
+        [SerializeField] private Transform contentBox = null;
+        [SerializeField] private RectTransform contentPanelBox = null;
+        [SerializeField] private GameObject showMoreBtn = null;
+        private bool isMoreLevelPanelOpen = false;
+        
         [Header("DoTween Information")]
         [SerializeField] private float waitTimeShop = 0.4f;
         [SerializeField] private float timeToGoToShop = 0.75f;
         
+        /// <summary>
+        /// Initialize all the data for the script
+        /// </summary>
         public override void Init() {
             var saver = GetComponentInChildren<SaveTester>();
             if (saver){ saver.m_Database = m_Data; }
-            
-            LevelInfo[] infos = m_Data.GetAllLevelInfos();
-            for (var index = 0; index < Mathf.Clamp(infos.Length, 0, 3); index++) {
-                var info = infos[index];
-                GameObject go = Instantiate(levelBox, contentBox);
 
-                var box = go.GetComponent<LevelBox>();
-                box.SetupBox(info, m_Tool, m_Data, this);
-            }
+            ResetCreateMenu();
         }
 
         #region SetPage
@@ -173,6 +174,45 @@ namespace UI.Canvas
         }
         #endregion SetPage
         
+        #region Creation Level Buttons
+        /// <summary>
+        /// Reset the create buttons
+        /// </summary>
+        private void ResetCreateMenu() {
+            for (int i = contentBox.childCount - 1; i > 0; i--) {
+                Destroy(contentBox.GetChild(i).gameObject);
+            }
+            
+            CreateLevelBtns();
+        }
+
+        /// <summary>
+        /// Create the buttons for the level the player create
+        /// </summary>
+        private void CreateLevelBtns() {
+            m_Data.RefreshLevelData();
+            LevelInfo[] infos = m_Data.GetAllLevelInfos();
+            showMoreBtn.SetActive(infos.Length > 3);
+
+            for (var index = 0; index < Mathf.Clamp(infos.Length,0,3); index++) {
+                CreateButton(contentBox, infos, index);
+            }
+        }
+        
+        /// <summary>
+        /// Create a button in the right target
+        /// </summary>
+        /// <param name="targetTransform"></param>
+        /// <param name="index"></param>
+        private Transform CreateButton(Transform targetTransform, LevelInfo[] infos, int index) {
+            GameObject go = Instantiate(levelBox, targetTransform);
+            var box = go.GetComponent<LevelBox>();
+            var info = infos[index];
+            box.SetupBox(info, m_Tool, m_Data, this);
+            return go.transform;
+        }
+        #endregion Creation Level Buttons
+        
         private MovementDirection moveDir = MovementDirection.None;
         private Vector2 startPosition = new();
         private bool hasMove = false;
@@ -201,7 +241,7 @@ namespace UI.Canvas
                 seasonViewportTransform.localPosition = Vector3.Lerp(seasonViewportTransform.localPosition, GetTargetPosition(false), changeScreenSpeed);
                 return;
             }
-            
+
             //Set the variable of the current page
             InitCurrentMovement();
 
@@ -209,8 +249,12 @@ namespace UI.Canvas
                 case TouchPhase.Began:
                     InitInputs();
                     if (isLevelSelectionOpen) {
-                        RectTransformUtility.ScreenPointToLocalPointInRectangle(maskTransform, position, mainCanvas.worldCamera, out Vector2 rectPos);
-                        if(!maskTransform.rect.Contains(rectPos)) OpenCloseSelectionlevel(false);
+                        RectTransformUtility.ScreenPointToLocalPointInRectangle(maskLevelSelectionTransform, position, mainCanvas.worldCamera, out Vector2 rectPos);
+                        if(!maskLevelSelectionTransform.rect.Contains(rectPos)) OpenCloseSelectionlevel(false);
+                    }
+                    else if (isMoreLevelPanelOpen) {
+                        RectTransformUtility.ScreenPointToLocalPointInRectangle(maskLevelCreatedTransform, position, mainCanvas.worldCamera, out Vector2 rectPos);
+                        if(!maskLevelCreatedTransform.rect.Contains(rectPos)) OpenCloseMoreLevels(false);
                     }
 
                     if (isInReward) {
@@ -224,7 +268,7 @@ namespace UI.Canvas
                     hasMove = true;
                     
                     if (CantMovePanel()) return;
-                    if(isInReward) return;
+                    if(isInReward || isMoreLevelPanelOpen) return;
                     if (moveDir == MovementDirection.Y) {
                         if (pageID != 0) return;
                         if (currentTransform.localPosition.y <= 0 && delatPos.y < 0 && !isInCreateMenu) return; 
@@ -366,12 +410,48 @@ namespace UI.Canvas
             isLevelSelectionOpen = open;
             
             if (isLevelSelectionOpen) {
-                levelSelectionTransform.DOScale(new Vector3(1, 1, 1), animationDuration).SetEase(Ease.OutBack, animationAmplitude);
+                levelSelectionTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude);
             }
             else {
-                levelSelectionTransform.DOScale(Vector3.zero, animationDuration / 2f);
+                levelSelectionTransform.DOScale(Vector3.zero, popUpAnimationDuration);
             }
         }
+        
+        #region Create Level More Panel
+        /// <summary>
+        /// Open or close the panel which contains all the created levels
+        /// </summary>
+        /// <param name="open"></param>
+        public void OpenCloseMoreLevels(bool open) {
+            isMoreLevelPanelOpen = open;
+            
+            if (isMoreLevelPanelOpen) {
+                moreLevelCreatedTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude)
+                    .OnComplete(CreateButtonsForLevelCreated);
+            }
+            else {
+                moreLevelCreatedTransform.DOScale(Vector3.zero, popUpAnimationDuration).OnComplete(() => {
+                    for (int i = contentPanelBox.childCount - 1; i >= 0; i--) {
+                        Destroy(contentPanelBox.GetChild(i).gameObject);
+                    }
+                });
+            }
+        }
+
+        private void CreateButtonsForLevelCreated() {
+            m_Data.RefreshLevelData();
+            LevelInfo[] infos = m_Data.GetAllLevelInfos();
+            contentPanelBox.sizeDelta = new Vector2(contentPanelBox.sizeDelta.x, 600 * infos.Length);
+            contentPanelBox.localPosition = new Vector3(0, 0, 0);
+
+            Sequence levelApparitionSequence = DOTween.Sequence();
+            for (var index = 0; index < infos.Length; index++) {
+                Transform btn = CreateButton(contentPanelBox, infos, index);
+                btn.transform.localScale = Vector3.zero;
+                levelApparitionSequence.Append(btn.DOScale(1, popUpAnimationDuration / 1.25f).SetEase(Ease.OutBack));
+            }
+        }
+        #endregion Create Level More Panel
 
         /// <summary>
         /// Animate the button
@@ -434,9 +514,7 @@ namespace UI.Canvas
         }
         #endregion LoadLevel
         
-        public void OpenTool() {
-            m_Tool.ShowTool();
-        }
+        public void OpenTool() => m_Tool.ShowTool();
         
         #region Rewards
         /// <summary>
