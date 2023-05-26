@@ -18,6 +18,8 @@ namespace BDD
 
         public void Init(IDataBaseService dataBaseReference) // Récupère tout les LevelInfo
         {
+            allInfoDatas.Clear();
+            
             dataBase = dataBaseReference;
             var infoPaths = Directory.GetFiles(dataBase.InfoPath());
 

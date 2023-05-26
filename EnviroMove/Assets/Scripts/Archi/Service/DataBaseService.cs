@@ -28,14 +28,11 @@ namespace Archi.Service
 
         protected override void Initialize()
         {
-            if (!File.Exists($"{Application.persistentDataPath}/SaveData"))
-                Directory.CreateDirectory($"{Application.persistentDataPath}/SaveData");
-            if (!File.Exists($"{Application.persistentDataPath}/SaveData/Level"))
-                Directory.CreateDirectory($"{Application.persistentDataPath}/SaveData/Level");
+            if (!File.Exists($"{Application.persistentDataPath}/SaveData")) Directory.CreateDirectory($"{Application.persistentDataPath}/SaveData");
+            if (!File.Exists($"{Application.persistentDataPath}/SaveData/Level")) Directory.CreateDirectory($"{Application.persistentDataPath}/SaveData/Level");
             levelPath = $"{Application.persistentDataPath}/SaveData/Level/";
 
-            if (!File.Exists($"{Application.persistentDataPath}/SaveData/Infos"))
-                Directory.CreateDirectory($"{Application.persistentDataPath}/SaveData/Infos");
+            if (!File.Exists($"{Application.persistentDataPath}/SaveData/Infos")) Directory.CreateDirectory($"{Application.persistentDataPath}/SaveData/Infos");
             infoPath = $"{Application.persistentDataPath}/SaveData/Infos/";
 
             dbReference = FirebaseDatabase.DefaultInstance.RootReference;
@@ -99,9 +96,8 @@ namespace Archi.Service
         {
             return container.allInfoDatas.FirstOrDefault(i => i.id == id);
         }
-
-
-
+        
+        public void RefreshLevelData() => container.Init(this);
 
         /// <summary>
         /// Create Data On DataBase

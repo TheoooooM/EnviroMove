@@ -17,6 +17,7 @@ namespace Archi.Service.Interface
         string[] GetUserLevels(string id);
         LevelData GetLevel(string path);
         LevelData GetLevelByName(string levelName);
+        public void RefreshLevelData();
         
         void CreateData(string data, string id);
         void DeleteData(string id);
