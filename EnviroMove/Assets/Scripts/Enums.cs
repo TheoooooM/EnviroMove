@@ -132,59 +132,66 @@ public class Enums
 
     public enum blockType
     {
-        empty,
-        ground,
-        playerStart,
-        playerEnd,
-        box,
-        breakableBlock,
-        chariot,
-        frog,
-        ice,
-        penguin,
-        rabbit,
-        directionBlock,
-        panelStart,
-        panelEnd,
-        M1_Block1,
-        M1_Block2,
-        M1_Block3,
-        M1_Block4,
-        M1_Block5,
-        M1_Block6,
-        M1_Block7,
-        M1_Block8,
-        M1_Block9,
-        M1_Block10,
-        M1_Block11,
-        M1_Block12,
-        M1_Block13,
-        M1_Block14,
-        M1_Block15,
-        M1_Block16,
-        M1_Block17,
-        M1_Block18,
-        M1_Border,
-        M2_Block1,
-        M2_Block2,
-        M2_Block3,
-        M2_Block4,
-        M2_Block5,
-        M2_Block6,
-        M2_Block7,
-        M2_Block8,
-        M2_Block9,
-        M2_Block10,
-        M2_Block11,
-        M2_Block12,
-        M2_Block13,
-        M2_Block14,
-        M2_Block15,
-        M2_Block16,
-        M2_Block17,
-        M2_Block18,
-        M2_Block19,
-        M1_Caillou
+        empty,      //0
+        ground,     //1
+        playerStart,//2
+        playerEnd,  //3
+        box,        //4
+        breakableBlock, //5
+        chariot,    //6
+        frog,       //7
+        ice,        //8
+        penguin,    //9
+        rabbit,     //10
+        directionBlock, //11
+        panelStart, //12
+        panelEnd,   //13
+        M1_Block1,  //14
+        M1_Block2,  //15
+        M1_Block3,  //16
+        M1_Block4,  //17
+        M1_Block5,  //18
+        M1_Block6,  //19
+        M1_Block7,  //20
+        M1_Block8,  //21
+        M1_Block9,  //22
+        M1_Block10, //23
+        M1_Block11, //24
+        M1_Block12, //25
+        M1_Block13, //26
+        M1_Block14, //27
+        M1_Block15, //28
+        M1_Block16, //29
+        M1_Block17, //30
+        M1_Block18, //31
+        M1_Border,  //32
+        M2_Block1,  //33
+        M2_Block2,  //34
+        M2_Block3,  //35
+        M2_Block4,  //36
+        M2_Block5,  //37
+        M2_Block6,  //38
+        M2_Block7,  //39
+        M2_Block8,  //40
+        M2_Block9,  //41
+        M2_Block10, //42
+        M2_Block11, //43
+        M2_Block12, //44
+        M2_Block13, //45
+        M2_Block14, //46
+        M2_Block15, //47
+        M2_Block16, //48
+        M2_Block17, //49
+        M2_Block18, //50
+        M2_Block19, //51
+        M1_Caillou, //52
+        M1_Block19, //53
+        M1_Block20, //54
+        M1_Block21, //55
+        M1_Block22, //56
+        M1_Block23, //57
+        M1_Block24, //58
+        M1_Block25, //59
     }
 
     public enum MajorCanvas
