@@ -229,6 +229,7 @@ public class SceneEditor
 
     private void MoveCamera()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
         if (Input.GetTouch(0).phase == TouchPhase.Moved)
         {
             var touchDeltaPosition = Input.GetTouch(0).deltaPosition;
