@@ -22,7 +22,7 @@ namespace Archi.Service.Interface
         void DeleteData(string id);
         void UpdateData();
         
-        void GenerateDataLevel(LevelData data, string levelName = "unnamed Level");
+        void GenerateDataLevel(LevelData data, string levelName = "unnamed Level", bool createInfo = true);
         void UpdateDataLevel(string jsonData, string dataId);
         void RemovedataLevel(string key);
         

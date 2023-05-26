@@ -46,11 +46,15 @@ namespace Archi.Service
                     if (varType.IsInterface && typeof(IService).IsAssignableFrom(varType) &&
                         varType != typeof(IService))
                     {
-                        var serviceFields = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public |
-                                                                BindingFlags.Instance | BindingFlags.DeclaredOnly);
-                        foreach (var serviceField in serviceFields)
+                        if (varType==GetType()) { field.SetValue(obj, GetType()); }
+                        else
                         {
-                            if(serviceField.FieldType == varType) field.SetValue(obj,serviceField.GetValue(this));
+                            var serviceFields = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public |
+                                                                    BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                            foreach (var serviceField in serviceFields)
+                            {
+                                if (serviceField.FieldType == varType) field.SetValue(obj, serviceField.GetValue(this));
+                            }
                         }
                     }
                 }

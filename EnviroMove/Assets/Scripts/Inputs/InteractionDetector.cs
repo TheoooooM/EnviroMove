@@ -1,3 +1,4 @@
+using System;
 using Interfaces;
 using UnityEngine;
 
@@ -5,7 +6,18 @@ namespace Inputs
 {
     public class InteractionDetector : MonoBehaviour
     {
+        public static InteractionDetector Instance;
+        
         private IInteractable selectEntity;
+
+        public bool isActive;
+
+        private void Awake()
+        {
+            if (!Instance) Instance = this;
+            else Destroy(this);
+        }
+
         // Start is called before the first frame update
         void Start()
         {
@@ -16,6 +28,7 @@ namespace Inputs
 
         void TouchEffect(Vector2 touchPos)
         {
+            if (!isActive) return;
             Debug.Log("Touch Screen");
             Ray ray = Camera.main.ScreenPointToRay(touchPos);
             if (Physics.Raycast(ray, out RaycastHit hit))
@@ -29,6 +42,7 @@ namespace Inputs
 
         void ReleasetouchEffect(Vector2 position)
         {
+            if (!isActive) return;
             IBoardable boardable = null;
             Ray ray = Camera.main.ScreenPointToRay(position);
             if(Physics.Raycast(ray, out RaycastHit hit)) boardable = hit.transform.GetComponent<IBoardable>();
@@ -36,6 +50,9 @@ namespace Inputs
         }
 
 
-        void SwipEffect(Enums.Side side)=> selectEntity?.Swipe(side);
+        void SwipEffect(Enums.Side side)
+        {
+            if (isActive) selectEntity?.Swipe(side);
+        }
     }
 }

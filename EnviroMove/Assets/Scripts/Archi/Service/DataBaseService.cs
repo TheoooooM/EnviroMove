@@ -41,7 +41,7 @@ namespace Archi.Service
             dbReference = FirebaseDatabase.DefaultInstance.RootReference;
 
             container.Init(this);
-            UpdateData();
+            //UpdateData();
         }
         // Remove DB : dbReference.Child("Levels").RemoveValueAsync();
 
@@ -160,6 +160,11 @@ namespace Archi.Service
             }
 
             throw new System.NotImplementedException();
+        }
+
+        public void GenerateDataLevel(LevelData data, string levelName = "unnamed Level")
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
