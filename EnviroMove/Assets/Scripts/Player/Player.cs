@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Inputs;
 using Interfaces;
 using Levels;
 using UnityEngine;
@@ -17,7 +18,7 @@ public class Player : MonoBehaviour, IBoardable
     private bool _moving;
     private basicDelegate _onMoveFinish;
 
-    [SerializeField] private float startDelay = 2;
+    [SerializeField] private float startDelay = 5;
     
     [SerializeField] private float moveSpeed;
     private Coroutine _actionCoroutine;
@@ -124,7 +125,9 @@ public class Player : MonoBehaviour, IBoardable
 
     IEnumerator DelayStart()
     {
+        InteractionDetector.Instance.isActive = false;
         yield return new WaitForSeconds(startDelay);
+        InteractionDetector.Instance.isActive = true;
         Move();
     }
 }

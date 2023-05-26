@@ -1,3 +1,4 @@
+using System;
 using Archi.Service.Interface;
 using Attributes;
 using Levels;
@@ -8,6 +9,7 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using static AdresseHelper;
 using static UnityEngine.SceneManagement.SceneManager;
+using Object = UnityEngine.Object;
 
 namespace Archi.Service
 {
@@ -19,6 +21,9 @@ namespace Archi.Service
         [DependeOnService] private ILevelService m_Level;
 
         private SceneEditor sceneEditor;
+
+        private string currentID;
+        
         protected override void Initialize()
         { }
 
@@ -57,10 +62,12 @@ namespace Archi.Service
             if (dataLoaded != null)
             {
                 sceneEditor.LoadData(dataLoaded);
+                currentID = dataLoaded.id;
                 dataLoaded = null;
             }
             else
             {
+                currentID = m_Data.GetUniqueIdentifier();
                 sceneEditor.Start();
             }
             sceneLoaded -= OnLoadSceneCompleted;
@@ -77,7 +84,10 @@ namespace Archi.Service
         public LevelData GetDataCreation()
         {
             Debug.Log("GetDataCreation");
-            return sceneEditor.GetData();
+            var data = sceneEditor.GetData();
+            if (currentID == "") throw new ArgumentNullException("ID isn't Set");
+            if (data.id == null) data.id = currentID;
+            return data;
         }
 
         private LevelData dataLoaded;
