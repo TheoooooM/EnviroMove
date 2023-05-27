@@ -29,20 +29,20 @@ public class Player : MonoBehaviour, IBoardable
     [SerializeField] private Animator _animator;
 
 
-    
-
+    private Vector3Int nextPos;
     void Move()
     {
         _board.CheckCameraMovement(_boardPos);
         _board.CheckFinishLevel(_boardPos);
         var dir = _board.GetPlayerDirection(_boardPos);
         if (dir != Enums.Side.none) _lastDir = dir;
-        if (_board.TryMove(_boardPos, _lastDir, out Vector3 movePosition))
+        if (_board.CanMove(_boardPos, _lastDir, out Vector3 movePosition, out nextPos))
         {
             transform.rotation = Quaternion.LookRotation(Enums.SideVector3(_lastDir), Vector3.up);
             _moving = true;
             _animator.SetTrigger("Walk");
-            MoveToPoint(movePosition, moveSpeed);
+            //_board.Move(this, nextPos);
+            MoveToPoint(movePosition, moveSpeed, false, true);
         }
         else GameOver();
     }
@@ -72,23 +72,29 @@ public class Player : MonoBehaviour, IBoardable
         MoveToPoint(newPos, speed);
     }
 
-    public void MoveToPoint(Vector3 newPos, float speed, bool instanteMove = false)
+    public void MoveToPoint(Vector3 newPos, float speed, bool instanteMove = false, bool finishMove = false)
     {
-        if (!instanteMove) _actionCoroutine = StartCoroutine(MoveToPosition(newPos, speed));
+        if (!instanteMove) _actionCoroutine = StartCoroutine(MoveToPosition(newPos, speed, finishMove));
         else transform.position = newPos;
     }
     
     // ReSharper disable Unity.PerformanceAnalysis
-    public IEnumerator MoveToPosition(Vector3 newPos, float speed)
+    public IEnumerator MoveToPosition(Vector3 newPos, float speed, bool finishMove = false)
     {
         var magnitude = Vector3.Distance(transform.position, newPos);
             var startMagnitude = magnitude;
+            bool haveTransi = false;
             var step = speed * Time.deltaTime;
             while (magnitude> step)
             {
-                //Debug.Log($"Moving by {(newPos - transform.position).normalized * step}");
                 transform.position += (newPos - transform.position).normalized * step;
                 magnitude -= step;
+                if (finishMove && magnitude <= startMagnitude / 2 && !haveTransi)
+                {
+                    haveTransi = true;
+                    _board.Move(this, nextPos);
+                    nextPos = default;
+                }
                 yield return new WaitForEndOfFrame();
             }
             transform.position = newPos;

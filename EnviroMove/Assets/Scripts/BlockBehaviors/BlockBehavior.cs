@@ -50,7 +50,7 @@ namespace BlockBehaviors
             MoveToPoint(newPos, speed);
         }
 
-        public void MoveToPoint(Vector3 newPos, float speed, bool instanteMove = false)
+        public void MoveToPoint(Vector3 newPos, float speed, bool instanteMove = false, bool finishMove = false)
         {
             if (speed == 0) speed = moveSpeed;
             _actionCoroutine = StartCoroutine(MoveToPosition(newPos, speed));

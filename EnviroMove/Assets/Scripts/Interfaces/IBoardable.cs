@@ -19,7 +19,7 @@ namespace Interfaces
 
         void StopCoroutineAction();
         public void Grab(Vector3 newPos, float speed = 0);
-        public void MoveToPoint(Vector3 newPos, float speed = 0, bool InstanteMove = false);
+        public void MoveToPoint(Vector3 newPos, float speed = 0, bool InstanteMove = false, bool finishMove = false);
 
         public void StartBoard();
     }
