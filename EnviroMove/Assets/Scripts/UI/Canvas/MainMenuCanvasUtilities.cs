@@ -57,11 +57,13 @@ namespace UI.Canvas
         private bool isLevelSelectionOpen = false;
         private int levelSelectionID = 0;
 
+        [FormerlySerializedAs("createMenu")]
         [Header("Level Create Information")]
+        [SerializeField] private RectTransform createMenuTransform = null;
         [SerializeField] private RectTransform moreLevelCreatedTransform = null;
         [SerializeField] private RectTransform maskLevelCreatedTransform = null;
         [SerializeField] private GameObject levelBox = null;
-        [SerializeField] private Transform contentBox = null;
+        [SerializeField] private RectTransform contentBox = null;
         [SerializeField] private RectTransform contentPanelBox = null;
         [SerializeField] private GameObject showMoreBtn = null;
         private bool isMoreLevelPanelOpen = false;
@@ -76,7 +78,6 @@ namespace UI.Canvas
         public override void Init() {
             var saver = GetComponentInChildren<SaveTester>();
             if (saver){ saver.m_Database = m_Data; }
-
             ResetCreateMenu();
         }
 
@@ -193,8 +194,9 @@ namespace UI.Canvas
             m_Data.RefreshLevelData();
             LevelInfo[] infos = m_Data.GetAllLevelInfos();
             showMoreBtn.SetActive(infos.Length > 3);
-
-            for (var index = 0; index < Mathf.Clamp(infos.Length,0,3); index++) {
+            
+            int numberOfObjectToSpawn = Mathf.Abs(Mathf.FloorToInt(contentBox.rect.height / 600f));
+            for (var index = 0; index < Mathf.Clamp(infos.Length,0,numberOfObjectToSpawn); index++) {
                 CreateButton(contentBox, infos, index);
             }
         }
@@ -221,6 +223,8 @@ namespace UI.Canvas
         private void Update() {
             MoveCurrentPageWithInput();
             ChangeBottomBarButtonSize();
+            
+            createMenuTransform.localPosition = new Vector3(0, -mainMenuTransform.sizeDelta.y, 0);
         }
 
         private RectTransform currentTransform = null;
@@ -272,7 +276,7 @@ namespace UI.Canvas
                     if (moveDir == MovementDirection.Y) {
                         if (pageID != 0) return;
                         if (currentTransform.localPosition.y <= 0 && delatPos.y < 0 && !isInCreateMenu) return; 
-                        if (currentTransform.localPosition.y >= 4053 && delatPos.y > 0 && isInCreateMenu) return;
+                        if (currentTransform.localPosition.y >= mainMenuTransform.sizeDelta.y && delatPos.y > 0 && isInCreateMenu) return;
                         
                         currentTransform.localPosition += new Vector3(0, delatPos.y, 0);
                         return;
@@ -346,7 +350,7 @@ namespace UI.Canvas
         /// Get the target position of the viewport
         /// </summary>
         private Vector3 GetTargetPosition(bool isMainPage = true) {
-            return isMainPage ? new Vector3(mainMenuTransform.sizeDelta.x * pageID, isInCreateMenu ? 4053f : 0, 0) : new Vector3(movePanelXValue * levelSelectionID, 0, 0);
+            return isMainPage ? new Vector3(mainMenuTransform.sizeDelta.x * pageID, isInCreateMenu ? mainMenuTransform.sizeDelta.y : 0, 0) : new Vector3(movePanelXValue * levelSelectionID, 0, 0);
         }
         
         /// <summary>
@@ -441,7 +445,7 @@ namespace UI.Canvas
         private void CreateButtonsForLevelCreated() {
             m_Data.RefreshLevelData();
             LevelInfo[] infos = m_Data.GetAllLevelInfos();
-            contentPanelBox.sizeDelta = new Vector2(contentPanelBox.sizeDelta.x, 600 * infos.Length);
+            contentPanelBox.sizeDelta = new Vector2(contentPanelBox.sizeDelta.x, (buttonSizes.y + 50) * infos.Length);
             contentPanelBox.localPosition = new Vector3(0, 0, 0);
 
             Sequence levelApparitionSequence = DOTween.Sequence();
