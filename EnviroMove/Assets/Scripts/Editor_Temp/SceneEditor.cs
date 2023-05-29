@@ -523,6 +523,13 @@ public class SceneEditor
         if (Physics.Raycast(ray, out hitRay))
         {
             if (hitRay.transform.gameObject.transform.name == "Plane") return;
+            if (hitRay.transform.gameObject.transform.name == "directionBlock")
+            {
+                directionGrid[(int)hitRay.transform.position.x, (int)hitRay.transform.position.y,
+                    (int)hitRay.transform.position.z] = Enums.Side.none;
+                Object.Destroy(hitRay.transform.gameObject);
+                return;
+            }
             if (blockGrid[(int)hitRay.transform.position.x, (int)hitRay.transform.position.y,
                     (int)hitRay.transform.position.z] == 0)
             {
