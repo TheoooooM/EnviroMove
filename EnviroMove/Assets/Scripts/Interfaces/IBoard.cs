@@ -8,7 +8,7 @@ namespace Interfaces
         public IBoardable GetNeighbor(Vector3Int boardPos, Enums.Side side, out bool boardLimit, out Vector3Int neighborPos);
         public Vector3Int GetPosition(IBoardable boardable);
         public bool TryMove(Vector3Int boardablePosition, Enums.Side side, out Vector3 position);
-        public bool CanMove(Vector3Int boardablePosition, Enums.Side side, out Vector3 position, out Vector3Int boardPos);
+        public bool CanMove(Vector3Int boardablePosition, Enums.Side side, bool isCalledByPlayer, out Vector3 position, out Vector3Int boardPos);
         public void Move(IBoardable boardable, Vector3Int position);
         public void SetAt(IBoardable boardable, Vector3Int position);
         public void RemoveBoardable(IBoardable boardable);

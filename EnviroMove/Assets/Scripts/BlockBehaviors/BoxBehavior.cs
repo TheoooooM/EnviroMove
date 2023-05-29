@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
 
@@ -10,30 +11,72 @@ namespace BlockBehaviors
     {
         private Vector3 _startScale;
         bool isInteractible = true;
-        
-        
+        [SerializeField] private List<GameObject> directionFX = new(); 
+
 
         private void Start()
         {
             _startScale = transform.localScale;
-            onMoveFinish += ()=>isInteractible = true;
+            onMoveFinish += () => {
+                isInteractible = true;
+                ChangeActivatedFX();
+                UpdateNeighboor(boardPos);
+            };
+        }
+
+        /// <summary>
+        /// Init the block when all the board is set
+        /// </summary>
+        protected override void InitAfterBeingPos() {
+            ChangeActivatedFX();
         }
 
 
-        public bool IsInteractible() => isInteractible;
-        public override void Select()=>transform.localScale = _startScale * 1.2f;
+        public bool IsInteractible() {
+            return isInteractible;
+        }
+
+        public override void Select() => transform.localScale = _startScale * 1.2f;
         public override void Deselect(IBoardable releaseBoardable)=>transform.localScale = _startScale;
 
 
         public override void Swipe(Enums.Side side)
         {
             isInteractible = false;
-            if (boardMaster.TryMove(boardPos, side, out Vector3 newPos))
-            {
+            Vector3Int lastBoardPos = boardPos;
+            if (boardMaster.TryMove(boardPos, side, out Vector3 newPos)) {
+                UpdateNeighboor(lastBoardPos);
                 StartCoroutine(MoveToPosition(newPos, moveSpeed));
             }
         }
 
-        
+
+        private Vector3 newPos = new();
+        private Vector3Int newBoardPos = new();
+        private bool limitBoard = false;
+        /// <summary>
+        /// Change the FX which are activated
+        /// </summary>
+        public void ChangeActivatedFX() {
+            directionFX[0].SetActive(boardMaster.CanMove(boardPos, Enums.Side.forward, false, out newPos, out newBoardPos));
+            directionFX[1].SetActive(boardMaster.CanMove(boardPos, Enums.Side.right, false,out newPos, out newBoardPos));
+            directionFX[2].SetActive(boardMaster.CanMove(boardPos, Enums.Side.back, false,out newPos, out newBoardPos));
+            directionFX[3].SetActive(boardMaster.CanMove(boardPos, Enums.Side.left, false,out newPos, out newBoardPos));
+        }
+
+        private void UpdateNeighboor(Vector3Int pos) {
+            if (boardMaster.GetNeighbor(pos, Enums.Side.forward, out limitBoard) is BoxBehavior) {
+                (boardMaster.GetNeighbor(pos, Enums.Side.forward, out limitBoard) as BoxBehavior).ChangeActivatedFX();
+            }
+            if (boardMaster.GetNeighbor(pos, Enums.Side.right, out limitBoard) is BoxBehavior) {
+                (boardMaster.GetNeighbor(pos, Enums.Side.right, out limitBoard) as BoxBehavior).ChangeActivatedFX();
+            }
+            if (boardMaster.GetNeighbor(pos, Enums.Side.back, out limitBoard) is BoxBehavior) {
+                (boardMaster.GetNeighbor(pos, Enums.Side.back, out limitBoard) as BoxBehavior).ChangeActivatedFX();
+            }
+            if (boardMaster.GetNeighbor(pos, Enums.Side.left, out limitBoard) is BoxBehavior) {
+                (boardMaster.GetNeighbor(pos, Enums.Side.left, out limitBoard) as BoxBehavior).ChangeActivatedFX();
+            }
+        }
     }
 }
