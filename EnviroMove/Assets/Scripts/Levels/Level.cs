@@ -264,15 +264,14 @@ namespace Levels
          return true;
       }
       
-      public bool CanMove(Vector3Int boardablePosition, Enums.Side side, out Vector3 position, out Vector3Int boardPos)
+      public bool CanMove(Vector3Int boardablePosition, Enums.Side side, bool isCalledByPlayer, out Vector3 position, out Vector3Int boardPos)
       {
          position = transform.position + boardablePosition;
          boardPos = boardablePosition;
          var mover = _board[boardablePosition.x, boardablePosition.y, boardablePosition.z];
          IBoardable neighboor = GetNeighbor(boardablePosition, side, out bool boardLimit, out Vector3Int neighborPos);
          if (boardLimit) return false;
-         if (neighboor != null)
-         {
+         if (neighboor != null && !(isCalledByPlayer && neighboor is Player)) {
             if(!neighboor.TryMoveOn(mover, Enums.InverseSide(side), boardablePosition + Enums.SideVector3Int(side))) return false;
          }
          boardPos = neighborPos;

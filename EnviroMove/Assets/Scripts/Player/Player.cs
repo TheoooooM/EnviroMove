@@ -36,7 +36,7 @@ public class Player : MonoBehaviour, IBoardable
         _board.CheckFinishLevel(_boardPos);
         var dir = _board.GetPlayerDirection(_boardPos);
         if (dir != Enums.Side.none) _lastDir = dir;
-        if (_board.CanMove(_boardPos, _lastDir, out Vector3 movePosition, out nextPos))
+        if (_board.CanMove(_boardPos, _lastDir, true, out Vector3 movePosition, out nextPos))
         {
             transform.rotation = Quaternion.LookRotation(Enums.SideVector3(_lastDir), Vector3.up);
             _moving = true;

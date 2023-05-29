@@ -42,8 +42,9 @@ namespace BlockBehaviors
         public void AddOnFinishMove(Action<IBoardable> action)=>onMoveFinish += () => action?.Invoke(this);
         public void RemoveOnFinishMove(Action<IBoardable> action) => onMoveFinish -= () => action?.Invoke(this);
 
-        public virtual void StartBoard()
-        { }
+        public virtual void StartBoard() {
+            InitAfterBeingPos();
+        }
 
         public void Grab(Vector3 newPos, float speed = 0)
         {
@@ -76,5 +77,7 @@ namespace BlockBehaviors
             transform.position = newPos;
             onMoveFinish?.Invoke();
         }
+
+        protected virtual void InitAfterBeingPos() { }
     }
 }
