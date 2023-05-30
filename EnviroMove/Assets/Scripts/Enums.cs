@@ -192,6 +192,18 @@ public class Enums
         M1_Block23, //57
         M1_Block24, //58
         M1_Block25, //59
+        M2_Block20A,//60
+        M2_Block20B,//61
+        M2_Block21A,//62
+        M2_Block21B,//63
+        M2_Block22A,//64
+        M2_Block22B,//65
+        M2_Block23A,//66
+        M2_Block23B,//67
+        M2_Block24A,//68
+        M2_Block24B,//69
+        M2_Block25A,//70
+        M2_Block25B,//71
     }
 
     public enum MajorCanvas
