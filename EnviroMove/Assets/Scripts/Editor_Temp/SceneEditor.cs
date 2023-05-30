@@ -174,13 +174,52 @@ public class SceneEditor
         while (firstBlockPosition.y > 0) firstBlockPosition.y -= tileSize.y;
         firstBlockPosition.x += tileSize.x;
         firstBlockPosition.y += tileSize.y;
+        
+        InstantiateNewBorder(posX, posZ);
 
-        block = Object.Instantiate(prefabs[(int)Enums.blockType.M1_Border],
-            new Vector3(posX + tileSize.x / 2 - .5f, 0, posZ + tileSize.y / 2 - .5f),
-            Quaternion.identity);
-        block.transform.Rotate(0, 90, 0);
+        // block = Object.Instantiate(prefabs[(int)Enums.blockType.M1_Border],
+        //     new Vector3(posX + tileSize.x / 2 - .5f, 0, posZ + tileSize.y / 2 - .5f),
+        //     Quaternion.identity);
+        // block.transform.Rotate(0, 90, 0);
+        // block.transform.SetParent(parent.transform);
+        // block.name = posX + tileSize.x / 2 - .5f + " " + 0 + " " + (posZ + tileSize.y / 2 - .5f);
+    }
+
+    private void InstantiateNewBorder(int posX, int posZ)
+    {
+        // OutBottomLeftCorner 98, OutTopLeftCorner 99, OutBottomRightCorner 100, OutTopRightCorner 101
+        // InsideBottomLeftCorner 102, InsideBottomRightCorner 103, InsideTopRightCorner 104, InsideTopLeftCorner 105
+        // OutLeft start at  106 to OutLeft ends at 119
+        // OutRight start at 120 to OutRight ends at 133
+        // OutTop start at 134 to OutTop ends at 141
+        // OutBottom start at 142 to OutBottom ends at 149
+        // InsideTop start at 150 to InsideTop ends at 155
+        // InsideLeft start at 156 to InsideLeft ends at 167
+        // InsideRight start at 168 to InsideRight ends at 180
+        // InsideBottom start at 181 to InsideBottom ends at 186
+        
+        //go through all of these indexes and instantiate the right prefab at the right position in order to make the border around the platform
+        //the border is made of 4 parts : the corners, the sides, the inside corners and the inside sides
+        
+        //corners
+        //bottom left corner take the bottom left corner of the platform -2x +2y -2z
+        var block = Object.Instantiate(prefabs[98], new Vector3(posX - 2, 2, posZ - 2), Quaternion.identity);
         block.transform.SetParent(parent.transform);
-        block.name = posX + tileSize.x / 2 - .5f + " " + 0 + " " + (posZ + tileSize.y / 2 - .5f);
+        block.name = posX - 2 + " " + 2 + " " + (posZ - 2);
+        //bottom right corner take the bottom right corner of the platform -2x +2y +tileSize.z +2z
+        block = Object.Instantiate(prefabs[100], new Vector3(posX - 2, 2, posZ + tileSize.y + 2), Quaternion.identity);
+        block.transform.SetParent(parent.transform);
+        block.name = posX - 2 + " " + 2 + " " + (posZ + tileSize.y + 2);
+        //top left corner take the top left corner of the platform +tileSize.x +2x +2y -2z
+        block = Object.Instantiate(prefabs[99], new Vector3(posX + tileSize.x + 2, 2, posZ - 2), Quaternion.identity);
+        block.transform.SetParent(parent.transform);
+        block.name = posX + tileSize.x + 2 + " " + 2 + " " + (posZ - 2);
+        //top right corner take the top right corner of the platform +tileSize.x +2x +2y +tileSize.z +2z
+        block = Object.Instantiate(prefabs[101], new Vector3(posX + tileSize.x + 2, 2, posZ + tileSize.y + 2),
+            Quaternion.identity);
+        block.transform.SetParent(parent.transform);
+        block.name = posX + tileSize.x + 2 + " " + 2 + " " + (posZ + tileSize.y + 2);
+        
     }
 
     private void DestroyPlatform(int posX, int posZ)

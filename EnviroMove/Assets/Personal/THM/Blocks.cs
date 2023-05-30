@@ -103,15 +103,15 @@ public struct Blocks
         { M3_Block24, "M3_Block24" }, //95  
         { M3_Block25, "M3_Block25" }, //96  
         { M3_Block26, "M3_Block26" }, //97  
-        { OutBottomLeftCorner, "Box555" },
-        { OutTopLeftCorner, "Box685" },
-        { OutBottomRightCorner, "Box686" },
-        { OutTopRightCorner, "Box687" },
-        { InsideBottomLeftCorner, "Box736" },
-        { InsideBottomRightCorner, "Box737" },
-        { InsideTopRightCorner, "Box738" },
-        { InsideTopLeftCorner, "Box739" },
-        { OutLeft1, "Box688" },
+        { OutBottomLeftCorner, "Box555" },      //98
+        { OutTopLeftCorner, "Box685" },         //99
+        { OutBottomRightCorner, "Box686" },     //100
+        { OutTopRightCorner, "Box687" },        //101
+        { InsideBottomLeftCorner, "Box736" },   //102
+        { InsideBottomRightCorner, "Box737" },  //103
+        { InsideTopRightCorner, "Box738" },     //104
+        { InsideTopLeftCorner, "Box739" },      //105
+        { OutLeft1, "Box688" },                 //106
         { OutLeft2, "Box689" },
         { OutLeft3, "Box690" },
         { OutLeft4, "Box779" },
@@ -125,7 +125,7 @@ public struct Blocks
         { OutLeft12, "Box778" },
         { OutLeft13, "Box699" },
         { OutLeft14, "Box705" },
-        { OutRight1, "Box719" },
+        { OutRight1, "Box719" },                //120
         { OutRight2, "Box713" },
         { OutRight3, "Box796" },
         { OutRight4, "Box712" },
@@ -139,7 +139,7 @@ public struct Blocks
         { OutRight12, "Box708" },
         { OutRight13, "Box707" },
         { OutRight14, "Box706" },
-        { OutTop1, "Box720" },
+        { OutTop1, "Box720" },                  //134
         { OutTop2, "Box721" },
         { OutTop3, "Box722" },
         { OutTop4, "Box792" },
@@ -147,7 +147,7 @@ public struct Blocks
         { OutTop6, "Box725" },
         { OutTop7, "Box726" },
         { OutTop8, "Box727" },
-        { OutBottom1, "Box735" },
+        { OutBottom1, "Box735" },               //142
         { OutBottom2, "Box734" },
         { OutBottom3, "Box795" },
         { OutBottom4, "Box799" },
@@ -155,13 +155,13 @@ public struct Blocks
         { OutBottom6, "Box730" },
         { OutBottom7, "Box729" },
         { OutBottom8, "Box728" },
-        { InsideTop1, "Box740" },
+        { InsideTop1, "Box740" },               //150
         { InsideTop2, "Box782" },
         { InsideTop3, "Box749" },
         { InsideTop4, "Box750" },
         { InsideTop5, "Box751" },
         { InsideTop6, "Box743" },
-        { InsideLeft1, "Box748" },
+        { InsideLeft1, "Box748" },              //156
         { InsideLeft2, "Box761" },
         { InsideLeft3, "Box760" },
         { InsideLeft4, "Box784" },
@@ -173,7 +173,7 @@ public struct Blocks
         { InsideLeft10, "Box783" },
         { InsideLeft11, "Box752" },
         { InsideLeft12, "Box742" },
-        { InsideRight1, "Box745" },
+        { InsideRight1, "Box745" },             //168
         { InsideRight2, "Box766" },
         { InsideRight3, "Box767" },
         { InsideRight4, "Box787" },
@@ -185,12 +185,12 @@ public struct Blocks
         { InsideRight10, "Box774" },
         { InsideRight11, "Box790" },
         { InsideRight12, "Box744" },
-        { InsideBottom1, "Box747" },
+        { InsideBottom1, "Box747" },            //181
         { InsideBottom2, "Box785" },
         { InsideBottom3, "Box763" },
         { InsideBottom4, "Box764" },
         { InsideBottom5, "Box786" },
-        { InsideBottom6, "Box746" }, //185
+        { InsideBottom6, "Box746" },            //186
     };
 
     public static readonly Dictionary<string, Enums.blockType> BlockAdressType = new()
