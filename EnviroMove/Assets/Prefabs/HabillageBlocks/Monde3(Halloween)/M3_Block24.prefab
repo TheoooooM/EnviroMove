@@ -107,6 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8799658581414522145}
   - component: {fileID: -2975676173197649689}
+  - component: {fileID: -2173292712450632593}
   m_Layer: 0
   m_Name: M3_Block24
   m_TagString: Untagged
@@ -146,6 +147,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tags: 
   moveSpeed: 1
+--- !u!65 &-2173292712450632593
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6167656157976737092}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &7076305043933241672
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -181,7 +195,7 @@ PrefabInstance:
     - target: {fileID: 3235025071543409631, guid: 8f83e0166f4baf84a969caf67b127198,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: -0.50001
       objectReference: {fileID: 0}
     - target: {fileID: 3235025071543409631, guid: 8f83e0166f4baf84a969caf67b127198,
         type: 3}
@@ -286,7 +300,7 @@ PrefabInstance:
     - target: {fileID: 6792063041373848477, guid: 3389e3566a416d1449f48d9072bc6dda,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.55518174
+      value: -0.44482827
       objectReference: {fileID: 0}
     - target: {fileID: 6792063041373848477, guid: 3389e3566a416d1449f48d9072bc6dda,
         type: 3}

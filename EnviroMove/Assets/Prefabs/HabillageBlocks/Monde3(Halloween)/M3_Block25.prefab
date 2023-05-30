@@ -107,6 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8799658581414522145}
   - component: {fileID: -2975676173197649689}
+  - component: {fileID: -4734557361400088545}
   m_Layer: 0
   m_Name: M3_Block25
   m_TagString: Untagged
@@ -148,6 +149,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tags: 
   moveSpeed: 1
+--- !u!65 &-4734557361400088545
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6167656157976737092}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &3594014405869035637
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -188,7 +202,7 @@ PrefabInstance:
     - target: {fileID: 2267583350235722161, guid: 443b9ba7d28369048b90c61a6ccaa26c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.24
+      value: 0.25001
       objectReference: {fileID: 0}
     - target: {fileID: 2267583350235722161, guid: 443b9ba7d28369048b90c61a6ccaa26c,
         type: 3}
@@ -283,7 +297,7 @@ PrefabInstance:
     - target: {fileID: 3926047929096502394, guid: c2253cbc9645f4f4b9e01684f733a7a3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.50000185
+      value: -0.48998815
       objectReference: {fileID: 0}
     - target: {fileID: 3926047929096502394, guid: c2253cbc9645f4f4b9e01684f733a7a3,
         type: 3}
@@ -378,7 +392,7 @@ PrefabInstance:
     - target: {fileID: 2267583350235722161, guid: 443b9ba7d28369048b90c61a6ccaa26c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.108
+      value: 0.118010044
       objectReference: {fileID: 0}
     - target: {fileID: 2267583350235722161, guid: 443b9ba7d28369048b90c61a6ccaa26c,
         type: 3}
@@ -473,7 +487,7 @@ PrefabInstance:
     - target: {fileID: 2267583350235722161, guid: 443b9ba7d28369048b90c61a6ccaa26c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.061
+      value: 0.07100999
       objectReference: {fileID: 0}
     - target: {fileID: 2267583350235722161, guid: 443b9ba7d28369048b90c61a6ccaa26c,
         type: 3}

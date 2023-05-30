@@ -107,6 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8799658581414522145}
   - component: {fileID: -2975676173197649689}
+  - component: {fileID: 6192248844180876939}
   m_Layer: 0
   m_Name: M3_Block21
   m_TagString: Untagged
@@ -145,6 +146,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tags: 
   moveSpeed: 1
+--- !u!65 &6192248844180876939
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6167656157976737092}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &4797390093581885784
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -185,7 +199,7 @@ PrefabInstance:
     - target: {fileID: 3856313792615474877, guid: 31729d01e0e0cad4bae707bc22095111,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5000003
+      value: -0.50000995
       objectReference: {fileID: 0}
     - target: {fileID: 3856313792615474877, guid: 31729d01e0e0cad4bae707bc22095111,
         type: 3}
