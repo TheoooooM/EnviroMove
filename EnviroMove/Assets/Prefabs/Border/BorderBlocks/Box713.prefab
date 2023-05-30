@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5657713721367750861}
   - component: {fileID: 6030878109672857193}
   - component: {fileID: 2591061757403129137}
+  - component: {fileID: -3279656772264103188}
   m_Layer: 0
   m_Name: Box713
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-3279656772264103188
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670874456579887741}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0039946, y: 1.0147336, z: 1.4509375}
+  m_Center: {x: 0.5019974, y: -0.50736606, z: 0.72546864}

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3859121412138059343}
   - component: {fileID: 8641428233610333595}
   - component: {fileID: 64371309694475589}
+  - component: {fileID: 2756378078086115851}
   m_Layer: 0
   m_Name: Box770
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2756378078086115851
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 238863196555313927}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.9829912, y: 1.691626, z: 2.02767}
+  m_Center: {x: 0.7008794, y: 0.4308181, z: 1.0113037}

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 531979258965671547}
   - component: {fileID: 8252514139164382472}
   - component: {fileID: 4764772982068456858}
+  - component: {fileID: 7124279821324389804}
   m_Layer: 0
   m_Name: Box745
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7124279821324389804
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3434030283908909849}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.7212689, y: 1.0039954, z: 2.1249785}
+  m_Center: {x: 0.85015184, y: 0.49867332, z: 1.059958}
