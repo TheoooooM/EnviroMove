@@ -204,6 +204,7 @@ namespace Levels
                {
                   if (_board[x, y, z] == boardable)
                   {
+                     _board[position.x, position.y, position.z]?.MoveOn(boardable, position);
                      _board[position.x, position.y, position.z] = _board[x, y, z];
                      _board[position.x, position.y, position.z].SetPosition(position);
                      _board[x, y, z] = null;
@@ -272,7 +273,7 @@ namespace Levels
          IBoardable neighboor = GetNeighbor(boardablePosition, side, out bool boardLimit, out Vector3Int neighborPos);
          if (boardLimit) return false;
          if (neighboor != null && !(isCalledByPlayer && neighboor is Player)) {
-            if(!neighboor.TryMoveOn(mover, Enums.InverseSide(side), boardablePosition + Enums.SideVector3Int(side))) return false;
+            if(!neighboor.CanMoveOn(mover, Enums.InverseSide(side), boardablePosition + Enums.SideVector3Int(side))) return false;
          }
          boardPos = neighborPos;
          position = transform.position + neighborPos;

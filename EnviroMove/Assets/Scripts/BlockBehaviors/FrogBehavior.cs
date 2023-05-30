@@ -45,7 +45,7 @@ namespace BlockBehaviors
             if (neighboor != null)
             {
                 var tags = neighboor.GetTags();
-                if (tags.Contains(Enums.BlockTag.FrogGrabbable))
+                if (tags.Contains(Enums.BlockTag.FrogGrabbable) && neighboor.CanBlockInteract())
                 {
                     neighboor.StopCoroutineAction();
                     neighboor.MoveToPoint(boardMaster.GetWorldPos(sideBoardPosition), tongueSpeed);

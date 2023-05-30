@@ -17,7 +17,9 @@ namespace BlockBehaviors
 
         [SerializeField] protected List<Enums.BlockTag> tags;
         public List<Enums.BlockTag> GetTags() => tags;
-        
+
+        public bool CanBlockInteract() => true;
+
         [SerializeField] protected float moveSpeed = 1f;
         private Coroutine _actionCoroutine;
     
@@ -38,6 +40,14 @@ namespace BlockBehaviors
         {
             return false;
         }
+
+        public virtual bool CanMoveOn(IBoardable move, Enums.Side commingSide, Vector3Int pos)
+        {
+            return false;
+        }
+
+        public virtual void MoveOn(IBoardable move, Vector3Int pos)
+        { }
 
         public void AddOnFinishMove(Action<IBoardable> action)=>onMoveFinish += () => action?.Invoke(this);
         public void RemoveOnFinishMove(Action<IBoardable> action) => onMoveFinish -= () => action?.Invoke(this);

@@ -17,6 +17,7 @@ public class Player : MonoBehaviour, IBoardable
 
     private Enums.Side _lastDir = Enums.Side.forward;
     private bool _moving;
+    private bool _isDead;
     private basicDelegate _onMoveFinish;
 
     [SerializeField] private int startDelay = 5;
@@ -28,6 +29,7 @@ public class Player : MonoBehaviour, IBoardable
     
     [SerializeField] protected List<Enums.BlockTag> tags;
     public List<Enums.BlockTag> GetTags() => tags;
+    public bool CanBlockInteract() => !_isDead;
 
     [SerializeField] private Animator _animator;
 
@@ -58,10 +60,13 @@ public class Player : MonoBehaviour, IBoardable
 
     private void GameOver()
     {
+        _animator.ResetTrigger("Walk");
         _animator.SetTrigger("Death");
         StopCoroutineAction();
         enabled = false;
     }
+
+    public void CompleteGameOver()=>_isDead = true;
 
     public void AsyncGameOver()
     {
@@ -102,6 +107,7 @@ public class Player : MonoBehaviour, IBoardable
                 {
                     haveTransi = true;
                     _board.Move(this, nextPos);
+                    //Debug.Break();
                     nextPos = default;
                 }
                 yield return new WaitForEndOfFrame();
@@ -129,6 +135,14 @@ public class Player : MonoBehaviour, IBoardable
     {
         return false;
     }
+
+    public bool CanMoveOn(IBoardable move, Enums.Side commingSide, Vector3Int pos)
+    {
+        return false;
+    }
+
+    public void MoveOn(IBoardable move, Vector3Int pos)
+    { }
 
     public void AddOnFinishMove(Action<IBoardable> action) => _onMoveFinish += () => action?.Invoke(this);
     public void RemoveOnFinishMove(Action<IBoardable> action) => _onMoveFinish -= () => action?.Invoke(this);
