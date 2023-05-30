@@ -246,7 +246,8 @@ public class Enums
     {
         Player,
         Penguin,
-        FrogGrabbable
+        FrogGrabbable,
+        NoTunnel
     }
 
     public enum SceneType

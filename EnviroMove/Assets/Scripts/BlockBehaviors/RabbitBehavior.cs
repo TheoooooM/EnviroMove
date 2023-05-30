@@ -41,6 +41,7 @@ namespace BlockBehaviors
             boardMaster.SetAt(this, tunnelPos);
             hole1.SetActive(true);
             hole2.SetActive(true);
+            
             secondPos = tunnelPos;
             hole2.transform.position = boardMaster.GetWorldPos(tunnelPos) + hole2.transform.localPosition;
             rabbitMesh.SetActive(false);
@@ -54,12 +55,24 @@ namespace BlockBehaviors
         public override bool TryMoveOn(IBoardable move, Enums.Side commingSide, Vector3Int pos)
         {
             if (!tunnelSet) return base.TryMoveOn(move, commingSide, pos);
-            
-            boardableEnters.Add(move, pos);
-            move.AddOnFinishMove(Teleport);
+            else if (move.GetTags().Contains(Enums.BlockTag.NoTunnel)) return false;
+            Debug.Log("TRy Move On Rabbit");
+            MoveOn(move, pos);
 
             return true;
+        }
 
+        public override bool CanMoveOn(IBoardable move, Enums.Side commingSide, Vector3Int pos)
+        {
+            if (!tunnelSet) return base.CanMoveOn(move, commingSide, pos);
+            else if (move.GetTags().Contains(Enums.BlockTag.NoTunnel)) return false;
+            else return true;
+        }
+
+        public override void MoveOn(IBoardable move, Vector3Int pos)
+        {
+            boardableEnters.Add(move, pos);
+            move.AddOnFinishMove(Teleport);
         }
 
         void Teleport(IBoardable boardable)

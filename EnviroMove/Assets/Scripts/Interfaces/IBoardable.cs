@@ -8,11 +8,14 @@ namespace Interfaces
     public interface IBoardable
     {
         public List<Enums.BlockTag> GetTags();
+        bool CanBlockInteract();
         
         public void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board);
         public void SetPosition(Vector3Int newBoardPos);
 
         bool TryMoveOn(IBoardable move, Enums.Side commingSide, Vector3Int pos);
+        bool CanMoveOn(IBoardable move, Enums.Side commingSide, Vector3Int pos);
+        void MoveOn(IBoardable move, Vector3Int pos);
 
         void AddOnFinishMove(Action<IBoardable> action);
         void RemoveOnFinishMove(Action<IBoardable> action);
