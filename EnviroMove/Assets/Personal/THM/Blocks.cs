@@ -66,16 +66,16 @@ public struct Blocks
         { Enums.blockType.M1_Block25, "M1_Block25"},        //59
         { Enums.blockType.M2_Block20A, "M2_Block20A"},      //60
         { Enums.blockType.M2_Block20B, "M2_Block20B"},      //61
-        { Enums.blockType.M2_Block20A, "M2_Block21A"},      //60
-        { Enums.blockType.M2_Block20B, "M2_Block21B"},      //62
-        { Enums.blockType.M2_Block20A, "M2_Block22A"},      //63
-        { Enums.blockType.M2_Block20B, "M2_Block22B"},      //64
-        { Enums.blockType.M2_Block20A, "M2_Block23A"},      //65
-        { Enums.blockType.M2_Block20B, "M2_Block23B"},      //66
-        { Enums.blockType.M2_Block20A, "M2_Block24A"},      //67
-        { Enums.blockType.M2_Block20B, "M2_Block24B"},      //68
-        { Enums.blockType.M2_Block20A, "M2_Block25A"},      //69
-        { Enums.blockType.M2_Block20B, "M2_Block25B"},      //70
+        { Enums.blockType.M2_Block21A, "M2_Block21A"},      //60
+        { Enums.blockType.M2_Block21B, "M2_Block21B"},      //62
+        { Enums.blockType.M2_Block22A, "M2_Block22A"},      //63
+        { Enums.blockType.M2_Block22B, "M2_Block22B"},      //64
+        { Enums.blockType.M2_Block23A, "M2_Block23A"},      //65
+        { Enums.blockType.M2_Block23B, "M2_Block23B"},      //66
+        { Enums.blockType.M2_Block24A, "M2_Block24A"},      //67
+        { Enums.blockType.M2_Block24B, "M2_Block24B"},      //68
+        { Enums.blockType.M2_Block25A, "M2_Block25A"},      //69
+        { Enums.blockType.M2_Block25B, "M2_Block25B"},      //70
         
         
         };
