@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Inputs;
 using Interfaces;
 using Levels;
+using TMPro;
 using UnityEngine;
 
 delegate void basicDelegate();
@@ -18,7 +19,9 @@ public class Player : MonoBehaviour, IBoardable
     private bool _moving;
     private basicDelegate _onMoveFinish;
 
-    [SerializeField] private float startDelay = 5;
+    [SerializeField] private int startDelay = 5;
+
+    [SerializeField] private TextMeshProUGUI countDownText;
     
     [SerializeField] private float moveSpeed;
     private Coroutine _actionCoroutine;
@@ -30,6 +33,12 @@ public class Player : MonoBehaviour, IBoardable
 
 
     private Vector3Int nextPos;
+
+    private void Awake()
+    {
+        countDownText.gameObject.SetActive(false);
+    }
+
     void Move()
     {
         _board.CheckCameraMovement(_boardPos);
@@ -132,7 +141,15 @@ public class Player : MonoBehaviour, IBoardable
     IEnumerator DelayStart()
     {
         InteractionDetector.Instance.isActive = false;
-        yield return new WaitForSeconds(startDelay);
+        countDownText.gameObject.SetActive(true);
+        int countdown = startDelay;
+        while (countdown>0)
+        {
+            countDownText.text = $"{countdown}";
+            yield return new WaitForSeconds(1);
+            countdown--;
+        }
+        countDownText.gameObject.SetActive(false);
         InteractionDetector.Instance.isActive = true;
         Move();
     }
