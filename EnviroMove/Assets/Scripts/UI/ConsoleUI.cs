@@ -25,7 +25,7 @@ public class ConsoleUI : MonoBehaviour
         {
             Debug.Log("Hello World");
         }
-        DebugFPS.text = "FPS: " + (int)(1.0f / Time.unscaledDeltaTime);
+        if(DebugFPS)DebugFPS.text = "FPS: " + (int)(1.0f / Time.unscaledDeltaTime);
     }
     
     public void OnEnable()
