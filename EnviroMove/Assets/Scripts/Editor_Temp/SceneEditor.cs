@@ -74,7 +74,11 @@ public class SceneEditor
 
     public float cameraSpeed = 0.5f;
 
-    #endregion
+    private List<int> twoByOnePrefabIndex = new() { 24, 25, 26, 27, 28, 43, 46, 47 };
+    private List<int> twoPlusOnePrefabIndex = new() { 29, 30, 48, 49 };
+    private List<int> twoByTwoPrefabIndex = new() {51};
+
+#endregion
 
     public void Start()
     {
@@ -229,6 +233,7 @@ public class SceneEditor
 
     private void MoveCamera()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
         if (Input.GetTouch(0).phase == TouchPhase.Moved)
         {
             var touchDeltaPosition = Input.GetTouch(0).deltaPosition;
@@ -282,8 +287,6 @@ public class SceneEditor
             blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
         if (blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] == Enums.Side.none)
             blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
-        Debug.Log("blockHorizontalRotationGrid[" + (int)position.x + ", " + (int)position.y + ", " + (int)position.z +
-                  "] = " + blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z]);
     }
 
     private bool SpecificBlockActions(Vector3 position, GameObject newGo)
