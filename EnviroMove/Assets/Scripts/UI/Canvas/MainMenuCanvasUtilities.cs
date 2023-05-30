@@ -7,9 +7,11 @@ using DG.Tweening;
 using Levels;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace UI.Canvas
 {
@@ -548,6 +550,17 @@ namespace UI.Canvas
             stageReward = 0;
         }
         #endregion Rewards
+        
+        /*void test() { 
+            GameObject objR = null;
+            AdresseHelper.LoadAssetWithCallback<GameObject>("MondeTest", (obj) => {
+                objR = Object.Instantiate(obj);
+            //retirer load screen
+            });
+            
+            Addressables.Release(objR);
+        }*/
+        
     }
 }
 
