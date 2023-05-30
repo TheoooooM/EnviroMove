@@ -66,16 +66,42 @@ public struct Blocks
         { Enums.blockType.M1_Block25, "M1_Block25"},        //59
         { Enums.blockType.M2_Block20A, "M2_Block20A"},      //60
         { Enums.blockType.M2_Block20B, "M2_Block20B"},      //61
-        { Enums.blockType.M2_Block20A, "M2_Block21A"},      //60
-        { Enums.blockType.M2_Block20B, "M2_Block21B"},      //62
-        { Enums.blockType.M2_Block20A, "M2_Block22A"},      //63
-        { Enums.blockType.M2_Block20B, "M2_Block22B"},      //64
-        { Enums.blockType.M2_Block20A, "M2_Block23A"},      //65
-        { Enums.blockType.M2_Block20B, "M2_Block23B"},      //66
-        { Enums.blockType.M2_Block20A, "M2_Block24A"},      //67
-        { Enums.blockType.M2_Block20B, "M2_Block24B"},      //68
-        { Enums.blockType.M2_Block20A, "M2_Block25A"},      //69
-        { Enums.blockType.M2_Block20B, "M2_Block25B"},      //70
+        { Enums.blockType.M2_Block21A, "M2_Block21A"},      //62
+        { Enums.blockType.M2_Block21B, "M2_Block21B"},      //63
+        { Enums.blockType.M2_Block22A, "M2_Block22A"},      //64
+        { Enums.blockType.M2_Block22B, "M2_Block22B"},      //65
+        { Enums.blockType.M2_Block23A, "M2_Block23A"},      //66
+        { Enums.blockType.M2_Block23B, "M2_Block23B"},      //67
+        { Enums.blockType.M2_Block24A, "M2_Block24A"},      //68
+        { Enums.blockType.M2_Block24B, "M2_Block24B"},      //69
+        { Enums.blockType.M2_Block25A, "M2_Block25A"},      //70
+        { Enums.blockType.M2_Block25B, "M2_Block25B"},      //71
+        { Enums.blockType.M3_Block1, "M3_Block1" },         //72
+        { Enums.blockType.M3_Block2, "M3_Block2" },         //73
+        { Enums.blockType.M3_Block3, "M3_Block3" },         //74
+        { Enums.blockType.M3_Block4, "M3_Block4" },         //75
+        { Enums.blockType.M3_Block5, "M3_Block5" },         //76
+        { Enums.blockType.M3_Block6, "M3_Block6" },         //77
+        { Enums.blockType.M3_Block7, "M3_Block7" },         //78
+        { Enums.blockType.M3_Block8, "M3_Block8" },         //79
+        { Enums.blockType.M3_Block9, "M3_Block9" },         //80
+        { Enums.blockType.M3_Block10, "M3_Block10" },       //81  
+        { Enums.blockType.M3_Block11, "M3_Block11" },       //82  
+        { Enums.blockType.M3_Block12, "M3_Block12" },       //83  
+        { Enums.blockType.M3_Block13, "M3_Block13" },       //84  
+        { Enums.blockType.M3_Block14, "M3_Block14" },       //85  
+        { Enums.blockType.M3_Block15, "M3_Block15" },       //86  
+        { Enums.blockType.M3_Block16, "M3_Block16" },       //87  
+        { Enums.blockType.M3_Block17, "M3_Block17" },       //88  
+        { Enums.blockType.M3_Block18, "M3_Block18" },       //89  
+        { Enums.blockType.M3_Block19, "M3_Block19" },       //90  
+        { Enums.blockType.M3_Block20, "M3_Block20" },       //91  
+        { Enums.blockType.M3_Block21, "M3_Block21" },       //92  
+        { Enums.blockType.M3_Block22, "M3_Block22" },       //93  
+        { Enums.blockType.M3_Block23, "M3_Block23" },       //94  
+        { Enums.blockType.M3_Block24, "M3_Block24" },       //95  
+        { Enums.blockType.M3_Block25, "M3_Block25" },       //96  
+        { Enums.blockType.M3_Block26, "M3_Block26" },       //97  
         
         
         };

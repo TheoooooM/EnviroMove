@@ -74,7 +74,7 @@ public class SceneEditor
 
     public float cameraSpeed = 0.5f;
 
-    private List<int> twoByOnePrefabIndex = new() { 24, 25, 26, 27, 28, 43, 46, 47 };
+    private List<int> twoByOnePrefabIndex = new() { 24, 25, 26, 27, 28, 43, 46, 47, 81 };
     private List<int> twoPlusOnePrefabIndex = new() { 29, 30, 48, 49 };
     private List<int> twoByTwoPrefabIndex = new() {51};
 
@@ -146,7 +146,7 @@ public class SceneEditor
             blockGrid[x, 0, z] = (int)Enums.blockType.M1_Block1;
             //random rotation
             var randomRotation = Random.Range(0, 4);
-            block.transform.Rotate(0, randomRotation * 90, 0);
+            block.transform.Rotate(0, 0, randomRotation * 90);
             blockHorizontalRotationGrid[posX, 0, posZ] = randomRotation switch
             {
                 0 => Enums.Side.forward,
@@ -156,7 +156,7 @@ public class SceneEditor
                 _ => blockHorizontalRotationGrid[posX, 0, posZ]
             };
             randomRotation = Random.Range(0, 4);
-            block.transform.Rotate(0, 0, randomRotation * 90);
+            block.transform.Rotate(randomRotation * 90, 0, 0);
             blockVerticalRotationGrid[posX, 0, posZ] = randomRotation switch
             {
                 0 => Enums.Side.forward,

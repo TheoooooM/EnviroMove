@@ -204,6 +204,32 @@ public class Enums
         M2_Block24B,//69
         M2_Block25A,//70
         M2_Block25B,//71
+        M3_Block1,  //72
+        M3_Block2,  //73
+        M3_Block3,  //74
+        M3_Block4,  //75
+        M3_Block5,  //76
+        M3_Block6,  //77
+        M3_Block7,  //78
+        M3_Block8,  //79
+        M3_Block9,  //80
+        M3_Block10, //81
+        M3_Block11, //82
+        M3_Block12, //83
+        M3_Block13, //84
+        M3_Block14, //85
+        M3_Block15, //86
+        M3_Block16, //87
+        M3_Block17, //88
+        M3_Block18, //89
+        M3_Block19, //90
+        M3_Block20, //91
+        M3_Block21, //92
+        M3_Block22, //93
+        M3_Block23, //94
+        M3_Block24, //95
+        M3_Block25, //96
+        M3_Block26, //97
     }
 
     public enum MajorCanvas
