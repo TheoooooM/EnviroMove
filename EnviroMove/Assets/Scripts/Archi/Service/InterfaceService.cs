@@ -71,6 +71,7 @@ namespace Archi.Service
             if(!canvasUtilities) canvasUtilities = go.GetComponentInChildren<CanvasUtilities>();
             if (canvasUtilities is MainMenuCanvasUtilities) {
                 canvasUtilities.GetComponentInChildren<MainMenuCanvasUtilities>().InitValue(pageDirection, pageValue);
+                canvasUtilities.GetComponentInChildren<MainMenuCanvasUtilities>().mainCanvas.worldCamera = Camera.main;
             }
             SetObjectDependencies(canvasUtilities);
             canvasUtilities.Init();

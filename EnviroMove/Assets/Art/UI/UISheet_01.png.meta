@@ -67,7 +67,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -126,7 +126,7 @@ TextureImporter:
         height: 346
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 121, y: 130, z: 121, w: 90}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -141,13 +141,13 @@ TextureImporter:
       name: UISheet_01_1
       rect:
         serializedVersion: 2
-        x: 554
-        y: 3917
+        x: 1071
+        y: 3921
         width: 488
-        height: 350
+        height: 346
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 121, y: 130, z: 121, w: 90}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -162,40 +162,19 @@ TextureImporter:
       name: UISheet_01_2
       rect:
         serializedVersion: 2
-        x: 1071
-        y: 3917
+        x: 1588
+        y: 3921
         width: 488
-        height: 350
+        height: 346
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 121, y: 130, z: 121, w: 90}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: d5462ed2058c3d148809b5c2f94f9b7f
       internalID: -1277414746
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UISheet_01_3
-      rect:
-        serializedVersion: 2
-        x: 1588
-        y: 3917
-        width: 487
-        height: 350
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 094100d44869424419409c4d4eacfa49
-      internalID: -799123915
       vertices: []
       indices: 
       edges: []
@@ -1015,6 +994,27 @@ TextureImporter:
       bones: []
       spriteID: 184a76e147903244cac5b29474cb4002
       internalID: 1837457842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UISheet_01_22
+      rect:
+        serializedVersion: 2
+        x: 554
+        y: 3921
+        width: 488
+        height: 346
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 121, y: 130, z: 121, w: 90}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 606552c8ba61f92489cf75a9963db87e
+      internalID: 1265573618
       vertices: []
       indices: 
       edges: []

@@ -8,6 +8,7 @@ using Levels;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -25,42 +26,54 @@ namespace UI.Canvas
         [SerializeField] private float animationDuration = 0.5f;
         [SerializeField] private float popUpAnimationDuration = 0.25f;
 
-        [Header("Viewport Information")]
-        [SerializeField] private UnityEngine.Canvas mainCanvas = null;
+        [Header("Base Viewport Information")]
+        public UnityEngine.Canvas mainCanvas = null;
         [SerializeField] private RectTransform mainMenuTransform = null;
+        [SerializeField] private CanvasGroup mainCanvasGroup = null;
+        
+        [Header("Bottom Bar Information")]
+        [SerializeField] private List<RectTransform> bottomBarButtonsRect = new();
+        [SerializeField] private Vector2 buttonSizes = new();
+        [SerializeField, Range(0,1 )] private float changeSizeSpeed = 0.1f;
+        
+        [Header("Movement Viewport Data")]
         [SerializeField] private RectTransform viewportTransform = null;
         [SerializeField] private Vector2 minMaxViewportXValue = new();
         [SerializeField, Range(0, 1)] private float changeScreenSpeed = 0.2f;
-        [SerializeField] private TMP_InputField inputField;
         [SerializeField] private ScrollRect shopScrollRect = null;
         [SerializeField] private ScrollRect commuScrollRect = null;
         private bool isInCreateMenu = false;
-
-        [FormerlySerializedAs("rewardRect")]
-        [Header("Rewards information")]
+        
+        [Header("- Shop Panel Information- ")]
+        [SerializeField] private TextMeshProUGUI specialOfferTxt = null;
+        [SerializeField] private TextMeshProUGUI bundleOfferTxt = null;
+        [SerializeField] private TextMeshProUGUI daysOfferTxt = null;
+        private DateTime currentTime;
+        
+        [Header("- Community Panel Information- ")]
+        [SerializeField] private TextMeshProUGUI specialEventTxt = null;
+        [SerializeField] private TextMeshProUGUI otherEventTxt = null;
+        [SerializeField] private TextMeshProUGUI mapOfDayTxt = null;
+        
+        [Header("- Rewards Panel information- ")]
         [SerializeField] private CanvasGroup rewardGroup = null;
         [SerializeField] private Image rewardImg = null;
         [SerializeField] private TextMeshProUGUI rewardTxt = null;
         public bool isInReward = false;
         private int stageReward = 0;
 
-        [Header("Bottom Bar Information")]
-        [SerializeField] private List<RectTransform> bottomBarButtonsRect = new();
-        [SerializeField] private Vector2 buttonSizes = new();
-        [SerializeField, Range(0,1 )] private float changeSizeSpeed = 0.1f;
-        
-        [Header("Level Selection Information")]
+        [Header("- LevelSelection Panel Information- ")]
         [SerializeField] private RectTransform levelSelectionTransform = null;
         [SerializeField] private RectTransform seasonViewportTransform = null;
         [SerializeField] private RectTransform maskLevelSelectionTransform = null;
         [SerializeField] private Vector2 minMaxlevelSelectionXValue = new();
         [SerializeField] private float movePanelXValue = 1820;
         [SerializeField] private float animationAmplitude = 1.25f;
+        private GameObject worldObj = null;
         private bool isLevelSelectionOpen = false;
         private int levelSelectionID = 0;
-
-        [FormerlySerializedAs("createMenu")]
-        [Header("Level Create Information")]
+        
+        [Header("- LevelCreate Panel Information- ")]
         [SerializeField] private RectTransform createMenuTransform = null;
         [SerializeField] private RectTransform moreLevelCreatedTransform = null;
         [SerializeField] private RectTransform maskLevelCreatedTransform = null;
@@ -69,6 +82,10 @@ namespace UI.Canvas
         [SerializeField] private RectTransform contentPanelBox = null;
         [SerializeField] private GameObject showMoreBtn = null;
         private bool isMoreLevelPanelOpen = false;
+        
+        
+        [SerializeField] private TMP_InputField inputField;
+
         
         [Header("DoTween Information")]
         [SerializeField] private float waitTimeShop = 0.4f;
@@ -225,7 +242,7 @@ namespace UI.Canvas
         private void Update() {
             MoveCurrentPageWithInput();
             ChangeBottomBarButtonSize();
-            
+            UpdateTimeOffers();
             createMenuTransform.localPosition = new Vector3(0, -mainMenuTransform.sizeDelta.y, 0);
         }
 
@@ -256,7 +273,7 @@ namespace UI.Canvas
                     InitInputs();
                     if (isLevelSelectionOpen) {
                         RectTransformUtility.ScreenPointToLocalPointInRectangle(maskLevelSelectionTransform, position, mainCanvas.worldCamera, out Vector2 rectPos);
-                        if(!maskLevelSelectionTransform.rect.Contains(rectPos)) OpenCloseSelectionlevel(false);
+                        if(!maskLevelSelectionTransform.rect.Contains(rectPos)) OpenCloseCampaign(false);
                     }
                     else if (isMoreLevelPanelOpen) {
                         RectTransformUtility.ScreenPointToLocalPointInRectangle(maskLevelCreatedTransform, position, mainCanvas.worldCamera, out Vector2 rectPos);
@@ -355,14 +372,7 @@ namespace UI.Canvas
             return isMainPage ? new Vector3(mainMenuTransform.sizeDelta.x * pageID, isInCreateMenu ? mainMenuTransform.sizeDelta.y : 0, 0) : new Vector3(movePanelXValue * levelSelectionID, 0, 0);
         }
         
-        /// <summary>
-        /// Switch page when button is pressed
-        /// </summary>
-        /// <param name="id"></param>
-        public void MoveToPage(int id) {
-            isInCreateMenu = false;
-            pageID = id;
-        }
+
         /// <summary>
         /// Move to a certain season
         /// </summary>
@@ -407,22 +417,7 @@ namespace UI.Canvas
                 bottomBarButtonsRect[i].sizeDelta = Vector2.Lerp(buttonSize, new Vector2((i == currentPage ? buttonSizes.y : buttonSizes.x), buttonSize.y), changeSizeSpeed);
             }
         }
-        
-        /// <summary>
-        /// Open or close the selection level panel
-        /// </summary>
-        /// <param name="open"></param>
-        public void OpenCloseSelectionlevel(bool open) {
-            isLevelSelectionOpen = open;
-            
-            if (isLevelSelectionOpen) {
-                levelSelectionTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude);
-            }
-            else {
-                levelSelectionTransform.DOScale(Vector3.zero, popUpAnimationDuration);
-            }
-        }
-        
+
         #region Create Level More Panel
         /// <summary>
         /// Open or close the panel which contains all the created levels
@@ -467,26 +462,11 @@ namespace UI.Canvas
             button.DORewind();
             button.DOPunchScale(new Vector3(-.075f, -.075f, -.075f), animationDuration / 2f, 1);
         }
-
-        /// <summary>
-        /// Go to the currency position in the shop
-        /// </summary>
-        /// <param name="scrollRect"></param>
-        public void GoToCurrencyPos(ScrollRect scrollRect) {
-            Sequence shopSequence = DOTween.Sequence();
-            shopSequence.AppendInterval(waitTimeShop);
-            shopSequence.Append(shopScrollRect.DONormalizedPos(new Vector2(0, 0), timeToGoToShop));
-        }
-
-        /// <summary>
-        /// Go to the create menu
-        /// </summary>
-        /// <param name="goCreate"></param>
-        public void GoToCreate(bool goCreate) => isInCreateMenu = goCreate;
         
         #region LoadLevel
         private LevelData dataToTest;
         public void LoadLevel(string levelName) {
+            UnLoad3DWorld();
             m_Level.LoadLevel(m_Data.GetLevelByName(levelName));
         }
 
@@ -495,6 +475,7 @@ namespace UI.Canvas
         /// </summary>
         /// <param name="data"></param>
         public void LoadLevelData(string data) {
+            UnLoad3DWorld();
             //m_Level.LoadLevel((LevelData)constantLevels.GetLevel(i));
             //dataToTest = (LevelData)constantLevels.GetLevel(i);
             dataToTest = (LevelData)data;
@@ -508,6 +489,7 @@ namespace UI.Canvas
             SceneManager.sceneLoaded += (_,_) => m_Tool.TestLevel();*/
         }
         public void LoadLevelData(LevelSO data) {
+            UnLoad3DWorld();
             m_thisInterface.SetNextLevelSO(data.Nextlevel);
             dataToTest = (LevelData)data.LevelData;
             SceneManager.sceneLoaded += AsyncTestLevel;
@@ -520,8 +502,11 @@ namespace UI.Canvas
         }
         #endregion LoadLevel
         
-        public void OpenTool() => m_Tool.ShowTool();
-        
+        public void OpenTool() {
+            UnLoad3DWorld();
+            m_Tool.ShowTool();
+        }
+
         #region Rewards
         /// <summary>
         /// Open the reward panel and show the reward on screen
@@ -550,17 +535,117 @@ namespace UI.Canvas
             stageReward = 0;
         }
         #endregion Rewards
+
+        #region Button Events
+        /// <summary>
+        /// Wait before doing anything
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        private IEnumerator WaitForAction(UnityAction action) {
+            yield return new WaitForSeconds(0.075f);
+            action.Invoke();
+        }
         
-        /*void test() { 
-            GameObject objR = null;
-            AdresseHelper.LoadAssetWithCallback<GameObject>("MondeTest", (obj) => {
-                objR = Object.Instantiate(obj);
-            //retirer load screen
-            });
+        public void OpenCloseCampaignLevels(bool open) => StartCoroutine(WaitForAction(() => OpenCloseCampaign(open)));
+        public void GoToCreatePanel(bool goCreate) => StartCoroutine(WaitForAction(() => GoToCreate(goCreate)));
+        public void GoToPage(int pageID) => StartCoroutine(WaitForAction(() => MoveToPage(pageID)));
+        public void GoBuyCurrency(ScrollRect scrollRect) => StartCoroutine(WaitForAction(() => GoToCurrencyPos(scrollRect)));
+        #endregion Button Events
+
+        #region OpenClose Panels
+        /// <summary>
+        /// Open or close the selection level panel
+        /// </summary>
+        /// <param name="open"></param>
+        private void OpenCloseCampaign(bool open) {
+            isLevelSelectionOpen = open;
             
-            Addressables.Release(objR);
-        }*/
+            if (isLevelSelectionOpen) {
+                //mainCanvasGroup.DOFade(0, popUpAnimationDuration);
+                m_thisInterface.GenerateLoadingScreen("Selection Level", 1);
+                //Load3DWorldAsync();
+                levelSelectionTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude);
+            }
+            else {
+                //mainCanvasGroup.DOFade(1, popUpAnimationDuration);
+                levelSelectionTransform.DOScale(Vector3.zero, popUpAnimationDuration);
+            }
+        }
+
+        /// <summary>
+        /// Load the 3D world
+        /// </summary>
+        private void Load3DWorldAsync() {
+            if (worldObj == null) {
+                AdresseHelper.LoadAssetWithCallback<GameObject>("WorldTest", (obj) => {
+                    worldObj = Instantiate(obj);
+                    m_thisInterface.HideLoadingScreen();
+                });
+                return;
+            }
+            m_thisInterface.HideLoadingScreen();
+        }
+
+        /// <summary>
+        /// Unload the 3D World
+        /// </summary>
+        private void UnLoad3DWorld() {
+            if(worldObj == null) return;
+            Addressables.Release(worldObj);
+            worldObj = null;
+        }
+        #endregion OpenClose Panels
         
+        #region GoTo Panels
+        /// <summary>
+        /// Go to the currency position in the shop
+        /// </summary>
+        /// <param name="scrollRect"></param>
+        private void GoToCurrencyPos(ScrollRect scrollRect) {
+            Sequence shopSequence = DOTween.Sequence();
+            shopSequence.AppendInterval(waitTimeShop);
+            shopSequence.Append(shopScrollRect.DONormalizedPos(new Vector2(0, 0), timeToGoToShop));
+        }
+        
+        /// <summary>
+        /// Go to the create menu
+        /// </summary>
+        /// <param name="goCreate"></param>
+        public void GoToCreate(bool goCreate) => isInCreateMenu = goCreate;
+        
+        /// <summary>
+        /// Switch page when button is pressed
+        /// </summary>
+        /// <param name="id"></param>
+        public void MoveToPage(int id) {
+            isInCreateMenu = false;
+            pageID = id;
+        }
+        #endregion GoTo Panels
+        
+        #region Timer Information
+        /// <summary>
+        /// Update the time of the offers
+        /// </summary>
+        private void UpdateTimeOffers() {
+            DateTime currentTime = DateTime.Now;
+            DateTime dayTargetTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 23, 59, 59);
+            DateTime specialOfferTargetTime = new DateTime(2023, 6, 11, 23, 59, 59);
+            DateTime otherEventTargetTime = new DateTime(2023, 6, 8, 23, 59, 59);
+            TimeSpan timeRemainingDay= dayTargetTime - currentTime;
+            TimeSpan timeRemainingOffer = specialOfferTargetTime - currentTime;
+            TimeSpan timeRemainingOtherEvent = otherEventTargetTime - currentTime;
+            
+            specialOfferTxt.text = $"end in : {timeRemainingOffer.Days}d {timeRemainingOffer.Hours}h";
+            bundleOfferTxt.text = $"end in : {timeRemainingOffer.Days}d {timeRemainingOffer.Hours}h";
+            specialEventTxt.text = $"end in : {timeRemainingOffer.Days}d {timeRemainingOffer.Hours}h";
+            otherEventTxt.text = $"end in : {timeRemainingOtherEvent.Days}d {timeRemainingOtherEvent.Hours}h";
+            
+            daysOfferTxt.text = $"end in : {timeRemainingDay.Hours}h {timeRemainingDay.Minutes}min";
+            mapOfDayTxt.text = $"end in : {timeRemainingDay.Hours}h {timeRemainingDay.Minutes}min";
+        }
+        #endregion Timer Information
     }
 }
 
