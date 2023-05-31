@@ -10,9 +10,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
-using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace UI.Canvas

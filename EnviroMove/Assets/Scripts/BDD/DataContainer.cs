@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Archi.Service.Interface;
 using Levels;
 using UnityEngine;
@@ -21,11 +22,13 @@ namespace BDD
             allInfoDatas.Clear();
             
             dataBase = dataBaseReference;
-            var infoPaths = Directory.GetFiles(dataBase.InfoPath());
+            //var infoPaths = Directory.GetFiles(dataBase.InfoPath());
+            DirectoryInfo infoD = new DirectoryInfo(dataBase.InfoPath());
+            FileInfo[] infoPaths = infoD.GetFiles().OrderByDescending(p => p.LastWriteTime).ToArray();
 
             foreach (var infoPath in infoPaths)
             {
-                LevelInfo info = JsonUtility.FromJson<LevelInfo>(File.ReadAllText(infoPath));
+                LevelInfo info = JsonUtility.FromJson<LevelInfo>(File.ReadAllText(infoPath.FullName));
                 allInfoDatas.Add(info);
             }
             Debug.Log($"Load {allInfoDatas.Count} infos");
