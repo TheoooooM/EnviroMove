@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_BlockDirection
-  m_Shader: {fileID: -6465566751694194690, guid: da6789f3f76392446889fb3c9e981679,
+  m_Name: FX_FrogIndicator
+  m_Shader: {fileID: -6465566751694194690, guid: eddfd2d557c54f544992bdc7de6b6489,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -21,8 +21,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _arrow:
-        m_Texture: {fileID: 2800000, guid: 2cb1c1d4c75577344bf01a8b3d49a181, type: 3}
+    - _main_texture:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -41,15 +41,23 @@ Material:
     m_Floats:
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _amplitude: 0.78
-    - _frequency: 46.2
-    - _speed: 2.53
-    - _stepness: 1.66
+    - _Size_Color: 0.12
+    - _Size_edge: 2.89
+    - _Size_refraction: 0.21
+    - _V2_SPeed: 1.94
+    - _frequence: 0.36
+    - _power_color: 1.25
+    - _power_edge: 0
+    - _power_reflaction: 2.77
+    - _refraction_intensity: -0.01
+    - _speed: -3.01
+    - _taille_wave: 13.8
+    - _wave_density: 3.29
     m_Colors:
-    - _Color: {r: 1.7207954, g: 0.4865076, b: 0, a: 0}
-    - _direction: {r: 1.46, g: 0.08, b: 0, a: 0}
+    - _Color: {r: 2, g: 0.3843137, b: 0, a: 0}
+    - _focal_point: {r: 0.5, g: -0.42, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &7082922232897017
+--- !u!114 &8691521023767531128
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
