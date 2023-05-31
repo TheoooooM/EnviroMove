@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
@@ -14,23 +15,34 @@ namespace BlockBehaviors
         [Space]
         [SerializeField] private GameObject hole1;
         [SerializeField] private GameObject hole2;
+        [Space] [SerializeField] private GameObject vfxDebug;
+        [Space] [SerializeField] private GameObject vfxDig;
 
         private Dictionary<IBoardable, Vector3Int> boardableEnters = new();
 
+        private void Start()
+        {
+            vfxDebug.SetActive(false);
+            vfxDig.SetActive(false);
+        }
+
         public override void Select()
         {
+            vfxDebug.SetActive(true);
             Debug.Log("Select Rabbit");
         }
 
         public Vector3Int tempPos;
         public override void Deselect(IBoardable releaseBoardable)
         {
+            vfxDebug.SetActive(false);
             if (releaseBoardable == null || releaseBoardable == (IBoardable)this) return;
             Vector3Int pos = boardMaster.GetPosition(releaseBoardable);
             var topblock = boardMaster.GetNeighbor(pos, Enums.Side.up, out _);
             if (topblock == null)
             {
                 Debug.Log("Dig");
+                vfxDig.SetActive(true);
                 _animator.SetTrigger("Dig");
                 tempPos = pos + Vector3Int.up;
             }
@@ -38,6 +50,7 @@ namespace BlockBehaviors
 
         public void CreateTunnel(Vector3Int tunnelPos)
         {
+            //vfxDig.SetActive(false);
             boardMaster.SetAt(this, tunnelPos);
             hole1.SetActive(true);
             hole2.SetActive(true);

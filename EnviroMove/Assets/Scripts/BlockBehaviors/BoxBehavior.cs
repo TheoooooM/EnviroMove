@@ -11,12 +11,15 @@ namespace BlockBehaviors
     {
         private Vector3 _startScale;
         bool isInteractible = true;
-        [SerializeField] private List<GameObject> directionFX = new(); 
+        [SerializeField] private List<GameObject> directionFX = new();
+        [SerializeField] private GameObject vfxDebug;
+        [SerializeField] private Transform mesh;
 
 
         private void Start()
         {
-            _startScale = transform.localScale;
+            vfxDebug.SetActive(false);
+            _startScale = mesh.localScale;
             onMoveFinish += () => {
                 isInteractible = true;
                 ChangeActivatedFX();
@@ -36,8 +39,17 @@ namespace BlockBehaviors
             return isInteractible;
         }
 
-        public override void Select() => transform.localScale = _startScale * 1.2f;
-        public override void Deselect(IBoardable releaseBoardable)=>transform.localScale = _startScale;
+        public override void Select()
+        {
+            mesh.localScale = _startScale * 1.2f;
+            vfxDebug.SetActive(true);
+        }
+
+        public override void Deselect(IBoardable releaseBoardable)
+        {
+            mesh.localScale = _startScale;
+            vfxDebug.SetActive(false);
+        }
 
 
         public override void Swipe(Enums.Side side)
