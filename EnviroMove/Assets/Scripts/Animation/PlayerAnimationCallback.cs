@@ -5,9 +5,9 @@ using UnityEngine;
 public class PlayerAnimationCallback : MonoBehaviour
 {
     [SerializeField]private Player player;
+
+    public void CompleteGameOver()=> player.CompleteGameOver();
+
+    public void Die()=>player.AsyncGameOver();
     
-    public void Die()
-    {
-        player.AsyncGameOver();
-    }
 }

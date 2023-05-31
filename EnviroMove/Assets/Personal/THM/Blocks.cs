@@ -1,184 +1,271 @@
 using System.Collections.Generic;
+using static Enums.blockType;
 
 public struct Blocks
 {
     public static readonly Dictionary<Enums.blockType, string> BlockType = new()
     {
-        { Enums.blockType.empty, "emptyBlock"},
-        { Enums.blockType.ground , "groundBlock"},
-        { Enums.blockType.playerStart , "playerStartBlock"},
-        { Enums.blockType.playerEnd , "playerEndBlock"},
-        { Enums.blockType.box , "box"},
-        { Enums.blockType.breakableBlock , "breakableBlock"},
-        { Enums.blockType.chariot , "chariot"},
-        { Enums.blockType.frog , "frog"},
-        { Enums.blockType.ice , "ice"},
-        { Enums.blockType.penguin , "penguin"},
-        { Enums.blockType.rabbit , "rabbit"},
-        { Enums.blockType.directionBlock, "ground8"},
-        { Enums.blockType.panelStart, "panelStart"},
-        { Enums.blockType.panelEnd, "panelEnd"},
-        { Enums.blockType.M1_Block1, "M1_Block1"},          //14
-        { Enums.blockType.M1_Block2, "M1_Block2"},          //15
-        { Enums.blockType.M1_Block3, "M1_Block3"},          //16
-        { Enums.blockType.M1_Block4, "M1_Block4"},          //17
-        { Enums.blockType.M1_Block5, "M1_Block5"},          //18
-        { Enums.blockType.M1_Block6, "M1_Block6"},          //19
-        { Enums.blockType.M1_Block7, "M1_Block7"},          //20
-        { Enums.blockType.M1_Block8, "M1_Block8"},          //21
-        { Enums.blockType.M1_Block9, "M1_Block9"},          //22
-        { Enums.blockType.M1_Block10, "M1_Block10"},        //23
-        { Enums.blockType.M1_Block11, "M1_Block11"},        //24
-        { Enums.blockType.M1_Block12, "M1_Block12"},        //25
-        { Enums.blockType.M1_Block13, "M1_Block13"},        //26
-        { Enums.blockType.M1_Block14, "M1_Block14"},        //27
-        { Enums.blockType.M1_Block15, "M1_Block15"},        //28
-        { Enums.blockType.M1_Block16, "M1_Block16"},        //29
-        { Enums.blockType.M1_Block17, "M1_Block17"},        //30
-        { Enums.blockType.M1_Block18, "M1_Block18"},        //31
-        { Enums.blockType.M1_Border, "M1_Border"},          //32
-        { Enums.blockType.M2_Block1, "M2_Block1"},          //33
-        { Enums.blockType.M2_Block2, "M2_Block2"},          //34
-        { Enums.blockType.M2_Block3, "M2_Block3"},          //35
-        { Enums.blockType.M2_Block4, "M2_Block4"},          //36
-        { Enums.blockType.M2_Block5, "M2_Block5"},          //37
-        { Enums.blockType.M2_Block6, "M2_Block6"},          //38
-        { Enums.blockType.M2_Block7, "M2_Block7"},          //39
-        { Enums.blockType.M2_Block8, "M2_Block8"},          //40
-        { Enums.blockType.M2_Block9, "M2_Block9"},          //41
-        { Enums.blockType.M2_Block10, "M2_Block10"},        //42
-        { Enums.blockType.M2_Block11, "M2_Block11"},        //43
-        { Enums.blockType.M2_Block12, "M2_Block12"},        //44
-        { Enums.blockType.M2_Block13, "M2_Block13"},        //45
-        { Enums.blockType.M2_Block14, "M2_Block14"},        //46
-        { Enums.blockType.M2_Block15, "M2_Block15"},        //47
-        { Enums.blockType.M2_Block16, "M2_Block16"},        //48
-        { Enums.blockType.M2_Block17, "M2_Block17"},        //49
-        { Enums.blockType.M2_Block18, "M2_Block18"},        //50
-        { Enums.blockType.M2_Block19, "M2_Block19"},        //51
-        { Enums.blockType.M1_Caillou, "M1_Caillou"},        //52
-        { Enums.blockType.M1_Block19, "M1_Block19"},        //53
-        { Enums.blockType.M1_Block20, "M1_Block20"},        //54
-        { Enums.blockType.M1_Block21, "M1_Block21"},        //55
-        { Enums.blockType.M1_Block22, "M1_Block22"},        //56
-        { Enums.blockType.M1_Block23, "M1_Block23"},        //57
-        { Enums.blockType.M1_Block24, "M1_Block24"},        //58
-        { Enums.blockType.M1_Block25, "M1_Block25"},        //59
-        { Enums.blockType.M2_Block20A, "M2_Block20A"},      //60
-        { Enums.blockType.M2_Block20B, "M2_Block20B"},      //61
-        { Enums.blockType.M2_Block21A, "M2_Block21A"},      //62
-        { Enums.blockType.M2_Block21B, "M2_Block21B"},      //63
-        { Enums.blockType.M2_Block22A, "M2_Block22A"},      //64
-        { Enums.blockType.M2_Block22B, "M2_Block22B"},      //65
-        { Enums.blockType.M2_Block23A, "M2_Block23A"},      //66
-        { Enums.blockType.M2_Block23B, "M2_Block23B"},      //67
-        { Enums.blockType.M2_Block24A, "M2_Block24A"},      //68
-        { Enums.blockType.M2_Block24B, "M2_Block24B"},      //69
-        { Enums.blockType.M2_Block25A, "M2_Block25A"},      //70
-        { Enums.blockType.M2_Block25B, "M2_Block25B"},      //71
-        { Enums.blockType.M3_Block1, "M3_Block1" },         //72
-        { Enums.blockType.M3_Block2, "M3_Block2" },         //73
-        { Enums.blockType.M3_Block3, "M3_Block3" },         //74
-        { Enums.blockType.M3_Block4, "M3_Block4" },         //75
-        { Enums.blockType.M3_Block5, "M3_Block5" },         //76
-        { Enums.blockType.M3_Block6, "M3_Block6" },         //77
-        { Enums.blockType.M3_Block7, "M3_Block7" },         //78
-        { Enums.blockType.M3_Block8, "M3_Block8" },         //79
-        { Enums.blockType.M3_Block9, "M3_Block9" },         //80
-        { Enums.blockType.M3_Block10, "M3_Block10" },       //81  
-        { Enums.blockType.M3_Block11, "M3_Block11" },       //82  
-        { Enums.blockType.M3_Block12, "M3_Block12" },       //83  
-        { Enums.blockType.M3_Block13, "M3_Block13" },       //84  
-        { Enums.blockType.M3_Block14, "M3_Block14" },       //85  
-        { Enums.blockType.M3_Block15, "M3_Block15" },       //86  
-        { Enums.blockType.M3_Block16, "M3_Block16" },       //87  
-        { Enums.blockType.M3_Block17, "M3_Block17" },       //88  
-        { Enums.blockType.M3_Block18, "M3_Block18" },       //89  
-        { Enums.blockType.M3_Block19, "M3_Block19" },       //90  
-        { Enums.blockType.M3_Block20, "M3_Block20" },       //91  
-        { Enums.blockType.M3_Block21, "M3_Block21" },       //92  
-        { Enums.blockType.M3_Block22, "M3_Block22" },       //93  
-        { Enums.blockType.M3_Block23, "M3_Block23" },       //94  
-        { Enums.blockType.M3_Block24, "M3_Block24" },       //95  
-        { Enums.blockType.M3_Block25, "M3_Block25" },       //96  
-        { Enums.blockType.M3_Block26, "M3_Block26" },       //97  
-        
-        
-        };
-    
-    public static readonly Dictionary<string,Enums.blockType> BlockAdressType = new()
+        { empty, "emptyBlock" },
+        { ground, "groundBlock" },
+        { playerStart, "playerStartBlock" },
+        { playerEnd, "playerEndBlock" },
+        { box, "box" },
+        { breakableBlock, "breakableBlock" },
+        { chariot, "chariot" },
+        { frog, "frog" },
+        { ice, "ice" },
+        { penguin, "penguin" },
+        { rabbit, "rabbit" },
+        { directionBlock, "ground8" },
+        { panelStart, "panelStart" },
+        { panelEnd, "panelEnd" },
+        { M1_Block1, "M1_Block1" }, //14
+        { M1_Block2, "M1_Block2" }, //15
+        { M1_Block3, "M1_Block3" }, //16
+        { M1_Block4, "M1_Block4" }, //17
+        { M1_Block5, "M1_Block5" }, //18
+        { M1_Block6, "M1_Block6" }, //19
+        { M1_Block7, "M1_Block7" }, //20
+        { M1_Block8, "M1_Block8" }, //21
+        { M1_Block9, "M1_Block9" }, //22
+        { M1_Block10, "M1_Block10" }, //23
+        { M1_Block11, "M1_Block11" }, //24
+        { M1_Block12, "M1_Block12" }, //25
+        { M1_Block13, "M1_Block13" }, //26
+        { M1_Block14, "M1_Block14" }, //27
+        { M1_Block15, "M1_Block15" }, //28
+        { M1_Block16, "M1_Block16" }, //29
+        { M1_Block17, "M1_Block17" }, //30
+        { M1_Block18, "M1_Block18" }, //31
+        { M1_Border, "M1_Border" }, //32
+        { M2_Block1, "M2_Block1" }, //33
+        { M2_Block2, "M2_Block2" }, //34
+        { M2_Block3, "M2_Block3" }, //35
+        { M2_Block4, "M2_Block4" }, //36
+        { M2_Block5, "M2_Block5" }, //37
+        { M2_Block6, "M2_Block6" }, //38
+        { M2_Block7, "M2_Block7" }, //39
+        { M2_Block8, "M2_Block8" }, //40
+        { M2_Block9, "M2_Block9" }, //41
+        { M2_Block10, "M2_Block10" }, //42
+        { M2_Block11, "M2_Block11" }, //43
+        { M2_Block12, "M2_Block12" }, //44
+        { M2_Block13, "M2_Block13" }, //45
+        { M2_Block14, "M2_Block14" }, //46
+        { M2_Block15, "M2_Block15" }, //47
+        { M2_Block16, "M2_Block16" }, //48
+        { M2_Block17, "M2_Block17" }, //49
+        { M2_Block18, "M2_Block18" }, //50
+        { M2_Block19, "M2_Block19" }, //51
+        { M1_Caillou, "M1_Caillou" }, //52
+        { M1_Block19, "M1_Block19" }, //53
+        { M1_Block20, "M1_Block20" }, //54
+        { M1_Block21, "M1_Block21" }, //55
+        { M1_Block22, "M1_Block22" }, //56
+        { M1_Block23, "M1_Block23" }, //57
+        { M1_Block24, "M1_Block24" }, //58
+        { M1_Block25, "M1_Block25" }, //59
+        { M2_Block20A, "M2_Block20A" }, //60
+        { M2_Block20B, "M2_Block20B" }, //61
+        { M2_Block21A, "M2_Block21A" }, //62
+        { M2_Block21B, "M2_Block21B" }, //63
+        { M2_Block22A, "M2_Block22A" }, //64
+        { M2_Block22B, "M2_Block22B" }, //65
+        { M2_Block23A, "M2_Block23A" }, //66
+        { M2_Block23B, "M2_Block23B" }, //67
+        { M2_Block24A, "M2_Block24A" }, //68
+        { M2_Block24B, "M2_Block24B" }, //69
+        { M2_Block25A, "M2_Block25A" }, //70
+        { M2_Block25B, "M2_Block25B" }, //71
+        { M3_Block1, "M3_Block1" }, //72
+        { M3_Block2, "M3_Block2" }, //73
+        { M3_Block3, "M3_Block3" }, //74
+        { M3_Block4, "M3_Block4" }, //75
+        { M3_Block5, "M3_Block5" }, //76
+        { M3_Block6, "M3_Block6" }, //77
+        { M3_Block7, "M3_Block7" }, //78
+        { M3_Block8, "M3_Block8" }, //79
+        { M3_Block9, "M3_Block9" }, //80
+        { M3_Block10, "M3_Block10" }, //81  
+        { M3_Block11, "M3_Block11" }, //82  
+        { M3_Block12, "M3_Block12" }, //83  
+        { M3_Block13, "M3_Block13" }, //84  
+        { M3_Block14, "M3_Block14" }, //85  
+        { M3_Block15, "M3_Block15" }, //86  
+        { M3_Block16, "M3_Block16" }, //87  
+        { M3_Block17, "M3_Block17" }, //88  
+        { M3_Block18, "M3_Block18" }, //89  
+        { M3_Block19, "M3_Block19" }, //90  
+        { M3_Block20, "M3_Block20" }, //91  
+        { M3_Block21, "M3_Block21" }, //92  
+        { M3_Block22, "M3_Block22" }, //93  
+        { M3_Block23, "M3_Block23" }, //94  
+        { M3_Block24, "M3_Block24" }, //95  
+        { M3_Block25, "M3_Block25" }, //96  
+        { M3_Block26, "M3_Block26" }, //97  
+        { OutBottomLeftCorner, "Box555" },      //98
+        { OutTopLeftCorner, "Box685" },         //99
+        { OutBottomRightCorner, "Box686" },     //100
+        { OutTopRightCorner, "Box687" },        //101
+        { InsideBottomLeftCorner, "Box736" },   //102
+        { InsideBottomRightCorner, "Box737" },  //103
+        { InsideTopRightCorner, "Box738" },     //104
+        { InsideTopLeftCorner, "Box739" },      //105
+        { OutLeft1, "Box688" },                 //106
+        { OutLeft2, "Box689" },
+        { OutLeft3, "Box690" },
+        { OutLeft4, "Box779" },
+        { OutLeft5, "Box692" },
+        { OutLeft6, "Box794" },
+        { OutLeft7, "Box694" },
+        { OutLeft8, "Box780" },
+        { OutLeft9, "Box696" },
+        { OutLeft10, "Box793" },
+        { OutLeft11, "Box698" },
+        { OutLeft12, "Box778" },
+        { OutLeft13, "Box699" },
+        { OutLeft14, "Box705" },
+        { OutRight1, "Box719" },                //120
+        { OutRight2, "Box713" },
+        { OutRight3, "Box796" },
+        { OutRight4, "Box712" },
+        { OutRight5, "Box717" },
+        { OutRight6, "Box777" },
+        { OutRight7, "Box716" },
+        { OutRight8, "Box797" },
+        { OutRight9, "Box791" },
+        { OutRight10, "Box709" },
+        { OutRight11, "Box776" },
+        { OutRight12, "Box708" },
+        { OutRight13, "Box707" },
+        { OutRight14, "Box706" },
+        { OutTop1, "Box720" },                  //134
+        { OutTop2, "Box721" },
+        { OutTop3, "Box722" },
+        { OutTop4, "Box792" },
+        { OutTop5, "Box798" },
+        { OutTop6, "Box725" },
+        { OutTop7, "Box726" },
+        { OutTop8, "Box727" },
+        { OutBottom1, "Box735" },               //142
+        { OutBottom2, "Box734" },
+        { OutBottom3, "Box795" },
+        { OutBottom4, "Box799" },
+        { OutBottom5, "Box781" },
+        { OutBottom6, "Box730" },
+        { OutBottom7, "Box729" },
+        { OutBottom8, "Box728" },
+        { InsideTop1, "Box740" },               //150
+        { InsideTop2, "Box782" },
+        { InsideTop3, "Box749" },
+        { InsideTop4, "Box750" },
+        { InsideTop5, "Box751" },
+        { InsideTop6, "Box743" },
+        { InsideLeft1, "Box748" },              //156
+        { InsideLeft2, "Box761" },
+        { InsideLeft3, "Box760" },
+        { InsideLeft4, "Box784" },
+        { InsideLeft5, "Box758" },
+        { InsideLeft6, "Box789" },
+        { InsideLeft7, "Box756" },
+        { InsideLeft8, "Box755" },
+        { InsideLeft9, "Box754" },
+        { InsideLeft10, "Box783" },
+        { InsideLeft11, "Box752" },
+        { InsideLeft12, "Box742" },
+        { InsideRight1, "Box745" },             //168
+        { InsideRight2, "Box766" },
+        { InsideRight3, "Box767" },
+        { InsideRight4, "Box787" },
+        { InsideRight5, "Box769" },
+        { InsideRight6, "Box770" },
+        { InsideRight7, "Box771" },
+        { InsideRight8, "Box772" },
+        { InsideRight9, "Box788" },
+        { InsideRight10, "Box774" },
+        { InsideRight11, "Box790" },
+        { InsideRight12, "Box744" },
+        { InsideBottom1, "Box747" },            //181
+        { InsideBottom2, "Box785" },
+        { InsideBottom3, "Box763" },
+        { InsideBottom4, "Box764" },
+        { InsideBottom5, "Box786" },
+        { InsideBottom6, "Box746" },            //186
+    };
+
+    public static readonly Dictionary<string, Enums.blockType> BlockAdressType = new()
     {
-        { "emptyBlock", Enums.blockType.empty},
-        { "groundBlock", Enums.blockType.ground },
-        { "playerStartBlock", Enums.blockType.playerStart},
-        { "playerEndBlock", Enums.blockType.playerEnd},
-        { "box", Enums.blockType.box},
-        { "breakableBlock", Enums.blockType.breakableBlock},
-        { "chariot", Enums.blockType.chariot},
-        { "frog", Enums.blockType.frog},
-        { "ice", Enums.blockType.ice},
-        { "penguin", Enums.blockType.penguin},
-        { "rabbit", Enums.blockType.rabbit},
-        { "ground8", Enums.blockType.directionBlock},
-        { "panelStart", Enums.blockType.panelStart},
-        { "panelEnd", Enums.blockType.panelEnd},
-        { "M1_Block1", Enums.blockType.M1_Block1},
-        { "M1_Block2", Enums.blockType.M1_Block2},
-        { "M1_Block3", Enums.blockType.M1_Block3},
-        { "M1_Block4", Enums.blockType.M1_Block4},
-        { "M1_Block5", Enums.blockType.M1_Block5},
-        { "M1_Block6", Enums.blockType.M1_Block6},
-        { "M1_Block7", Enums.blockType.M1_Block7},
-        { "M1_Block8", Enums.blockType.M1_Block8},
-        { "M1_Block9", Enums.blockType.M1_Block9},
-        { "M1_Block10", Enums.blockType.M1_Block10},
-        { "M1_Block11", Enums.blockType.M1_Block11},
-        { "M1_Block12", Enums.blockType.M1_Block12},
-        { "M1_Block13", Enums.blockType.M1_Block13},
-        { "M1_Block14", Enums.blockType.M1_Block14},
-        { "M1_Block15", Enums.blockType.M1_Block15},
-        { "M1_Block16", Enums.blockType.M1_Block16},
-        { "M1_Block17", Enums.blockType.M1_Block17},
-        { "M1_Block18", Enums.blockType.M1_Block18},
-        { "M1_Border", Enums.blockType.M1_Border},
-        { "M2_Block1", Enums.blockType.M2_Block1},
-        { "M2_Block2", Enums.blockType.M2_Block2},
-        { "M2_Block3", Enums.blockType.M2_Block3},
-        { "M2_Block4", Enums.blockType.M2_Block4},
-        { "M2_Block5", Enums.blockType.M2_Block5},
-        { "M2_Block6", Enums.blockType.M2_Block6},
-        { "M2_Block7", Enums.blockType.M2_Block7},
-        { "M2_Block8", Enums.blockType.M2_Block8},
-        { "M2_Block9", Enums.blockType.M2_Block9},
-        { "M2_Block10", Enums.blockType.M2_Block10},
-        { "M2_Block11", Enums.blockType.M2_Block11},
-        { "M2_Block12", Enums.blockType.M2_Block12},
-        { "M2_Block13", Enums.blockType.M2_Block13},
-        { "M2_Block14", Enums.blockType.M2_Block14},
-        { "M2_Block15", Enums.blockType.M2_Block15},
-        { "M2_Block16", Enums.blockType.M2_Block16},
-        { "M2_Block17", Enums.blockType.M2_Block17},
-        { "M2_Block18", Enums.blockType.M2_Block18},
-        { "M2_Block19", Enums.blockType.M2_Block19},
-        { "M1_Caillou", Enums.blockType.M1_Caillou},
-        { "M1_Block19", Enums.blockType.M1_Block19},
-        { "M1_Block20", Enums.blockType.M1_Block20},
-        { "M1_Block21", Enums.blockType.M1_Block21},
-        { "M1_Block22", Enums.blockType.M1_Block22},
-        { "M1_Block23", Enums.blockType.M1_Block23},
-        { "M1_Block24", Enums.blockType.M1_Block24},
-        { "M1_Block25", Enums.blockType.M1_Block25},
-        { "M2_Block20A", Enums.blockType.M2_Block20A},
-        { "M2_Block20B", Enums.blockType.M2_Block20B},
-        { "M2_Block21A", Enums.blockType.M2_Block21A},
-        { "M2_Block21B", Enums.blockType.M2_Block21B},
-        { "M2_Block22A", Enums.blockType.M2_Block22A},
-        { "M2_Block22B", Enums.blockType.M2_Block22B},
-        { "M2_Block23A", Enums.blockType.M2_Block23A},
-        { "M2_Block23B", Enums.blockType.M2_Block23B},
-        { "M2_Block24A", Enums.blockType.M2_Block24A},
-        { "M2_Block24B", Enums.blockType.M2_Block24B},
-        { "M2_Block25A", Enums.blockType.M2_Block25A},
-        { "M2_Block25B", Enums.blockType.M2_Block25B},
+        { "emptyBlock", empty },
+        { "groundBlock", ground },
+        { "playerStartBlock", playerStart },
+        { "playerEndBlock", playerEnd },
+        { "box", box },
+        { "breakableBlock", breakableBlock },
+        { "chariot", chariot },
+        { "frog", frog },
+        { "ice", ice },
+        { "penguin", penguin },
+        { "rabbit", rabbit },
+        { "ground8", directionBlock },
+        { "panelStart", panelStart },
+        { "panelEnd", panelEnd },
+        { "M1_Block1", M1_Block1 },
+        { "M1_Block2", M1_Block2 },
+        { "M1_Block3", M1_Block3 },
+        { "M1_Block4", M1_Block4 },
+        { "M1_Block5", M1_Block5 },
+        { "M1_Block6", M1_Block6 },
+        { "M1_Block7", M1_Block7 },
+        { "M1_Block8", M1_Block8 },
+        { "M1_Block9", M1_Block9 },
+        { "M1_Block10", M1_Block10 },
+        { "M1_Block11", M1_Block11 },
+        { "M1_Block12", M1_Block12 },
+        { "M1_Block13", M1_Block13 },
+        { "M1_Block14", M1_Block14 },
+        { "M1_Block15", M1_Block15 },
+        { "M1_Block16", M1_Block16 },
+        { "M1_Block17", M1_Block17 },
+        { "M1_Block18", M1_Block18 },
+        { "M1_Border", M1_Border },
+        { "M2_Block1", M2_Block1 },
+        { "M2_Block2", M2_Block2 },
+        { "M2_Block3", M2_Block3 },
+        { "M2_Block4", M2_Block4 },
+        { "M2_Block5", M2_Block5 },
+        { "M2_Block6", M2_Block6 },
+        { "M2_Block7", M2_Block7 },
+        { "M2_Block8", M2_Block8 },
+        { "M2_Block9", M2_Block9 },
+        { "M2_Block10", M2_Block10 },
+        { "M2_Block11", M2_Block11 },
+        { "M2_Block12", M2_Block12 },
+        { "M2_Block13", M2_Block13 },
+        { "M2_Block14", M2_Block14 },
+        { "M2_Block15", M2_Block15 },
+        { "M2_Block16", M2_Block16 },
+        { "M2_Block17", M2_Block17 },
+        { "M2_Block18", M2_Block18 },
+        { "M2_Block19", M2_Block19 },
+        { "M1_Caillou", M1_Caillou },
+        { "M1_Block19", M1_Block19 },
+        { "M1_Block20", M1_Block20 },
+        { "M1_Block21", M1_Block21 },
+        { "M1_Block22", M1_Block22 },
+        { "M1_Block23", M1_Block23 },
+        { "M1_Block24", M1_Block24 },
+        { "M1_Block25", M1_Block25 },
+        { "M2_Block20A", M2_Block20A },
+        { "M2_Block20B", M2_Block20B },
+        { "M2_Block21A", M2_Block21A },
+        { "M2_Block21B", M2_Block21B },
+        { "M2_Block22A", M2_Block22A },
+        { "M2_Block22B", M2_Block22B },
+        { "M2_Block23A", M2_Block23A },
+        { "M2_Block23B", M2_Block23B },
+        { "M2_Block24A", M2_Block24A },
+        { "M2_Block24B", M2_Block24B },
+        { "M2_Block25A", M2_Block25A },
+        { "M2_Block25B", M2_Block25B },
     };
 }
