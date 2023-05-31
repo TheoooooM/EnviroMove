@@ -563,7 +563,7 @@ namespace UI.Canvas
             
             if (isLevelSelectionOpen) {
                 //mainCanvasGroup.DOFade(0, popUpAnimationDuration);
-                m_thisInterface.GenerateLoadingScreen("Selection Level", 1);
+                //m_thisInterface.GenerateLoadingScreen("Selection Level", 1);
                 //Load3DWorldAsync();
                 levelSelectionTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude);
             }
