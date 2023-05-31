@@ -112,7 +112,12 @@ namespace Levels
                   GameObject currentGo = Instantiate(_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]],
                         transform.position + currentPos, rotation, transform);
                   currentGo.name = currentGo.name + currentPos;
-                  if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] == (int)Enums.blockType.playerStart) _player = currentGo;
+                  if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] == (int)Enums.blockType.playerStart)
+                  {
+                     _player = currentGo;
+                     var mesh = GetComponentInChildren<SkinnedMeshRenderer>();
+                     mesh.material = mesh.materials[PlayerPrefs.GetInt("PlayerSkin")];
+                  }
                   IBoardable currentBoardable = currentGo.GetComponent<IBoardable>();
                   if (currentBoardable == null) throw new MissingMemberException($"{currentGo.name} isn't Boardable");
                   currentBoardable.SetOnBoard(currentPos,(Enums.Side)data.blockHorizontalRotationGrid[x, y, z] , this);
@@ -244,7 +249,7 @@ namespace Levels
       public void FinishLevel()
       { 
          Destroy(_player);
-         m_interface.DrawCanvas(Enums.MajorCanvas.gameover);
+         m_interface.DrawCanvas(Enums.MajorCanvas.gameOver);
       }
 
       public bool TryMove(Vector3Int boardablePosition, Enums.Side side, out Vector3 position)

@@ -31,6 +31,7 @@ namespace Archi.Service
         public Level LoadLevel(LevelData data, GameObject levelContainer = null)
         {
             m_Interface.GenerateLoadingScreen("Load Level", 1);
+            m_Interface.DrawCanvas(Enums.MajorCanvas.inGame);
             Level level;
             if (levelContainer) level = levelContainer.AddComponent<Level>();
             else

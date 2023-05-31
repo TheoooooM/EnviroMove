@@ -21,7 +21,7 @@ namespace Inputs
 
         void InputCheck()
         {
-            if (Input.touches.Length == 0) return;
+            if (Input.touches.Length == 0 || Time.timeScale <= 0) return;
             if (Input.touches[0].phase == TouchPhase.Began)
             {
                 _touchStartPos = Input.touches[0].position;

@@ -327,7 +327,7 @@ public class Enums
         tool,
         toolLevels,
         levels,
-        gameover
+        gameOver,
     }
 
     public enum BlockTag
