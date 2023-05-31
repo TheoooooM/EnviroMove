@@ -27,8 +27,8 @@ namespace Archi.Service
 
         private readonly Dictionary<Enums.MajorCanvas, string> canvasAddress = new() {
             {Enums.MajorCanvas.menu, "MainMenuCanvas"},
-            {Enums.MajorCanvas.inGame, ""},
-            {Enums.MajorCanvas.gameover, "GameOverCanvas"},
+            {Enums.MajorCanvas.inGame, "InGameCanvas"},
+            {Enums.MajorCanvas.gameOver, "GameOverCanvas"},
             {Enums.MajorCanvas.tool, "ToolCanvas"},
             {Enums.MajorCanvas.levels, "LevelsCanvas"},
             {Enums.MajorCanvas.toolLevels, "LevelSelectorCanvas"},

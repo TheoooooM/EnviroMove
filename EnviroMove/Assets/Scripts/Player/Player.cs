@@ -95,12 +95,14 @@ public class Player : MonoBehaviour, IBoardable
     // ReSharper disable Unity.PerformanceAnalysis
     public IEnumerator MoveToPosition(Vector3 newPos, float speed, bool finishMove = false)
     {
+        yield return new WaitForEndOfFrame();
         var magnitude = Vector3.Distance(transform.position, newPos);
             var startMagnitude = magnitude;
             bool haveTransi = false;
             var step = speed * Time.deltaTime;
             while (magnitude> step)
             {
+                step = speed * Time.deltaTime;
                 transform.position += (newPos - transform.position).normalized * step;
                 magnitude -= step;
                 if (finishMove && magnitude <= startMagnitude / 2 && !haveTransi)
