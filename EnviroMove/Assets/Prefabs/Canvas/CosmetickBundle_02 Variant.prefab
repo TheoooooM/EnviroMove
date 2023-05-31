@@ -15,12 +15,22 @@ PrefabInstance:
     - target: {fileID: 1068627678432749197, guid: f10272eefa5237c458846cb7d7227c12,
         type: 3}
       propertyPath: m_text
-      value: "1027 \u20AC"
+      value: "9.99 \u20AC"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1068627678432749197, guid: f10272eefa5237c458846cb7d7227c12,
+        type: 3}
+      propertyPath: m_margin.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1068627678432749197, guid: f10272eefa5237c458846cb7d7227c12,
+        type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3264379182133389032, guid: f10272eefa5237c458846cb7d7227c12,
         type: 3}
       propertyPath: m_Name
-      value: CosmetickBundle_02
+      value: CosmetickBundle_02 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 6570976512547657125, guid: f10272eefa5237c458846cb7d7227c12,
         type: 3}
@@ -125,6 +135,11 @@ PrefabInstance:
     - target: {fileID: 6570976512547657125, guid: f10272eefa5237c458846cb7d7227c12,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8443496343709926169, guid: f10272eefa5237c458846cb7d7227c12,
+        type: 3}
+      propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
