@@ -116,7 +116,7 @@ namespace Levels
                   {
                      _player = currentGo;
                      var mesh = GetComponentInChildren<SkinnedMeshRenderer>();
-                     mesh.material = mesh.materials[PlayerPrefs.GetInt("PlayerSkin")];
+                     mesh.material = _player.GetComponent<Player>().GetMat(PlayerPrefs.GetInt("PlayerSkin"));
                   }
                   IBoardable currentBoardable = currentGo.GetComponent<IBoardable>();
                   if (currentBoardable == null) throw new MissingMemberException($"{currentGo.name} isn't Boardable");

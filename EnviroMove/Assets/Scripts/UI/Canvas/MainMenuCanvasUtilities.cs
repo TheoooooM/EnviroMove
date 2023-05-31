@@ -13,6 +13,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 namespace UI.Canvas
 {
@@ -85,7 +86,15 @@ namespace UI.Canvas
         
         
         [SerializeField] private TMP_InputField inputField;
-
+        [SerializeField] private List<RectTransform> shopBtnsPunch = new();
+        [SerializeField] private List<RectTransform> homeBtnPunch = new();
+        [SerializeField] private List<RectTransform> commuBtnPunch = new();
+        [SerializeField] private List<RectTransform> createBtnPunch = new();
+        
+        [Header("Player Skin")]
+        [SerializeField] private SkinnedMeshRenderer skinRend = null;
+        [SerializeField] private Transform playerTrans = null;
+        [SerializeField] private List<Material> skinMat = new();
         
         [Header("DoTween Information")]
         [SerializeField] private float waitTimeShop = 0.4f;
@@ -98,6 +107,8 @@ namespace UI.Canvas
             var saver = GetComponentInChildren<SaveTester>();
             if (saver){ saver.m_Database = m_Data; }
             ResetCreateMenu();
+            LaunchAllAnimation();
+            UpdatePlayerSkin();
         }
 
         #region SetPage
@@ -133,6 +144,7 @@ namespace UI.Canvas
                     isInCreateMenu = false;
                     isLevelSelectionOpen = true;
                     levelSelectionTransform.localScale = new Vector3(1, 1, 1);
+                    playerTrans.gameObject.SetActive(false);
                     break;
                 
                 case PageDirection.LevelSelection_Autumn:
@@ -141,6 +153,7 @@ namespace UI.Canvas
                     isInCreateMenu = false;
                     isLevelSelectionOpen = true;
                     levelSelectionTransform.localScale = new Vector3(1, 1, 1);
+                    playerTrans.gameObject.SetActive(false);
                     break;
                 
                 case PageDirection.LevelSelection_Winter:
@@ -149,6 +162,7 @@ namespace UI.Canvas
                     isInCreateMenu = false;
                     isLevelSelectionOpen = true;
                     levelSelectionTransform.localScale = new Vector3(1, 1, 1);
+                    playerTrans.gameObject.SetActive(false);
                     break;
                 
                 case PageDirection.Create:
@@ -560,6 +574,7 @@ namespace UI.Canvas
         /// <param name="open"></param>
         private void OpenCloseCampaign(bool open) {
             isLevelSelectionOpen = open;
+            playerTrans.gameObject.SetActive(!isLevelSelectionOpen);
             
             if (isLevelSelectionOpen) {
                 //mainCanvasGroup.DOFade(0, popUpAnimationDuration);
@@ -612,7 +627,7 @@ namespace UI.Canvas
         /// Go to the create menu
         /// </summary>
         /// <param name="goCreate"></param>
-        public void GoToCreate(bool goCreate) => isInCreateMenu = goCreate;
+        private void GoToCreate(bool goCreate) => isInCreateMenu = goCreate;
         
         /// <summary>
         /// Switch page when button is pressed
@@ -646,6 +661,53 @@ namespace UI.Canvas
             mapOfDayTxt.text = $"end in : {timeRemainingDay.Hours}h {timeRemainingDay.Minutes}min";
         }
         #endregion Timer Information
+        
+        #region Btn Animation
+        /// <summary>
+        /// Launch the animations of all the buttons
+        /// </summary>
+        private void LaunchAllAnimation() {
+            AnimateAllBtns(homeBtnPunch);
+            AnimateAllBtns(shopBtnsPunch, 0.025f);
+            AnimateAllBtns(commuBtnPunch, 0.025f);
+        }
+        
+        /// <summary>
+        /// Animate all the rect inside the list
+        /// </summary>
+        /// <param name="btns"></param>
+        private void AnimateAllBtns(List<RectTransform> btns, float size = 0.1f) {
+            Sequence btnSequence = DOTween.Sequence();
+            btnSequence.SetLoops(-1).SetAutoKill(false);
+            btnSequence.AppendInterval(Random.Range(10, 15));
+            foreach (RectTransform rect in btns) {
+                btnSequence.Append(rect.DOPunchScale(new Vector3(size, size, size), animationDuration * 2, 2));
+                btnSequence.AppendInterval(0.1f);
+            }
+        }
+        #endregion btn Animation
+        
+        #region ChangeSkin
+        /// <summary>
+        /// Change the current skin of the player
+        /// </summary>
+        /// <param name="addValue"></param>
+        public void ChangeCurrentSkin(int addValue) {
+            int currentSkin = PlayerPrefs.GetInt("PlayerSkin", 0);
+            currentSkin += addValue;
+            if (currentSkin > skinMat.Count - 1) currentSkin = 0;
+            else if (currentSkin < 0) currentSkin = skinMat.Count - 1;
+            PlayerPrefs.SetInt("PlayerSkin", currentSkin);
+            UpdatePlayerSkin();
+        }
+
+        private void UpdatePlayerSkin() {
+            skinRend.sharedMaterial = skinMat[PlayerPrefs.GetInt("PlayerSkin", 0)];
+            playerTrans.DORewind();
+            playerTrans.DOPunchScale(new Vector3(75, 75, 75), popUpAnimationDuration, 1);
+        }
+
+        #endregion ChangeSkin
     }
 }
 

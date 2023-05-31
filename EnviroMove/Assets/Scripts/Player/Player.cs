@@ -32,12 +32,13 @@ public class Player : MonoBehaviour, IBoardable
     public bool CanBlockInteract() => !_isDead;
 
     [SerializeField] private Animator _animator;
+    [SerializeField] private List<Material> skinMat = new();
+    public Material GetMat(int id) => skinMat[id];
 
 
     private Vector3Int nextPos;
 
-    private void Awake()
-    {
+    private void Awake() {
         countDownText.gameObject.SetActive(false);
     }
 
