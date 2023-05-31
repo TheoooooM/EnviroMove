@@ -325,24 +325,6 @@ public class SceneEditor
         //if the prefab is in the twoByTwo list, add one block to the right and one block to the bottom and one block to the bottom right
         if (twoByTwoPrefabIndex.Contains(selectedPrefabIndex))
         {
-            // blockGrid[(int)position.x + 1, (int)position.y, (int)position.z] = selectedPrefabIndex;
-            // blockGrid[(int)position.x + 1, (int)position.y, (int)position.z + 1] = selectedPrefabIndex;
-            // blockGrid[(int)position.x, (int)position.y, (int)position.z + 1] = selectedPrefabIndex;
-            //
-            // if (blockHorizontalRotationGrid[(int)position.x+1, (int)position.y, (int)position.z] == Enums.Side.none)
-            //     blockHorizontalRotationGrid[(int)position.x + 1, (int)position.y, (int)position.z] = Enums.Side.forward;
-            // if (blockVerticalRotationGrid[(int)position.x + 1, (int)position.y, (int)position.z] == Enums.Side.none)
-            //     blockVerticalRotationGrid[(int)position.x + 1, (int)position.y, (int)position.z] = Enums.Side.forward;
-            //
-            // if (blockHorizontalRotationGrid[(int)position.x + 1, (int)position.y, (int)position.z + 1] == Enums.Side.none)
-            //     blockHorizontalRotationGrid[(int)position.x + 1, (int)position.y, (int)position.z + 1] = Enums.Side.forward;
-            // if (blockVerticalRotationGrid[(int)position.x + 1, (int)position.y, (int)position.z + 1] == Enums.Side.none)
-            //     blockVerticalRotationGrid[(int)position.x + 1, (int)position.y, (int)position.z + 1] = Enums.Side.forward;
-            //
-            // if (blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z + 1] == Enums.Side.none)
-            //     blockHorizontalRotationGrid[(int)position.x, (int)position.y, (int)position.z + 1] = Enums.Side.forward;
-            // if (blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z + 1] == Enums.Side.none)
-            //     blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z + 1] = Enums.Side.forward;
             for (int i = 0; i < 3; i++)
             {
                 if (blockGrid[(int)position.x + i % 2, (int)position.y, (int)position.z + i / 2] != 0) continue;
@@ -460,11 +442,7 @@ public class SceneEditor
                 break;
             case 13:
                 var rotation = 0;
-                if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] == 0 ||
-                    (position.x + 8 >= size.x && position.x % (tileSize.x + tailleBridge) == 5) ||
-                    (position.x - 8 < 0 && position.x % (tileSize.x + tailleBridge) == 0) ||
-                    (position.z + 8 >= size.z && position.x % (tileSize.y + tailleBridge) == 11) ||
-                    (position.z - 8 < 0 && position.x % (tileSize.y + tailleBridge) == 0))
+                if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] == 0)
                 {
                     Object.Destroy(newGo);
                     return true;
