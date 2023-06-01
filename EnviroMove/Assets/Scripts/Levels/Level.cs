@@ -241,13 +241,27 @@ namespace Levels
 
         private void StartBoard(Vector2 side)
         {
-            Inputs.Inputs.Instance.OnTouch -= StartBoard;
             InteractionDetector.Instance.isActive = true;
+            Inputs.Inputs.Instance.OnTouch -= StartBoard;
             _player.GetComponent<Player>().Move();
         }
 
 
-        
+        Vector3Int GetPosition(IBoardable boardable)
+        {
+            for (int z = 0; z < _board.GetLength(2); z++)
+            {
+                for (int y = 0; y < _board.GetLength(1); y++)
+                {
+                    for (int x = 0; x < _board.GetLength(0); x++)
+                    {
+                        if (_board[x, y, z] == boardable) return new Vector3Int(x, y, z);
+                    }
+                }
+            }
+
+            throw new NullReferenceException($"{name} board Doesn't Countain {boardable}");
+        }
 
 
         public IBoardable GetNeighbor(Vector3Int boardPos, Enums.Side side, out bool boardLimit)
@@ -321,13 +335,10 @@ namespace Levels
             }
         }
 
-      public void SetAt(IBoardable boardable, Vector3Int position)
-      {
-         if (position.x >= _board.GetLength(0)) return;
-         if (position.y >= _board.GetLength(1)) return;
-         if (position.z >= _board.GetLength(2)) return;
-         _board[position.x, position.y, position.z] = boardable;
-      }
+        Vector3Int IBoard.GetPosition(IBoardable boardable)
+        {
+            return GetPosition(boardable);
+        }
 
         void SetBoardable(IBoardable boardable, Vector3Int boardPos, Enums.Side side = Enums.Side.none)
         {
@@ -359,25 +370,9 @@ namespace Levels
             _board[position.x, position.y, position.z].SetPosition(position);
         }
 
-        // public void SetAt(IBoardable boardable, Vector3Int position)
-        // {
-        //     _board[position.x, position.y, position.z] = boardable;
-        // }
-        
-        public Vector3Int GetPosition(IBoardable boardable)
+        public void SetAt(IBoardable boardable, Vector3Int position)
         {
-            for (int z = 0; z < _board.GetLength(2); z++)
-            {
-                for (int y = 0; y < _board.GetLength(1); y++)
-                {
-                    for (int x = 0; x < _board.GetLength(0); x++)
-                    {
-                        if (_board[x, y, z] == boardable) return new Vector3Int(x, y, z);
-                    }
-                }
-            }
-
-            throw new NullReferenceException($"{name} board Doesn't Countain {boardable}");
+            _board[position.x, position.y, position.z] = boardable;
         }
 
         public void RemoveBoardable(IBoardable boardable)
