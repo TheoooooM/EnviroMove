@@ -71,7 +71,7 @@ public class Player : MonoBehaviour, IBoardable
 
     public void AsyncGameOver()
     {
-        _board.FinishLevel();
+        _board.GameOver();
         Destroy(gameObject);
     }
     

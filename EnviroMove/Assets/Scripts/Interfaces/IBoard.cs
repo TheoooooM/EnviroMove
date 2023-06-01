@@ -20,5 +20,6 @@ namespace Interfaces
         void CheckFinishLevel(Vector3Int pos);
 
         void FinishLevel();
+        void GameOver();
     }
 }
