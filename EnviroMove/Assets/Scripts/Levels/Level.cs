@@ -228,6 +228,8 @@ namespace Levels
          }
          _board[position.x, position.y, position.z]?.MoveOn(boardable, position);
          _board[position.x, position.y, position.z] = boardable;
+         _board[position.x, position.y, position.z].SetPosition(position);
+         
       }
 
       public void SetAt(IBoardable boardable, Vector3Int position)
