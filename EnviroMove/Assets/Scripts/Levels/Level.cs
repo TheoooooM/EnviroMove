@@ -264,6 +264,11 @@ namespace Levels
          m_interface.DrawCanvas(Enums.MajorCanvas.winMenu);
       }
 
+      public void GameOver() {
+         Destroy(_player);
+         m_interface.DrawCanvas(Enums.MajorCanvas.gameOver);
+      }
+
       public bool TryMove(Vector3Int boardablePosition, Enums.Side side, out Vector3 position)
       {
          position = transform.position + boardablePosition;
