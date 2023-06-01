@@ -116,9 +116,9 @@ MonoBehaviour:
   moveSpeed: 6
   cooldown: 1
   directionFX:
-  - {fileID: 6374599732071921811}
-  - {fileID: 3943752118662890041}
   - {fileID: 808453440233482136}
+  - {fileID: 3943752118662890041}
+  - {fileID: 6374599732071921811}
   - {fileID: 6912268581758401592}
   vfxDebug: {fileID: 6104147156259142663}
   mesh: {fileID: 3924872518071311736}
@@ -162,7 +162,7 @@ PrefabInstance:
     - target: {fileID: 3540755100980895822, guid: 372c2dc7587caf84c9f8c6439c37d56d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.7
+      value: 0.79
       objectReference: {fileID: 0}
     - target: {fileID: 3540755100980895822, guid: 372c2dc7587caf84c9f8c6439c37d56d,
         type: 3}

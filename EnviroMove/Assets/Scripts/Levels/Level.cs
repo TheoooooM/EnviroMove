@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Archi.Service.Interface;
 using Attributes;
 using Cysharp.Threading.Tasks;
+using Inputs;
 using Interfaces;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -126,11 +127,18 @@ namespace Levels
                }
             }
          }
-         
+
+         Inputs.Inputs.Instance.OnTouch += StartBoard;
          onFinishGenerate?.Invoke();
       }
 
-      
+      private void StartBoard(Vector2 side)
+      {
+         InteractionDetector.Instance.isActive = true;
+         Inputs.Inputs.Instance.OnTouch -= StartBoard;
+         _player.GetComponent<Player>().Move();
+      }
+
 
       Vector3Int GetPosition(IBoardable boardable)
       {
@@ -218,6 +226,8 @@ namespace Levels
                }
             }
          }
+         _board[position.x, position.y, position.z]?.MoveOn(boardable, position);
+         _board[position.x, position.y, position.z] = boardable;
       }
 
       public void SetAt(IBoardable boardable, Vector3Int position)

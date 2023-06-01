@@ -42,7 +42,7 @@ public class Player : MonoBehaviour, IBoardable
         countDownText.gameObject.SetActive(false);
     }
 
-    void Move()
+    public void Move()
     {
         _board.CheckCameraMovement(_boardPos);
         _board.CheckFinishLevel(_boardPos);
@@ -152,7 +152,7 @@ public class Player : MonoBehaviour, IBoardable
 
     public void StartBoard()
     {
-        StartCoroutine(DelayStart());
+        //StartCoroutine(DelayStart());
     }
 
     IEnumerator DelayStart()
