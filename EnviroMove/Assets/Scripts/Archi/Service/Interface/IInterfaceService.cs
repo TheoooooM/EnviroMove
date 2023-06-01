@@ -12,6 +12,7 @@ namespace Archi.Service.Interface
         void HideLoadingScreen();
 
         public void SetTargetPage(PageDirection page, float value);
+        public PageDirection GetTargetPage();
         public void SetNextLevelSO(LevelSO nextLevel);
         public LevelSO GetNextLevelSO();
     }
