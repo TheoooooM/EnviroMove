@@ -463,7 +463,8 @@ namespace UI.Canvas
             for (var index = 0; index < infos.Length; index++) {
                 Transform btn = CreateButton(contentPanelBox, infos, index);
                 btn.transform.localScale = Vector3.zero;
-                levelApparitionSequence.Append(btn.DOScale(1, popUpAnimationDuration / 1.25f).SetEase(Ease.OutBack));
+                if(index <= 7) levelApparitionSequence.Append(btn.DOScale(1, popUpAnimationDuration / 1.6f).SetEase(Ease.OutBack));
+                else btn.transform.localScale = new Vector3(1,1,1);
             }
         }
         #endregion Create Level More Panel

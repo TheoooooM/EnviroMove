@@ -109,6 +109,12 @@ namespace Archi.Service
         }
 
         /// <summary>
+        /// Get the target of the pageDirection
+        /// </summary>
+        /// <returns></returns>
+        public PageDirection GetTargetPage() => pageDirection;
+
+        /// <summary>
         /// Set the next level
         /// </summary>
         /// <param name="nextLevel"></param>

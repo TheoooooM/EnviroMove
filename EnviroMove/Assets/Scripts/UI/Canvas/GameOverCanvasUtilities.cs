@@ -15,11 +15,13 @@ namespace UI.Canvas
         [ServiceDependency] private IInterfaceService m_thisInterface;
 
         [SerializeField] private Button nextLevelButton = null;
+        [SerializeField] private Button editLevelButton = null;
         private LevelSO nextLevel = null;
         
         public override void Init() {
             nextLevel = m_thisInterface.GetNextLevelSO();
             nextLevelButton.gameObject.SetActive(nextLevel != null);
+            editLevelButton.gameObject.SetActive(m_thisInterface.GetTargetPage() == PageDirection.Create);
         }
 
         public void EditLevel() {
