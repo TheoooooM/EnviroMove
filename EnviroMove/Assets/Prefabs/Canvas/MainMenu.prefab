@@ -11578,8 +11578,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2978443152692004860}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -400}
+  m_LocalScale: {x: 0.875, y: 0.875, z: 0.875}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4561403493022622260}
@@ -11588,7 +11588,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 150}
+  m_AnchoredPosition: {x: 0, y: 355}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &3410100072902248363
@@ -18368,9 +18368,36 @@ MonoBehaviour:
   - {fileID: 4356911651155468190}
   - {fileID: 5275958999248790493}
   - {fileID: 4979347790485749710}
-  createBtnPunch: []
+  createBtnPunch:
+  - {fileID: 4302145205670559030}
+  - {fileID: 5696654014916933360}
+  - {fileID: 8421738636723652311}
   skinRend: {fileID: 4122423922811384899}
   playerTrans: {fileID: 6730871933747367553}
+  playerSizeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   skinMat:
   - {fileID: 2100000, guid: 2f65d9f202cc76d40ae5c228dd02eb0c, type: 2}
   - {fileID: 2100000, guid: 82fc2e835895032408bd90f24bec651b, type: 2}
@@ -34258,7 +34285,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 19084808}
+  m_AnchoredPosition: {x: 0, y: 22226100}
   m_SizeDelta: {x: 0, y: 3007}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &3594761718698860756
