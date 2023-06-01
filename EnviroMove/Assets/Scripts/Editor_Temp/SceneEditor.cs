@@ -175,19 +175,10 @@ public class SceneEditor
         firstBlockPosition.y += tileSize.y;
 
         InstantiateNewBorder(posX, posZ);
-
-        // block = Object.Instantiate(prefabs[(int)Enums.blockType.M1_Border],
-        //     new Vector3(posX + tileSize.x / 2 - .5f, 0, posZ + tileSize.y / 2 - .5f),
-        //     Quaternion.identity);
-        // block.transform.Rotate(0, 90, 0);
-        // block.transform.SetParent(parent.transform);
-        // block.name = posX + tileSize.x / 2 - .5f + " " + 0 + " " + (posZ + tileSize.y / 2 - .5f);
     }
 
     private void InstantiateNewBorder(int posX, int posZ)
     {
-        //go through all of these indexes and instantiate the right prefab at the right position in order to make the border around the platform
-        //the border is made of 4 parts : the corners, the sides, the inside corners and the inside sides
 
         // instantiating the selling
          var block = Object.Instantiate(prefabs[(int)Enums.blockType.SM_BorderVfinal_Roof],
@@ -196,26 +187,7 @@ public class SceneEditor
          block.transform.Rotate(0, 90, 0);
          block.transform.SetParent(parent.transform);
          block.name = posX + tileSize.x / 2 - .5f + " " + 2 + " " + (posZ + tileSize.y / 2 - .5f);
-        //
-        // //instantiating the inside
-        // block = Object.Instantiate(prefabs[(int)Enums.blockType.SM_BorderVfinal_Inside],
-        //     new Vector3(posX + tileSize.x / 2 - .5f, 0, posZ + tileSize.y / 2 - .5f),
-        //     Quaternion.identity);
-        // block.transform.Rotate(0, 90, 0);
-        // block.transform.SetParent(parent.transform);
-        // block.name = posX + tileSize.x / 2 - .5f + " " + 1 + " " + (posZ + tileSize.y / 2 - .5f);
-        
-        //now fill the blockGrid with the right indexes
-        // for (var x = posX; x < posX + tileSize.x + 4; x++)
-        //     for (var z = posZ; z < posZ + tileSize.y + 4; z++)
-        //     {
-        //         if (x < posX || x > posX + tileSize.x - 1 || z < posZ || z > posZ + tileSize.y - 1)
-        //         {
-        //             blockGrid[x, 0, z] = 186;
-        //             blockGrid[x, 1, z] = 186;
-        //         }
-        //         
-        //     }
+       
         // InsideBottomLeftCorner 102, InsideBottomRightCorner 103, InsideTopRightCorner 104, InsideTopLeftCorner 105
         // InsideTop start at 150 to InsideTop ends at 155
         // InsideLeft start at 156 to InsideLeft ends at 167
