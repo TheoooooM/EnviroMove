@@ -38,6 +38,7 @@ namespace BlockBehaviors
             vfxDebug.SetActive(false);
             if (releaseBoardable == null || releaseBoardable == (IBoardable)this) return;
             Vector3Int pos = boardMaster.GetPosition(releaseBoardable);
+            if (!(pos.x == boardPos.x || pos.y == boardPos.y)) return;
             var topblock = boardMaster.GetNeighbor(pos, Enums.Side.up, out _);
             if (topblock == null)
             {
