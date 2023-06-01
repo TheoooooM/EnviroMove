@@ -318,6 +318,9 @@ public class Enums
         InsideTop4,
         InsideTop5,
         InsideTop6,         //185
+        empty2,
+        SM_BorderVfinal_Roof,
+        SM_BorderVfinal_Inside,
     }
 
     public enum MajorCanvas

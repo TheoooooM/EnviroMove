@@ -191,6 +191,9 @@ public struct Blocks
         { InsideBottom4, "Box764" },
         { InsideBottom5, "Box786" },
         { InsideBottom6, "Box746" },            //186
+        { empty2, "emptyBlock2" },
+        {SM_BorderVfinal_Roof, "SM_BorderVfinal_Roof"},
+        {SM_BorderVfinal_Inside , "SM_BorderVfinal_Inside"},
     };
 
     public static readonly Dictionary<string, Enums.blockType> BlockAdressType = new()
@@ -267,5 +270,8 @@ public struct Blocks
         { "M2_Block24B", M2_Block24B },
         { "M2_Block25A", M2_Block25A },
         { "M2_Block25B", M2_Block25B },
+        { "emptyBlock2" , empty2},
+        { "SM_BorderVfinal_Roof", SM_BorderVfinal_Roof}, 
+        { "SM_BorderVfinal_Inside", SM_BorderVfinal_Inside},
     };
 }
