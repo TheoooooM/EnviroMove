@@ -186,18 +186,12 @@ public class SceneEditor
 
     private void InstantiateNewBorder(int posX, int posZ)
     {
-        // InsideBottomLeftCorner 102, InsideBottomRightCorner 103, InsideTopRightCorner 104, InsideTopLeftCorner 105
-        // InsideTop start at 150 to InsideTop ends at 155
-        // InsideLeft start at 156 to InsideLeft ends at 167
-        // InsideRight start at 168 to InsideRight ends at 180
-        // InsideBottom start at 181 to InsideBottom ends at 186
-
         //go through all of these indexes and instantiate the right prefab at the right position in order to make the border around the platform
         //the border is made of 4 parts : the corners, the sides, the inside corners and the inside sides
 
         // instantiating the selling
          var block = Object.Instantiate(prefabs[(int)Enums.blockType.SM_BorderVfinal_Roof],
-             new Vector3(posX + tileSize.x / 2 - .5f, 0, posZ + tileSize.y / 2 - .5f),
+             new Vector3(posX + tileSize.x / 2 - .5f, -0.5f, posZ + tileSize.y / 2 - .5f),
              Quaternion.identity);
          block.transform.Rotate(0, 90, 0);
          block.transform.SetParent(parent.transform);
@@ -222,67 +216,68 @@ public class SceneEditor
         //         }
         //         
         //     }
-        
+        // InsideBottomLeftCorner 102, InsideBottomRightCorner 103, InsideTopRightCorner 104, InsideTopLeftCorner 105
+        // InsideTop start at 150 to InsideTop ends at 155
+        // InsideLeft start at 156 to InsideLeft ends at 167
+        // InsideRight start at 168 to InsideRight ends at 180
+        // InsideBottom start at 181 to InsideBottom ends at 186
         //left bottom corner
         block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideBottomLeftCorner],
-            new Vector3(posX -1, 0, posZ - 1), Quaternion.identity);
+            new Vector3(posX -0.5f, 0, posZ - 0.5f), Quaternion.identity);
         block.transform.SetParent(parent.transform);
-        block.transform.Rotate(-90,0,0);
+        block.transform.Rotate(-90,-90,0);
         
         //right bottom corner
         block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideBottomRightCorner],
-            new Vector3(posX + tileSize.x, 0, posZ - 1), Quaternion.identity);
-        block.transform.SetParent(parent.transform);
-        block.transform.Rotate(-90,0,0);
-        
-        //right top corner
-        block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideTopRightCorner],
-            new Vector3(posX + tileSize.x, 0, posZ + tileSize.y), Quaternion.identity);
-        block.transform.SetParent(parent.transform);
-        block.transform.Rotate(-90,0,0);
-        
-        //left top corner
-        block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideTopLeftCorner],
-            new Vector3(posX - 1, 0, posZ + tileSize.y), Quaternion.identity);
+            new Vector3(posX + tileSize.x - .5f, 0, posZ - .5f), Quaternion.identity);
         block.transform.SetParent(parent.transform);
         block.transform.Rotate(-90,0,-90);
         
+        //right top corner
+        block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideTopRightCorner],
+            new Vector3(posX + tileSize.x -.5f, 0, posZ + tileSize.y -.5f), Quaternion.identity);
+        block.transform.SetParent(parent.transform);
+        block.transform.Rotate(-90,0,-90);
+        
+        //left top corner
+        block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideTopLeftCorner],
+            new Vector3(posX - .5f, 0, posZ + tileSize.y - .5f), Quaternion.identity);
+        block.transform.SetParent(parent.transform);
+        block.transform.Rotate(-90,0,-90);
+        Debug.Log(posX + " " + posZ);
         //left side
-        for (var i = 0; i < tileSize.y; i++)
+        var i = 0;
+        for (i = 0; i < tileSize.y; i++)
         {
-            block = Object.Instantiate(prefabs[156+i],
-                new Vector3(posX - 1, 0, posZ + i), Quaternion.identity);
+            block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideLeft1 + i],
+                new Vector3(posX - 0.5f, 0, posZ + i - 0.5f), Quaternion.identity);
+            block.transform.SetParent(parent.transform);
+            block.transform.Rotate(-90,180,0);
+        }
+        //right side
+        for (i = 0; i < tileSize.y; i++)
+        {
+            block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideRight1 + i],
+                new Vector3(posX + tileSize.x - .5f, 0, posZ + i + .5f), Quaternion.identity);
             block.transform.SetParent(parent.transform);
             block.transform.Rotate(-90,0,0);
         }
-        
-        //right side
-        for (var i = 0; i < tileSize.y; i++)
+        //top side
+        for (i = 0; i < tileSize.x; i++)
         {
-            block = Object.Instantiate(prefabs[168+i],
-                new Vector3(posX + tileSize.x, 0, posZ + i), Quaternion.identity);
+            block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideTop1 + i],
+                new Vector3(posX + i -.5f, 0, posZ + tileSize.y - .5f), Quaternion.identity);
+            block.transform.SetParent(parent.transform);
+            block.transform.Rotate(-90,-90,0);
+        }
+        //bottom side
+        for (i = 0; i < tileSize.x; i++)
+        {
+            block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideBottom1 + i],
+                new Vector3(posX + i + .5f, 0, posZ - .5f), Quaternion.identity);
             block.transform.SetParent(parent.transform);
             block.transform.Rotate(-90,0,90);
         }
-        
-        //top side
-        for (var i = 0; i < tileSize.x; i++)
-        {
-            block = Object.Instantiate(prefabs[150+i],
-                new Vector3(posX + i, 0, posZ + tileSize.y), Quaternion.identity);
-            block.transform.SetParent(parent.transform);
-            block.transform.Rotate(-90,0,0);
-        }
-        
-        //bottom side
-        for (var i = 0; i < tileSize.x; i++)
-        {
-            block = Object.Instantiate(prefabs[181+i],
-                new Vector3(posX + i, 0, posZ - 1), Quaternion.identity);
-            block.transform.SetParent(parent.transform);
-            block.transform.Rotate(-90,0,180);
-        }
-        
     }
 
     private void DestroyPlatform(int posX, int posZ)
