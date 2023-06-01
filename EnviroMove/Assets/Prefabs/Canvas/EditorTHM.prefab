@@ -5333,7 +5333,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ground
+  m_text: Grass
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -14273,8 +14273,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2258749839917991904}
         m_TargetAssemblyTypeName: UI.Canvas.ToolUtilities, Assembly-CSharp
-        m_MethodName: ChangePrefab
-        m_Mode: 3
+        m_MethodName: PlaceGrass
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -14554,8 +14554,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2258749839917991904}
         m_TargetAssemblyTypeName: UI.Canvas.ToolUtilities, Assembly-CSharp
-        m_MethodName: ChangePrefab
-        m_Mode: 3
+        m_MethodName: PlaceCaillou
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -17654,7 +17654,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ground
+  m_text: Rock
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

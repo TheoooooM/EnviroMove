@@ -156,8 +156,21 @@ public class SceneEditor
         {
             for (var z = posZ; z < posZ + tileSize.y; z++)
             {
-                block = Object.Instantiate(prefabs[(int)Enums.blockType.M1_Block1], new Vector3(x, 0, z),
-                    Quaternion.identity);
+                switch (season)
+                {
+                    case 0:
+                        block = Object.Instantiate(prefabs[(int)Enums.blockType.M3_Block1], new Vector3(x, 0, z),
+                            Quaternion.identity);
+                        break;
+                    case 1:
+                        block = Object.Instantiate(prefabs[(int)Enums.blockType.M2_Block1], new Vector3(x, 0, z),
+                            Quaternion.identity);
+                        break;
+                    case 2:
+                        block = Object.Instantiate(prefabs[(int)Enums.blockType.M1_Block1], new Vector3(x, 0, z),
+                            Quaternion.identity);
+                        break;
+                }
                 block.transform.SetParent(parent.transform);
                 blockGrid[x, 0, z] = (int)Enums.blockType.M1_Block1;
                 //random rotation
@@ -484,6 +497,28 @@ public class SceneEditor
             blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
     }
 
+    public void PlaceGrass()
+    {
+        selectedPrefabIndex = season switch
+        {
+            0 => (int)Enums.blockType.M3_Block1,
+            1 => (int)Enums.blockType.M2_Block1,
+            2 => (int)Enums.blockType.M1_Block1,
+            _ => selectedPrefabIndex
+        };
+    }
+    
+    public void PlaceCaillou()
+    {
+        selectedPrefabIndex = season switch
+        {
+            0 => (int)Enums.blockType.M3_Caillou,
+            1 => (int)Enums.blockType.M2_Caillou,
+            2 => (int)Enums.blockType.M1_Caillou,
+            _ => selectedPrefabIndex
+        };
+    }
+
     private bool SpecificBlockActions(Vector3 position, GameObject newGo)
     {
         int randomRotation;
@@ -513,6 +548,7 @@ public class SceneEditor
                     3 => Enums.Side.left,
                     _ => blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z]
                 };
+                newGo.name = "Block" + position.x + position.y + position.z;
                 break;
             case 11:
                 directionGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
@@ -572,27 +608,21 @@ public class SceneEditor
         switch (rotation)
         {
             case 0:
-                Debug.Log("destroyed at angle " + rotation);
                 blockGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z - 1] = 0;
                 Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewPanelStart.x, posOfnewPanelStart.y,
                     posOfnewPanelStart.z - 1)));
                 break;
             case 90:
-                Debug.Log("destroyed at angle " + rotation);
                 blockGrid[(int)posOfnewPanelStart.x - 1, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = 0;
                 Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewPanelStart.x - 1, posOfnewPanelStart.y,
                     posOfnewPanelStart.z)));
                 break;
             case 180:
-                Debug.Log("destroyed at angle " + rotation);
                 blockGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z + 1] = 0;
                 Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewPanelStart.x, posOfnewPanelStart.y,
                     posOfnewPanelStart.z + 1)));
-                Debug.Log("position of the block to destroy : " + new Vector3(posOfnewPanelStart.x, posOfnewPanelStart.y,
-                    posOfnewPanelStart.z + 1));
                 break;
             case 270:
-                Debug.Log("destroyed at angle " + rotation);
                 blockGrid[(int)posOfnewPanelStart.x + 1, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = 0;
                 Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewPanelStart.x + 1, posOfnewPanelStart.y,
                     posOfnewPanelStart.z)));
@@ -605,22 +635,18 @@ public class SceneEditor
         switch (rotationGo)
         {
             case 0:
-                Debug.Log("destroyed at angle " + rotationGo);
                 blockGrid[(int)posOfnewGo.x, (int)posOfnewGo.y, (int)posOfnewGo.z + 1] = 0;
                 Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewGo.x, posOfnewGo.y, posOfnewGo.z + 1)));
                 break;
             case 90:
-                Debug.Log("destroyed at angle " + rotationGo);
                 blockGrid[(int)posOfnewGo.x + 1, (int)posOfnewGo.y, (int)posOfnewGo.z] = 0;
                 Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewGo.x + 1, posOfnewGo.y, posOfnewGo.z)));
                 break;
             case 180:
-                Debug.Log("destroyed at angle " + rotationGo);
                 blockGrid[(int)posOfnewGo.x, (int)posOfnewGo.y, (int)posOfnewGo.z - 1] = 0;
                 Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewGo.x, posOfnewGo.y, posOfnewGo.z - 1)));
                 break;
             case 270:
-                Debug.Log("destroyed at angle " + rotationGo);
                 blockGrid[(int)posOfnewGo.x - 1, (int)posOfnewGo.y, (int)posOfnewGo.z] = 0;
                 Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewGo.x - 1, posOfnewGo.y, posOfnewGo.z)));
                 break;
@@ -680,37 +706,60 @@ public class SceneEditor
         {
             //left x = 0, right = 5, back = 0, forward = 15
             case 0:
-                newground = Object.Instantiate(prefabs[1], new Vector3(position.x - i, 0, position.z),
+                newground = Object.Instantiate(prefabs[season switch
+                    {
+                        0 => (int)Enums.blockType.M3_Block1,
+                        1 => (int)Enums.blockType.M2_Block1,
+                        2 => (int)Enums.blockType.M1_Block1,
+                    }], new Vector3(position.x - i, 0, position.z),
                     Quaternion.identity);
                 posOfnewPanelStart = new Vector3(position.x - i - 1, 1, position.z);
                 sideToInstantiateNewGrid = Enums.Side.left;
                 blockGrid[(int)position.x - i, (int)position.y - 1, (int)position.z] = 1;
                 rotation = 270;
                 directionGrid[(int)position.x - i, (int)position.y - 1, (int)position.z] = Enums.Side.left;
+                newground.transform.name = "Block" + (position.x - i) + 0 + position.z;
                 break;
             case 5:
-                newground = Object.Instantiate(prefabs[1], new Vector3(position.x + i, 0, position.z),
+                newground = Object.Instantiate(prefabs[season switch
+                    {
+                        0 => (int)Enums.blockType.M3_Block1,
+                        1 => (int)Enums.blockType.M2_Block1,
+                        2 => (int)Enums.blockType.M1_Block1,
+                    }], new Vector3(position.x + i, 0, position.z),
                     Quaternion.identity);
                 posOfnewPanelStart = new Vector3(position.x + i + 1, 1, position.z);
                 sideToInstantiateNewGrid = Enums.Side.right;
                 blockGrid[(int)position.x + i, (int)position.y - 1, (int)position.z] = 1;
                 rotation = 90;
                 directionGrid[(int)position.x + i, (int)position.y - 1, (int)position.z] = Enums.Side.right;
+                newground.transform.name = "Block" + (position.x + i) + 0 + position.z;
                 break;
             default:
                 switch (position.z % (tileSize.y + tailleBridge))
                 {
                     case 0:
-                        newground = Object.Instantiate(prefabs[1], new Vector3(position.x, 0, position.z - i),
+                        newground = Object.Instantiate(prefabs[season switch
+                            {
+                                0 => (int)Enums.blockType.M3_Block1,
+                                1 => (int)Enums.blockType.M2_Block1,
+                                2 => (int)Enums.blockType.M1_Block1,
+                            }], new Vector3(position.x, 0, position.z - i),
                             Quaternion.identity);
                         posOfnewPanelStart = new Vector3(position.x, 1, position.z - i - 1);
                         sideToInstantiateNewGrid = Enums.Side.back;
                         blockGrid[(int)position.x, (int)position.y - 1, (int)position.z - i] = 1;
                         rotation = 180;
                         directionGrid[(int)position.x, (int)position.y - 1, (int)position.z - i] = Enums.Side.back;
+                        newground.transform.name = "Block" + position.x + 0 + (position.z - i);
                         break;
                     case 11:
-                        newground = Object.Instantiate(prefabs[1], new Vector3(position.x, 0, position.z + i),
+                        newground = Object.Instantiate(prefabs[season switch
+                            {
+                                0 => (int)Enums.blockType.M3_Block1,
+                                1 => (int)Enums.blockType.M2_Block1,
+                                2 => (int)Enums.blockType.M1_Block1,
+                            }], new Vector3(position.x, 0, position.z + i),
                             Quaternion.identity);
                         posOfnewPanelStart = new Vector3(position.x, 1, position.z + i + 1);
                         sideToInstantiateNewGrid = Enums.Side.forward;
@@ -718,6 +767,7 @@ public class SceneEditor
                         rotation = 0;
                         directionGrid[(int)position.x, (int)position.y - 1, (int)position.z + i] =
                             Enums.Side.forward;
+                        newground.transform.name = "Block" + position.x + 0 + (position.z + i);
                         break;
                 }
 

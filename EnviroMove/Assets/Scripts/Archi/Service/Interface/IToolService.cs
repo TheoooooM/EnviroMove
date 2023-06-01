@@ -33,5 +33,9 @@ namespace Archi.Service.Interface
         void SliderCamera(float value);
         
         void SwapSeason();
+        
+        void PlaceGrass();
+        
+        void PlaceCaillou();
     }
 }

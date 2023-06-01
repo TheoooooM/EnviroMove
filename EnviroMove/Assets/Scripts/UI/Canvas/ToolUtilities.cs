@@ -107,5 +107,15 @@ namespace UI.Canvas
         {
             m_Tool.SwapSeason();
         }
+        
+        public void PlaceGrass()
+        {
+            m_Tool.PlaceGrass();
+        }
+        
+        public void PlaceCaillou()
+        {
+            m_Tool.PlaceCaillou();
+        }
     }
 }
