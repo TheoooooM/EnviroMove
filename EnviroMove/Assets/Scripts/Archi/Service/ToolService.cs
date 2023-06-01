@@ -170,6 +170,16 @@ namespace Archi.Service
         {
             sceneEditor.SwapSeason();
         }
+        
+        public void PlaceGrass()
+        {
+            sceneEditor.PlaceGrass();
+        }
+        
+        public void PlaceCaillou()
+        {
+            sceneEditor.PlaceCaillou();
+        }
         #endregion
     }
 }
