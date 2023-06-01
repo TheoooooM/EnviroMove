@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -29,6 +30,9 @@ namespace UI.Canvas
         public UnityEngine.Canvas mainCanvas = null;
         [SerializeField] private RectTransform mainMenuTransform = null;
         [SerializeField] private CanvasGroup mainCanvasGroup = null;
+
+        [Header("- Home Panel Information")]
+        [SerializeField] private TextMeshProUGUI playerName = null;
         
         [Header("Bottom Bar Information")]
         [SerializeField] private List<RectTransform> bottomBarButtonsRect = new();
@@ -42,7 +46,7 @@ namespace UI.Canvas
         [SerializeField] private ScrollRect shopScrollRect = null;
         [SerializeField] private ScrollRect commuScrollRect = null;
         private bool isInCreateMenu = false;
-        
+
         [Header("- Shop Panel Information- ")]
         [SerializeField] private TextMeshProUGUI specialOfferTxt = null;
         [SerializeField] private TextMeshProUGUI bundleOfferTxt = null;
@@ -81,9 +85,12 @@ namespace UI.Canvas
         [SerializeField] private RectTransform contentPanelBox = null;
         [SerializeField] private GameObject showMoreBtn = null;
         private bool isMoreLevelPanelOpen = false;
-        
-        
-        [SerializeField] private TMP_InputField inputField;
+
+        [Header("Username Information")]
+        [SerializeField] private GameObject usernameGam = null;
+        [SerializeField] private TMP_InputField usernameInputField;
+        private bool isInUsername = false;
+
         [SerializeField] private List<RectTransform> shopBtnsPunch = new();
         [SerializeField] private List<RectTransform> homeBtnPunch = new();
         [SerializeField] private List<RectTransform> commuBtnPunch = new();
@@ -105,6 +112,10 @@ namespace UI.Canvas
         public override void Init() {
             var saver = GetComponentInChildren<SaveTester>();
             if (saver){ saver.m_Database = m_Data; }
+
+            if (PlayerPrefs.GetInt("HasMadeTutorial", 0) == 0) SetPageToUsername();
+            playerName.text = PlayerPrefs.GetString("Username");
+            
             ResetCreateMenu();
             LaunchAllAnimation();
             UpdatePlayerSkin();
@@ -206,6 +217,16 @@ namespace UI.Canvas
             };
             m_thisInterface.SetTargetPage(pageDirection, value);
         }
+
+        /// <summary>
+        /// Set the page to username
+        /// </summary>
+        private void SetPageToUsername() {
+            isInUsername = true;
+            playerTrans.gameObject.SetActive(false);
+            usernameGam.SetActive(true);
+            PlayerPrefs.SetInt("HasMadeTutorial", 1);
+        }
         #endregion SetPage
         
         #region Creation Level Buttons
@@ -254,6 +275,7 @@ namespace UI.Canvas
         private int pageID = 0;
         
         private void Update() {
+            if (isInUsername) return;
             MoveCurrentPageWithInput();
             ChangeBottomBarButtonSize();
             UpdateTimeOffers();
@@ -394,9 +416,10 @@ namespace UI.Canvas
         public void MoveToSeason(int id) => levelSelectionID = id;
         #endregion Panel Movement Helper
         
-        public void SetUsername()
-        {
-            if(inputField.text != "")m_Data.SetUsername(inputField.text);
+        public void SetUsername() {
+            if (usernameInputField.text != "") {
+                m_Data.SetUsername(usernameInputField.text);
+            }
         } 
         
         #region Information Panel
@@ -432,27 +455,6 @@ namespace UI.Canvas
             }
         }
 
-        #region Create Level More Panel
-        /// <summary>
-        /// Open or close the panel which contains all the created levels
-        /// </summary>
-        /// <param name="open"></param>
-        public void OpenCloseMoreLevels(bool open) {
-            isMoreLevelPanelOpen = open;
-            
-            if (isMoreLevelPanelOpen) {
-                moreLevelCreatedTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude)
-                    .OnComplete(CreateButtonsForLevelCreated);
-            }
-            else {
-                moreLevelCreatedTransform.DOScale(Vector3.zero, popUpAnimationDuration).OnComplete(() => {
-                    for (int i = contentPanelBox.childCount - 1; i >= 0; i--) {
-                        Destroy(contentPanelBox.GetChild(i).gameObject);
-                    }
-                });
-            }
-        }
-
         private void CreateButtonsForLevelCreated() {
             m_Data.RefreshLevelData();
             LevelInfo[] infos = m_Data.GetAllLevelInfos();
@@ -467,7 +469,6 @@ namespace UI.Canvas
                 else btn.transform.localScale = new Vector3(1,1,1);
             }
         }
-        #endregion Create Level More Panel
 
         /// <summary>
         /// Animate the button
@@ -517,11 +518,6 @@ namespace UI.Canvas
         }
         #endregion LoadLevel
         
-        public void OpenTool() {
-            UnLoad3DWorld();
-            m_Tool.ShowTool();
-        }
-
         #region Rewards
         /// <summary>
         /// Open the reward panel and show the reward on screen
@@ -563,9 +559,11 @@ namespace UI.Canvas
         }
         
         public void OpenCloseCampaignLevels(bool open) => StartCoroutine(WaitForAction(() => OpenCloseCampaign(open)));
+        public void OpenCloseCreatedLevels(bool open) => StartCoroutine(WaitForAction(() => OpenCloseMoreLevels(open)));
         public void GoToCreatePanel(bool goCreate) => StartCoroutine(WaitForAction(() => GoToCreate(goCreate)));
         public void GoToPage(int pageID) => StartCoroutine(WaitForAction(() => MoveToPage(pageID)));
-        public void GoBuyCurrency(ScrollRect scrollRect) => StartCoroutine(WaitForAction(() => GoToCurrencyPos(scrollRect)));
+        public void OpenEditorTool() => StartCoroutine(WaitForAction(OpenTool));
+        public void GoBuyCurrency() => StartCoroutine(WaitForAction(GoToCurrencyPos));
         #endregion Button Events
 
         #region OpenClose Panels
@@ -611,6 +609,26 @@ namespace UI.Canvas
             Addressables.Release(worldObj);
             worldObj = null;
         }
+        
+        /// <summary>
+        /// Open or close the panel which contains all the created levels
+        /// </summary>
+        /// <param name="open"></param>
+        private void OpenCloseMoreLevels(bool open) {
+            isMoreLevelPanelOpen = open;
+            
+            if (isMoreLevelPanelOpen) {
+                moreLevelCreatedTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude)
+                    .OnComplete(CreateButtonsForLevelCreated);
+            }
+            else {
+                moreLevelCreatedTransform.DOScale(Vector3.zero, popUpAnimationDuration).OnComplete(() => {
+                    for (int i = contentPanelBox.childCount - 1; i >= 0; i--) {
+                        Destroy(contentPanelBox.GetChild(i).gameObject);
+                    }
+                });
+            }
+        }
         #endregion OpenClose Panels
         
         #region GoTo Panels
@@ -618,7 +636,7 @@ namespace UI.Canvas
         /// Go to the currency position in the shop
         /// </summary>
         /// <param name="scrollRect"></param>
-        private void GoToCurrencyPos(ScrollRect scrollRect) {
+        private void GoToCurrencyPos() {
             Sequence shopSequence = DOTween.Sequence();
             shopSequence.AppendInterval(waitTimeShop);
             shopSequence.Append(shopScrollRect.DONormalizedPos(new Vector2(0, 0), timeToGoToShop));
@@ -637,6 +655,11 @@ namespace UI.Canvas
         public void MoveToPage(int id) {
             isInCreateMenu = false;
             pageID = id;
+        }
+
+        private void OpenTool() {
+            UnLoad3DWorld();
+            m_Tool.ShowTool();
         }
         #endregion GoTo Panels
         
