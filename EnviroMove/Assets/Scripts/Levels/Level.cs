@@ -261,7 +261,7 @@ namespace Levels
       public void FinishLevel()
       { 
          Destroy(_player);
-         m_interface.DrawCanvas(Enums.MajorCanvas.gameOver);
+         m_interface.DrawCanvas(Enums.MajorCanvas.winMenu);
       }
 
       public bool TryMove(Vector3Int boardablePosition, Enums.Side side, out Vector3 position)

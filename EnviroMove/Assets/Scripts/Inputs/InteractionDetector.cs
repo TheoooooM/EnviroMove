@@ -29,7 +29,6 @@ namespace Inputs
         void TouchEffect(Vector2 touchPos)
         {
             if (!isActive) return;
-            Debug.Log("Touch Screen");
             Ray ray = Camera.main.ScreenPointToRay(touchPos);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {

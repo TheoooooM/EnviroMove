@@ -40,6 +40,7 @@ public class ConsoleUI : MonoBehaviour
 
     public void Log(string logString, string stackTrace, LogType type)
     {
+        if(type is LogType.Log or LogType.Warning)return;
         switch (type)
         {
             case LogType.Assert:

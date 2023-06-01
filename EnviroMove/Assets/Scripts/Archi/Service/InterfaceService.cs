@@ -29,6 +29,7 @@ namespace Archi.Service
             {Enums.MajorCanvas.menu, "MainMenuCanvas"},
             {Enums.MajorCanvas.inGame, "InGameCanvas"},
             {Enums.MajorCanvas.gameOver, "GameOverCanvas"},
+            {Enums.MajorCanvas.winMenu, "WinMenuCanvas"},
             {Enums.MajorCanvas.tool, "ToolCanvas"},
             {Enums.MajorCanvas.levels, "LevelsCanvas"},
             {Enums.MajorCanvas.toolLevels, "LevelSelectorCanvas"},

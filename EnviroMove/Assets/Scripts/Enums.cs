@@ -328,6 +328,7 @@ public class Enums
         toolLevels,
         levels,
         gameOver,
+        winMenu
     }
 
     public enum BlockTag
