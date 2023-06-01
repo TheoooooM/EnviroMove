@@ -223,60 +223,91 @@ public class SceneEditor
         // InsideBottom start at 181 to InsideBottom ends at 186
         //left bottom corner
         block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideBottomLeftCorner],
-            new Vector3(posX -0.5f, 0, posZ - 0.5f), Quaternion.identity);
+            new Vector3(posX -0.5f, 0.5f, posZ - 0.5f), Quaternion.identity);
         block.transform.SetParent(parent.transform);
         block.transform.Rotate(-90,-90,0);
+        blockGrid[posX - 1, 1, posZ - 1] = (int)Enums.blockType.InsideBottomLeftCorner;
+        blockHorizontalRotationGrid[posX - 1, 1, posZ - 1] = Enums.Side.left;
+        blockVerticalRotationGrid[posX - 1, 1, posZ - 1] = Enums.Side.forward;
+        block.name = "Block (" + (posX - 1) + ", " + 1 + ", " + (posZ - 1) + ")";
         
         //right bottom corner
         block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideBottomRightCorner],
-            new Vector3(posX + tileSize.x - .5f, 0, posZ - .5f), Quaternion.identity);
+            new Vector3(posX + tileSize.x - .5f, 0.5f, posZ - .5f), Quaternion.identity);
         block.transform.SetParent(parent.transform);
         block.transform.Rotate(-90,0,-90);
+        blockGrid[posX + tileSize.x, 1, posZ - 1] = (int)Enums.blockType.InsideBottomRightCorner;
+        blockHorizontalRotationGrid[posX + tileSize.x, 1, posZ - 1] = Enums.Side.right;
+        blockVerticalRotationGrid[posX + tileSize.x, 1, posZ - 1] = Enums.Side.forward;
+        block.name = "Block (" + (posX + tileSize.x) + ", " + 1 + ", " + (posZ - 1) + ")";
         
         //right top corner
         block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideTopRightCorner],
-            new Vector3(posX + tileSize.x -.5f, 0, posZ + tileSize.y -.5f), Quaternion.identity);
+            new Vector3(posX + tileSize.x -.5f, 0.5f, posZ + tileSize.y -.5f), Quaternion.identity);
         block.transform.SetParent(parent.transform);
         block.transform.Rotate(-90,0,-90);
+        blockGrid[posX + tileSize.x, 1, posZ + tileSize.y] = (int)Enums.blockType.InsideTopRightCorner;
+        blockHorizontalRotationGrid[posX + tileSize.x, 1, posZ + tileSize.y] = Enums.Side.right;
+        blockVerticalRotationGrid[posX + tileSize.x, 1, posZ + tileSize.y] = Enums.Side.back;
+        block.name = "Block (" + (posX + tileSize.x) + ", " + 1 + ", " + (posZ + tileSize.y) + ")";
         
         //left top corner
         block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideTopLeftCorner],
-            new Vector3(posX - .5f, 0, posZ + tileSize.y - .5f), Quaternion.identity);
+            new Vector3(posX - .5f, 0.5f, posZ + tileSize.y - .5f), Quaternion.identity);
         block.transform.SetParent(parent.transform);
         block.transform.Rotate(-90,0,-90);
-        Debug.Log(posX + " " + posZ);
+        blockGrid[posX - 1, 1, posZ + tileSize.y] = (int)Enums.blockType.InsideTopLeftCorner;
+        blockHorizontalRotationGrid[posX - 1, 1, posZ + tileSize.y] = Enums.Side.left;
+        blockVerticalRotationGrid[posX - 1, 1, posZ + tileSize.y] = Enums.Side.back;
+        block.name = $"Block ({posX - 1}, {1}, {(posZ + tileSize.y)})";
         //left side
         var i = 0;
         for (i = 0; i < tileSize.y; i++)
         {
             block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideLeft1 + i],
-                new Vector3(posX - 0.5f, 0, posZ + i - 0.5f), Quaternion.identity);
+                new Vector3(posX - 0.5f, 0.5f, posZ + i - 0.5f), Quaternion.identity);
             block.transform.SetParent(parent.transform);
             block.transform.Rotate(-90,180,0);
+            blockGrid[posX - 1, 1, posZ + i] = (int)Enums.blockType.InsideLeft1 + i;
+            blockHorizontalRotationGrid[posX - 1, 1, posZ + i] = Enums.Side.left;
+            blockVerticalRotationGrid[posX - 1, 1, posZ + i] = Enums.Side.forward;
+            block.name = "Block (" + (posX - 1) + ", " + 1 + ", " + (posZ + i) + ")";
         }
         //right side
         for (i = 0; i < tileSize.y; i++)
         {
             block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideRight1 + i],
-                new Vector3(posX + tileSize.x - .5f, 0, posZ + i + .5f), Quaternion.identity);
+                new Vector3(posX + tileSize.x - .5f, 0.5f, posZ + i + .5f), Quaternion.identity);
             block.transform.SetParent(parent.transform);
             block.transform.Rotate(-90,0,0);
+            blockGrid[posX + tileSize.x, 1, posZ + i] = (int)Enums.blockType.InsideRight1 + i;
+            blockHorizontalRotationGrid[posX + tileSize.x, 1, posZ + i] = Enums.Side.right;
+            blockVerticalRotationGrid[posX + tileSize.x, 1, posZ + i] = Enums.Side.forward;
+            block.name = "Block (" + (posX + tileSize.x) + ", " + 1 + ", " + (posZ + i) + ")";
         }
         //top side
         for (i = 0; i < tileSize.x; i++)
         {
             block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideTop1 + i],
-                new Vector3(posX + i -.5f, 0, posZ + tileSize.y - .5f), Quaternion.identity);
+                new Vector3(posX + i -.5f, 0.5f, posZ + tileSize.y - .5f), Quaternion.identity);
             block.transform.SetParent(parent.transform);
             block.transform.Rotate(-90,-90,0);
+            blockGrid[posX + i, 1, posZ + tileSize.y] = (int)Enums.blockType.InsideTop1 + i;
+            blockHorizontalRotationGrid[posX + i, 1, posZ + tileSize.y] = Enums.Side.forward;
+            blockVerticalRotationGrid[posX + i, 1, posZ + tileSize.y] = Enums.Side.back;
+            block.name = "Block (" + (posX + i) + ", " + 1 + ", " + (posZ + tileSize.y) + ")";
         }
         //bottom side
         for (i = 0; i < tileSize.x; i++)
         {
             block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideBottom1 + i],
-                new Vector3(posX + i + .5f, 0, posZ - .5f), Quaternion.identity);
+                new Vector3(posX + i + .5f, 0.5f, posZ - .5f), Quaternion.identity);
             block.transform.SetParent(parent.transform);
-            block.transform.Rotate(-90,0,90);
+            block.transform.Rotate(-90,1,90);
+            blockGrid[posX + i, 1, posZ - 1] = (int)Enums.blockType.InsideBottom1 + i;
+            blockHorizontalRotationGrid[posX + i, 1, posZ - 1] = Enums.Side.forward;
+            blockVerticalRotationGrid[posX + i, 1, posZ - 1] = Enums.Side.forward;
+            block.name = "Block (" + (posX + i) + ", " + 1 + ", " + (posZ - 1) + ")";
         }
     }
 
@@ -511,7 +542,7 @@ public class SceneEditor
                     newground = SwitchBridgePlacement(position, newground, i, ref posOfnewPanelStart,
                         ref sideToInstantiateNewGrid, ref rotation);
 
-                PlacePanelEnd(newGo, newground, posOfnewPanelStart, rotation);
+                var posOfNewPanelEnd = PlacePanelEnd(newGo, newground, posOfnewPanelStart, rotation);
 
                 //offset for the position of the MakePlatform function
                 var offset = sideToInstantiateNewGrid switch
@@ -530,15 +561,84 @@ public class SceneEditor
                     offset.y >= blockGrid.GetLength(2)) return true;
                 if (blockGrid[(int)offset.x, 0, (int)offset.y] == 1) break;
                 //check if there is already a platform
-                if (blockGrid[(int)offset.x, 0, (int)offset.y] != 0) return true;
+                if (blockGrid[(int)offset.x, 0, (int)offset.y] != 0)
+                {
+                    DeleteWalls(newGo, posOfNewPanelEnd);
+                    return true;
+                }
                 MakePlatform((int)offset.x, (int)offset.y);
+                DeleteWalls(newGo, posOfNewPanelEnd);
                 break;
         }
 
         return false;
     }
 
-    private void PlacePanelEnd(GameObject newGo, GameObject newground, Vector3 posOfnewPanelStart, int rotation)
+    private void DeleteWalls(GameObject newGo, GameObject posOfnewPanel)
+    {
+        var posOfnewPanelStart = posOfnewPanel.transform.position;
+        var rotation = (int)posOfnewPanel.transform.rotation.eulerAngles.y;
+        switch (rotation)
+        {
+            case 0:
+                Debug.Log("destroyed at angle " + rotation);
+                blockGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z - 1] = 0;
+                Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewPanelStart.x, posOfnewPanelStart.y,
+                    posOfnewPanelStart.z - 1)));
+                break;
+            case 90:
+                Debug.Log("destroyed at angle " + rotation);
+                blockGrid[(int)posOfnewPanelStart.x - 1, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = 0;
+                Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewPanelStart.x - 1, posOfnewPanelStart.y,
+                    posOfnewPanelStart.z)));
+                break;
+            case 180:
+                Debug.Log("destroyed at angle " + rotation);
+                blockGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z + 1] = 0;
+                Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewPanelStart.x, posOfnewPanelStart.y,
+                    posOfnewPanelStart.z + 1)));
+                Debug.Log("position of the block to destroy : " + new Vector3(posOfnewPanelStart.x, posOfnewPanelStart.y,
+                    posOfnewPanelStart.z + 1));
+                break;
+            case 270:
+                Debug.Log("destroyed at angle " + rotation);
+                blockGrid[(int)posOfnewPanelStart.x + 1, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = 0;
+                Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewPanelStart.x + 1, posOfnewPanelStart.y,
+                    posOfnewPanelStart.z)));
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        var posOfnewGo = newGo.transform.position;
+        var rotationGo = (int)newGo.transform.rotation.eulerAngles.y;
+        switch (rotationGo)
+        {
+            case 0:
+                Debug.Log("destroyed at angle " + rotationGo);
+                blockGrid[(int)posOfnewGo.x, (int)posOfnewGo.y, (int)posOfnewGo.z + 1] = 0;
+                Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewGo.x, posOfnewGo.y, posOfnewGo.z + 1)));
+                break;
+            case 90:
+                Debug.Log("destroyed at angle " + rotationGo);
+                blockGrid[(int)posOfnewGo.x + 1, (int)posOfnewGo.y, (int)posOfnewGo.z] = 0;
+                Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewGo.x + 1, posOfnewGo.y, posOfnewGo.z)));
+                break;
+            case 180:
+                Debug.Log("destroyed at angle " + rotationGo);
+                blockGrid[(int)posOfnewGo.x, (int)posOfnewGo.y, (int)posOfnewGo.z - 1] = 0;
+                Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewGo.x, posOfnewGo.y, posOfnewGo.z - 1)));
+                break;
+            case 270:
+                Debug.Log("destroyed at angle " + rotationGo);
+                blockGrid[(int)posOfnewGo.x - 1, (int)posOfnewGo.y, (int)posOfnewGo.z] = 0;
+                Object.Destroy(FindBlockAtPosition(new Vector3(posOfnewGo.x - 1, posOfnewGo.y, posOfnewGo.z)));
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private GameObject PlacePanelEnd(GameObject newGo, GameObject newground, Vector3 posOfnewPanelStart, int rotation)
     {
         if (newground != null)
         {
@@ -546,7 +646,6 @@ public class SceneEditor
             newPanelStart.transform.parent = parent.transform;
             newPanelStart.transform.Rotate(0, rotation, 0);
             var newGoGridPos = newGo.transform.position;
-            Debug.Log("newGoGridPos: " + newGoGridPos);
             blockHorizontalRotationGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z] = rotation switch
             {
                 0 => Enums.Side.forward,
@@ -555,9 +654,6 @@ public class SceneEditor
                 270 => Enums.Side.left,
                 _ => blockHorizontalRotationGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z]
             };
-            Debug.Log("blockHorizontalRotationGrid[" + (int)newGoGridPos.x + ", " + (int)newGoGridPos.y + ", " +
-                      (int)newGoGridPos.z + "] = " +
-                      blockHorizontalRotationGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z]);
             newGo.transform.Rotate(0, rotation, 0);
             blockHorizontalRotationGrid
                 [(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = rotation switch
@@ -569,12 +665,22 @@ public class SceneEditor
                 _ => blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y,
                     (int)posOfnewPanelStart.z]
             };
-            Debug.Log("blockHorizontalRotationGrid[" + (int)posOfnewPanelStart.x + "," + (int)posOfnewPanelStart.y +
-                      " , " +
-                      (int)posOfnewPanelStart.z + "] = " +
-                      blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y,
-                          (int)posOfnewPanelStart.z]);
+            return newPanelStart;
         }
+
+        return null;
+    }
+
+    private Object FindBlockAtPosition(Vector3 vector3)
+    {
+        //find in parent the block at position
+        var transform = parent.transform.Find("Block (" + vector3.x + ", " + 1 + ", " + vector3.z + ")");
+        if (transform != null)
+        {
+            return transform.gameObject;
+        }
+
+        return null;
     }
 
     private GameObject SwitchBridgePlacement(Vector3 position, GameObject newground, int i,
