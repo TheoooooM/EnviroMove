@@ -194,6 +194,8 @@ public struct Blocks
         { empty2, "emptyBlock2" },
         {SM_BorderVfinal_Roof, "SM_BorderVfinal_Roof"},
         {SM_BorderVfinal_Inside , "SM_BorderVfinal_Inside"},
+        { M2_Caillou, "M2_Caillou" },
+        { M3_Caillou, "M3_Caillou" }, 
     };
 
     public static readonly Dictionary<string, Enums.blockType> BlockAdressType = new()

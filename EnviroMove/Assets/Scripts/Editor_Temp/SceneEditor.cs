@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 #if UNITY_STANDALONE && !UNITY_EDITOR
@@ -38,7 +39,7 @@ public class SceneEditor
 
     //LevelData
     public Vector3Int size;
-    public Vector3Int defaultSize = new(80, 2, 80);
+    public Vector3Int defaultSize = new(160, 2, 160);
     public Vector2Int tileSize = new(6, 12);
     public int[,,] blockGrid;
     public Enums.Side[,,] blockHorizontalRotationGrid;
@@ -57,6 +58,8 @@ public class SceneEditor
     private Vector2Int firstBlockPosition;
     private Vector2Int[,] gridPositions;
     private readonly int tailleBridge = 4;
+    
+    private int season = 0;
 
     private enum EditorMode
     {
@@ -79,11 +82,15 @@ public class SceneEditor
     private List<int> twoPlusOnePrefabIndex = new() { 29, 30, 48, 49, 87, 88 };
     private List<int> twoByTwoPrefabIndex = new() { 51, 89 };
 
+    private List<VolumeProfile> volumeProfiles;
+    private Volume volume;
+
     #endregion
 
     public void Start()
     {
         size = defaultSize;
+        season = 2;
         new Blocks();
         // blockGrid = new List<List<List<int>>>();
         blocksUsed = new List<string>();
@@ -98,6 +105,11 @@ public class SceneEditor
             var block = Addressables.LoadAssetAsync<GameObject>(blockAddress.Value).WaitForCompletion();
             prefabs[(int)blockAddress.Key] = block;
         }
+        volume = Camera.main.transform.GetChild(0).GetComponent<Volume>();
+        volumeProfiles = new List<VolumeProfile>();
+        volumeProfiles.Add(Addressables.LoadAssetAsync<VolumeProfile>("PP_Automne").WaitForCompletion());
+        volumeProfiles.Add(Addressables.LoadAssetAsync<VolumeProfile>("PP_Hiver").WaitForCompletion());
+        volumeProfiles.Add(Addressables.LoadAssetAsync<VolumeProfile>("PP_Printemps").WaitForCompletion());
 
         _camera = Camera.main;
         parent = new GameObject();
@@ -129,7 +141,9 @@ public class SceneEditor
     private void PlaceDefaultGround()
     {
         var posX = (tileSize.x + tailleBridge) * (size.x / (tileSize.x + tailleBridge) / 2);
+        Debug.Log(posX);
         var posZ = (tileSize.y + tailleBridge) * (size.z / (tileSize.y + tailleBridge) / 2);
+        Debug.Log(posZ);
         MakePlatform(posX, posZ);
 
         blocksUsed.Add("M1_Block1");
@@ -139,33 +153,36 @@ public class SceneEditor
     {
         GameObject block = null;
         for (var x = posX; x < posX + tileSize.x; x++)
-        for (var z = posZ; z < posZ + tileSize.y; z++)
         {
-            block = Object.Instantiate(prefabs[(int)Enums.blockType.M1_Block1], new Vector3(x, 0, z),
-                Quaternion.identity);
-            block.transform.SetParent(parent.transform);
-            blockGrid[x, 0, z] = (int)Enums.blockType.M1_Block1;
-            //random rotation
-            var randomRotation = Random.Range(0, 4);
-            block.transform.Rotate(0, 0, randomRotation * 90);
-            blockHorizontalRotationGrid[posX, 0, posZ] = randomRotation switch
+            for (var z = posZ; z < posZ + tileSize.y; z++)
             {
-                0 => Enums.Side.forward,
-                1 => Enums.Side.right,
-                2 => Enums.Side.back,
-                3 => Enums.Side.left,
-                _ => blockHorizontalRotationGrid[posX, 0, posZ]
-            };
-            randomRotation = Random.Range(0, 4);
-            block.transform.Rotate(randomRotation * 90, 0, 0);
-            blockVerticalRotationGrid[posX, 0, posZ] = randomRotation switch
-            {
-                0 => Enums.Side.forward,
-                1 => Enums.Side.right,
-                2 => Enums.Side.back,
-                3 => Enums.Side.left,
-                _ => blockVerticalRotationGrid[posX, 0, posZ]
-            };
+                block = Object.Instantiate(prefabs[(int)Enums.blockType.M1_Block1], new Vector3(x, 0, z),
+                    Quaternion.identity);
+                block.transform.SetParent(parent.transform);
+                blockGrid[x, 0, z] = (int)Enums.blockType.M1_Block1;
+                //random rotation
+                var randomRotation = Random.Range(0, 4);
+                block.transform.Rotate(0, 0, randomRotation * 90);
+                blockHorizontalRotationGrid[posX, 0, posZ] = randomRotation switch
+                {
+                    0 => Enums.Side.forward,
+                    1 => Enums.Side.right,
+                    2 => Enums.Side.back,
+                    3 => Enums.Side.left,
+                    _ => blockHorizontalRotationGrid[posX, 0, posZ]
+                };
+                randomRotation = Random.Range(0, 4);
+                block.transform.Rotate(randomRotation * 90, 0, 0);
+                blockVerticalRotationGrid[posX, 0, posZ] = randomRotation switch
+                {
+                    0 => Enums.Side.forward,
+                    1 => Enums.Side.up,
+                    2 => Enums.Side.back,
+                    3 => Enums.Side.down,
+                    _ => blockVerticalRotationGrid[posX, 0, posZ]
+                };
+                block.transform.name = "Block" + x + "" + 0 + "" + z;
+            }
         }
 
         firstBlockPosition = new Vector2Int(posX, posZ);
@@ -181,26 +198,26 @@ public class SceneEditor
     {
 
         // instantiating the selling
-         var block = Object.Instantiate(prefabs[(int)Enums.blockType.SM_BorderVfinal_Roof],
-             new Vector3(posX + tileSize.x / 2 - .5f, -0.5f, posZ + tileSize.y / 2 - .5f),
-             Quaternion.identity);
-         block.transform.Rotate(0, 90, 0);
-         block.transform.SetParent(parent.transform);
-         block.name = posX + tileSize.x / 2 - .5f + " " + 2 + " " + (posZ + tileSize.y / 2 - .5f);
-       
+         // var block = Object.Instantiate(prefabs[(int)Enums.blockType.SM_BorderVfinal_Roof],
+         //     new Vector3(posX + tileSize.x / 2 - .5f, -0.5f, posZ + tileSize.y / 2 - .5f),
+         //     Quaternion.identity);
+         // block.transform.Rotate(0, 90, 0);
+         // block.transform.SetParent(parent.transform);
+         // block.name = posX + tileSize.x / 2 - .5f + " " + 2 + " " + (posZ + tileSize.y / 2 - .5f);
+         //
         // InsideBottomLeftCorner 102, InsideBottomRightCorner 103, InsideTopRightCorner 104, InsideTopLeftCorner 105
         // InsideTop start at 150 to InsideTop ends at 155
         // InsideLeft start at 156 to InsideLeft ends at 167
         // InsideRight start at 168 to InsideRight ends at 180
         // InsideBottom start at 181 to InsideBottom ends at 186
         //left bottom corner
-        block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideBottomLeftCorner],
+        var block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideBottomLeftCorner],
             new Vector3(posX -0.5f, 0.5f, posZ - 0.5f), Quaternion.identity);
         block.transform.SetParent(parent.transform);
         block.transform.Rotate(-90,-90,0);
         blockGrid[posX - 1, 1, posZ - 1] = (int)Enums.blockType.InsideBottomLeftCorner;
         blockHorizontalRotationGrid[posX - 1, 1, posZ - 1] = Enums.Side.left;
-        blockVerticalRotationGrid[posX - 1, 1, posZ - 1] = Enums.Side.forward;
+        blockVerticalRotationGrid[posX - 1, 1, posZ - 1] = Enums.Side.down;
         block.name = "Block (" + (posX - 1) + ", " + 1 + ", " + (posZ - 1) + ")";
         
         //right bottom corner
@@ -275,7 +292,7 @@ public class SceneEditor
             block = Object.Instantiate(prefabs[(int)Enums.blockType.InsideBottom1 + i],
                 new Vector3(posX + i + .5f, 0.5f, posZ - .5f), Quaternion.identity);
             block.transform.SetParent(parent.transform);
-            block.transform.Rotate(-90,1,90);
+            block.transform.Rotate(-90,0,90);
             blockGrid[posX + i, 1, posZ - 1] = (int)Enums.blockType.InsideBottom1 + i;
             blockHorizontalRotationGrid[posX + i, 1, posZ - 1] = Enums.Side.forward;
             blockVerticalRotationGrid[posX + i, 1, posZ - 1] = Enums.Side.forward;
@@ -472,7 +489,9 @@ public class SceneEditor
         int randomRotation;
         switch (selectedPrefabIndex)
         {
-            case 1:
+            case (int)Enums.blockType.ground or (int)Enums.blockType.M1_Block1 or (int)Enums.blockType.M2_Block1
+                or (int)Enums.blockType.M3_Block1 or (int)Enums.blockType.M1_Caillou or (int)Enums.blockType.M2_Caillou
+                or (int)Enums.blockType.M3_Caillou:
                 // random rotation
                 randomRotation = Random.Range(0, 4);
                 newGo.transform.Rotate(0, randomRotation * 90, 0);
@@ -612,35 +631,33 @@ public class SceneEditor
 
     private GameObject PlacePanelEnd(GameObject newGo, GameObject newground, Vector3 posOfnewPanelStart, int rotation)
     {
-        if (newground != null)
+        if (newground == null) return null;
+        var newPanelStart = Object.Instantiate(prefabs[13], posOfnewPanelStart, Quaternion.identity);
+        blockGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = 13;
+        newPanelStart.transform.parent = parent.transform;
+        newPanelStart.transform.Rotate(0, rotation, 0);
+        var newGoGridPos = newGo.transform.position;
+        blockHorizontalRotationGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z] = rotation switch
         {
-            var newPanelStart = Object.Instantiate(prefabs[13], posOfnewPanelStart, Quaternion.identity);
-            newPanelStart.transform.parent = parent.transform;
-            newPanelStart.transform.Rotate(0, rotation, 0);
-            var newGoGridPos = newGo.transform.position;
-            blockHorizontalRotationGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z] = rotation switch
-            {
-                0 => Enums.Side.forward,
-                90 => Enums.Side.right,
-                180 => Enums.Side.back,
-                270 => Enums.Side.left,
-                _ => blockHorizontalRotationGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z]
-            };
-            newGo.transform.Rotate(0, rotation, 0);
-            blockHorizontalRotationGrid
-                [(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = rotation switch
-            {
-                0 => Enums.Side.forward,
-                90 => Enums.Side.right,
-                180 => Enums.Side.back,
-                270 => Enums.Side.left,
-                _ => blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y,
-                    (int)posOfnewPanelStart.z]
-            };
-            return newPanelStart;
-        }
+            0 => Enums.Side.forward,
+            90 => Enums.Side.right,
+            180 => Enums.Side.back,
+            270 => Enums.Side.left,
+            _ => blockHorizontalRotationGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z]
+        };
+        newGo.transform.Rotate(0, rotation, 0);
+        blockHorizontalRotationGrid
+            [(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = rotation switch
+        {
+            0 => Enums.Side.forward,
+            90 => Enums.Side.right,
+            180 => Enums.Side.back,
+            270 => Enums.Side.left,
+            _ => blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y,
+                (int)posOfnewPanelStart.z]
+        };
+        return newPanelStart;
 
-        return null;
     }
 
     private Object FindBlockAtPosition(Vector3 vector3)
@@ -1116,7 +1133,7 @@ public class SceneEditor
         var blockVerticalRotationGridIntArray = Enums.SideToIntArray(blockVerticalRotationGrid);
         var playerDirGridVector3Array = Enums.SideToVector3Array(directionGrid);
         data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGridIntArray,
-            blockVerticalRotationGridIntArray, playerDirGridVector3Array);
+            blockVerticalRotationGridIntArray, playerDirGridVector3Array, season);
         curentLevelData = data;
     }
 
@@ -1126,7 +1143,7 @@ public class SceneEditor
         var blockVerticalRotationGridIntArray = Enums.SideToIntArray(blockVerticalRotationGrid);
         var playerDirGridVector3Array = Enums.SideToVector3Array(directionGrid);
         data = new LevelData(size, blockGrid, blocksUsed.ToArray(), blockHorizontalRotationGridIntArray,
-            blockVerticalRotationGridIntArray, playerDirGridVector3Array);
+            blockVerticalRotationGridIntArray, playerDirGridVector3Array, season);
         curentLevelData = data;
         return data;
     }
@@ -1134,7 +1151,7 @@ public class SceneEditor
     public LevelData TestLevel()
     {
         data = new LevelData(size, blockGrid, blocksUsed.ToArray(), Enums.SideToIntArray(blockHorizontalRotationGrid),
-            Enums.SideToIntArray(blockVerticalRotationGrid), Enums.SideToVector3Array(directionGrid));
+            Enums.SideToIntArray(blockVerticalRotationGrid), Enums.SideToVector3Array(directionGrid), season);
         curentLevelData = data;
         return data;
     }
@@ -1163,9 +1180,14 @@ public class SceneEditor
                 Debug.Log("Direction block instantiated" + x + y + z);
                 InstantiateDirectionPrefab(x, y, z);
             }
-
-            if (blockGrid[x, y, z] == 0) continue;
-            InstantiateBlock(x, y, z);
+            switch (blockGrid[x, y, z])
+            {
+                case 0:
+                    continue;
+                default:
+                    InstantiateBlock(x, y, z);
+                    break;
+            }
         }
     }
 
@@ -1197,60 +1219,113 @@ public class SceneEditor
         var prefabIndex = blockGrid[x, y, z];
         var block = Object.Instantiate(prefabs[prefabIndex], new Vector3(x, y, z),
             Quaternion.identity);
-        if (prefabIndex is (int)Enums.blockType.ground or (int)Enums.blockType.M1_Block1)
-        {
-            var randomRotation = Random.Range(0, 4);
-            blockHorizontalRotationGrid[x, y, z] = randomRotation switch
-            {
-                0 => Enums.Side.forward,
-                1 => Enums.Side.right,
-                2 => Enums.Side.back,
-                3 => Enums.Side.left,
-                _ => blockHorizontalRotationGrid[x, y, z]
-            };
-            randomRotation = Random.Range(0, 4);
-            block.transform.Rotate(0, 0, randomRotation * 90);
-            blockVerticalRotationGrid[x, y, z] = randomRotation switch
-            {
-                0 => Enums.Side.forward,
-                1 => Enums.Side.right,
-                2 => Enums.Side.back,
-                3 => Enums.Side.left,
-                _ => blockVerticalRotationGrid[x, y, z]
-            };
-        }
-
-        switch (blockHorizontalRotationGrid[x, y, z])
-        {
-            case Enums.Side.right:
-                block.transform.Rotate(0, 90, 0);
-                break;
-            case Enums.Side.left:
-                block.transform.Rotate(0, -90, 0);
-                break;
-            case Enums.Side.back:
-                block.transform.Rotate(0, 180, 0);
-                break;
-            default:
-                break;
-        }
-
-        switch (blockVerticalRotationGrid[x, y, z])
-        {
-            case Enums.Side.back:
-                block.transform.Rotate(180, 0, 0);
-                break;
-            case Enums.Side.up:
-                block.transform.Rotate(90, 0, 0);
-                break;
-            case Enums.Side.down:
-                block.transform.Rotate(-90, 0, 0);
-                break;
-            default:
-                break;
-        }
-
         block.transform.parent = parent.transform;
+        switch (prefabIndex)
+        {
+            case (int)Enums.blockType.ground or (int)Enums.blockType.M1_Block1:
+            {
+                var randomRotation = Random.Range(0, 4);
+                blockHorizontalRotationGrid[x, y, z] = randomRotation switch
+                {
+                    0 => Enums.Side.forward,
+                    1 => Enums.Side.right,
+                    2 => Enums.Side.back,
+                    3 => Enums.Side.left,
+                    _ => blockHorizontalRotationGrid[x, y, z]
+                };
+                randomRotation = Random.Range(0, 4);
+                block.transform.Rotate(0, 0, randomRotation * 90);
+                blockVerticalRotationGrid[x, y, z] = randomRotation switch
+                {
+                    0 => Enums.Side.forward,
+                    1 => Enums.Side.up,
+                    2 => Enums.Side.back,
+                    3 => Enums.Side.down,
+                    _ => blockVerticalRotationGrid[x, y, z]
+                };
+                break;
+            }
+            case > 97 and <= 186:
+                switch (prefabIndex)
+                {
+                    //left bottom corner
+                    case (int)Enums.blockType.InsideBottomLeftCorner:
+                        block.transform.Rotate(-90,-90,0);
+                        block.transform.position += new Vector3(.5f, -0.5f, .5f);
+                        break;
+                    //right bottom corner
+                    case (int)Enums.blockType.InsideBottomRightCorner:
+                        block.transform.Rotate(-90, 0, -90);
+                        block.transform.position += new Vector3(-.5f, -0.5f, .5f);
+                        break;
+                    //left top corner
+                    case (int)Enums.blockType.InsideTopLeftCorner:
+                        block.transform.Rotate(-90, 0, -90);
+                        block.transform.position += new Vector3(.5f, -0.5f, -.5f);
+                        break;
+                    //right top corner
+                    case (int)Enums.blockType.InsideTopRightCorner:
+                        block.transform.Rotate(-90, 0, -90);
+                        block.transform.position += new Vector3(-.5f, -0.5f, -.5f);
+                        break;
+                    //left side
+                    case >= (int)Enums.blockType.InsideLeft1 and <= (int)Enums.blockType.InsideLeft12:
+                        block.transform.Rotate(-90,180,0);
+                        block.transform.position += new Vector3(.5f, -0.5f, -.5f);
+                        break;
+                    //right side
+                    case >= (int)Enums.blockType.InsideRight1 and <= (int)Enums.blockType.InsideRight12:
+                        block.transform.Rotate(-90,0,0);
+                        block.transform.position += new Vector3(-.5f, -0.5f, .5f);
+                        break;
+                    //top side
+                    case >= (int)Enums.blockType.InsideTop1 and <= (int)Enums.blockType.InsideTop6:
+                        block.transform.Rotate(-90,-90,0);
+                        block.transform.position += new Vector3(-.5f, -0.5f, -.5f);
+                        break;
+                    //bottom side
+                    case >= (int)Enums.blockType.InsideBottom1 and <= (int)Enums.blockType.InsideBottom6:
+                        block.transform.Rotate(-90,0,90);
+                        block.transform.position += new Vector3(.5f, -0.5f, .5f);
+                        break;
+                }
+
+                break;
+            default:
+                switch (blockHorizontalRotationGrid[x, y, z])
+                {
+                    case Enums.Side.right:
+                        block.transform.Rotate(0, 90, 0);
+                        break;
+                    case Enums.Side.left:
+                        block.transform.Rotate(0, -90, 0);
+                        break;
+                    case Enums.Side.back:
+                        block.transform.Rotate(0, 180, 0);
+                        break;
+                    default:
+                        break;
+                }
+
+                switch (blockVerticalRotationGrid[x, y, z])
+                {
+                    case Enums.Side.back:
+                        block.transform.Rotate(180, 0, 0);
+                        break;
+                    case Enums.Side.up:
+                        block.transform.Rotate(90, 0, 0);
+                        break;
+                    case Enums.Side.down:
+                        block.transform.Rotate(-90, 0, 0);
+                        break;
+                    default:
+                        break;
+                }
+
+                break;
+        }
+
+        block.name = "Block" + x + y + z;
         if (directionGrid[x, y, z] != Enums.Side.none)
         {
             var directionBlock = Object.Instantiate(prefabs[11], new Vector3(x, y, z), Quaternion.identity);
@@ -1695,5 +1770,117 @@ public class SceneEditor
     public void ChangeMoveCamera()
     {
         isMoveCamera = !isMoveCamera;
+    }
+    
+    public void SwapSeason()
+    {
+        if (season == 2)
+        {
+            season = 0;
+        }
+        else
+        {
+            season++;
+        }
+        
+        switch (season)
+        {
+            case 0:
+                Autumn();
+                break;
+            case 1:
+                Winter();
+                break;
+            case 2:
+                Spring();
+                break;
+        }
+    }
+
+    private void Autumn()
+    {
+        volume.profile = volumeProfiles[0];
+        
+        for (int i = 0; i < blockGrid.GetLength(0); i++)
+        {
+            for (int j = 0; j < blockGrid.GetLength(1); j++)
+            {
+                for (int k = 0; k < blockGrid.GetLength(2); k++)
+                {
+                    if (blockGrid[i, j, k] == (int)Enums.blockType.M1_Block1 || blockGrid[i, j, k] == (int)Enums.blockType.ground)
+                    {
+                        blockGrid[i, j, k] = (int)Enums.blockType.M3_Block1;
+                        ReplaceBlock(i, j, k);
+                    }
+                    else if (blockGrid[i, j, k] == (int)Enums.blockType.M1_Caillou)
+                    {
+                        blockGrid[i, j, k] = (int)Enums.blockType.M3_Caillou;
+                        ReplaceBlock(i, j, k);
+                    }
+                }
+            }
+        }
+    }
+    
+    private void Winter()
+    {
+        volume.profile = volumeProfiles[1];
+        
+        for (int i = 0; i < blockGrid.GetLength(0); i++)
+        {
+            for (int j = 0; j < blockGrid.GetLength(1); j++)
+            {
+                for (int k = 0; k < blockGrid.GetLength(2); k++)
+                {
+                    if (blockGrid[i, j, k] == (int)Enums.blockType.M3_Block1)
+                    {
+                        blockGrid[i, j, k] = (int)Enums.blockType.M2_Block1;
+                        ReplaceBlock(i, j, k);
+                    }
+                    else if (blockGrid[i, j, k] == (int)Enums.blockType.M3_Caillou)
+                    {
+                        blockGrid[i, j, k] = (int)Enums.blockType.M2_Caillou;
+                        ReplaceBlock(i, j, k);
+                    }
+                }
+            }
+        }
+    }
+
+    private void Spring()
+    {
+        volume.profile = volumeProfiles[2];
+        
+        for (int i = 0; i < blockGrid.GetLength(0); i++)
+        {
+            for (int j = 0; j < blockGrid.GetLength(1); j++)
+            {
+                for (int k = 0; k < blockGrid.GetLength(2); k++)
+                {
+                    if (blockGrid[i, j, k] == (int)Enums.blockType.M2_Block1)
+                    {
+                        blockGrid[i, j, k] = (int)Enums.blockType.M1_Block1;
+                        ReplaceBlock(i, j, k);
+                    }
+                    else if (blockGrid[i, j, k] == (int)Enums.blockType.M2_Caillou)
+                    {
+                        blockGrid[i, j, k] = (int)Enums.blockType.M1_Caillou;
+                        ReplaceBlock(i, j, k);
+                    }
+                }
+            }
+        }
+    }
+    
+    private void ReplaceBlock(int i, int j, int k)
+    {
+        var block = GameObject.Find("Block" + i + j + k);
+        Object.Destroy(block);
+        var blockPrefab = Object.Instantiate(prefabs[blockGrid[i, j, k]], new Vector3(i, j, k),
+            Quaternion.identity);
+        blockPrefab.transform.Rotate(90 * Random.Range(0, 4),
+                                            90 * Random.Range(0, 4), 90 * Random.Range(0, 4));
+        blockPrefab.name = "Block" + i + j + k;
+        blockPrefab.transform.parent = parent.transform;
     }
 }

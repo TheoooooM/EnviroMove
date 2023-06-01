@@ -321,6 +321,8 @@ public class Enums
         empty2,
         SM_BorderVfinal_Roof,
         SM_BorderVfinal_Inside,
+        M2_Caillou,
+        M3_Caillou,
     }
 
     public enum MajorCanvas

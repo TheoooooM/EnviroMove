@@ -165,6 +165,11 @@ namespace Archi.Service
         {
             sceneEditor.ChangeCameraAngle();
         }
+        
+        public void SwapSeason()
+        {
+            sceneEditor.SwapSeason();
+        }
         #endregion
     }
 }
