@@ -18,6 +18,7 @@ namespace Levels
         public int[,,] blockVerticalRotationGrid;
         public int[] _blockVerticalRotationEnumerable;
         public int[,,] playerDir;
+        public int season;
         public int[] playerDirEnumerable;
         public int[,] levelGridPosition;
         public string levelName;
@@ -47,7 +48,7 @@ namespace Levels
             playerDir = BlockEnumerable(this.playerDirEnumerable, size);
         }
 
-        public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed, int[,,] blockHorizontalRotationGrid, int[,,] blockVerticalRotationGrid, Vector3[,,] playerDirGrid)
+        public LevelData(Vector3Int size, int[,,] blockGrid, string[] levelBlocksUsed, int[,,] blockHorizontalRotationGrid, int[,,] blockVerticalRotationGrid, Vector3[,,] playerDirGrid, int season)
         {
             blocksUsed = levelBlocksUsed;
             this.blockGrid = blockGrid;
@@ -59,6 +60,7 @@ namespace Levels
             _blockVerticalRotationEnumerable = From3DTo1DArray(this.blockVerticalRotationGrid);
             playerDir = Vector3ToSideArray(playerDirGrid);
             playerDirEnumerable = From3DTo1DArray(playerDir);
+            this.season = season;
         }
 
         public LevelData(bool random)
