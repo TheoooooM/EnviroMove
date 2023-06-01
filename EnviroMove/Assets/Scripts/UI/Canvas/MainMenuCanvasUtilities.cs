@@ -92,6 +92,7 @@ namespace UI.Canvas
         [Header("Player Skin")]
         [SerializeField] private SkinnedMeshRenderer skinRend = null;
         [SerializeField] private Transform playerTrans = null;
+        [SerializeField] private AnimationCurve playerSizeCurve = null;
         [SerializeField] private List<Material> skinMat = new();
         
         [Header("DoTween Information")]
@@ -107,6 +108,7 @@ namespace UI.Canvas
             ResetCreateMenu();
             LaunchAllAnimation();
             UpdatePlayerSkin();
+            InitSkinSize();
         }
 
         #region SetPage
@@ -705,6 +707,15 @@ namespace UI.Canvas
             playerTrans.DOPunchScale(new Vector3(75, 75, 75), popUpAnimationDuration, 1);
         }
 
+        /// <summary>
+        /// Init the size of the skins
+        /// </summary>
+        private void InitSkinSize() {
+            float sizeRatio = Mathf.Clamp(mainMenuTransform.rect.height / 4060f, 0f, 1f);
+            float Playerscale = 700 * playerSizeCurve.Evaluate(sizeRatio);
+            playerTrans.localScale = new Vector3(Playerscale, Playerscale, Playerscale);
+        }
+        
         #endregion ChangeSkin
     }
 }
