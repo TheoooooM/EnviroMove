@@ -37,8 +37,6 @@ public class Compositor : MonoBehaviour {
     }
 
     bool Compose() {
-        PlayerPrefs.DeleteKey("HasMadeTutorial");
-
         CreateServices();
         ResoleDepencencies();
         InitializeServices();

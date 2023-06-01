@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Archi.Service.Interface;
 using DG.Tweening;
 using Levels;
@@ -14,7 +15,9 @@ public class LevelBox : MonoBehaviour
     [Header("Base map information")]
     [SerializeField] private TextMeshProUGUI levelNameTxt = null;
     [SerializeField] private TextMeshProUGUI creatorNameTxt = null;
+    [SerializeField] private Image backgroundImg = null;
     [SerializeField] private Image difficultyImg = null;
+    [SerializeField] private List<Sprite> seasonSprites = null;
 
     [Header("Social level information")]
     [SerializeField] private Image daylyIcon = null;
@@ -33,14 +36,14 @@ public class LevelBox : MonoBehaviour
     /// <param name="levelInfo"></param>
     /// <param name="toolService"></param>
     /// <param name="dataBaseService"></param>
-    public void SetupBox(LevelInfo levelInfo, IToolService toolService, IDataBaseService dataBaseService, MainMenuCanvasUtilities target = null)
-    {
+    public void SetupBox(LevelInfo levelInfo, IToolService toolService, IDataBaseService dataBaseService, MainMenuCanvasUtilities target = null) {
         m_dataBase = dataBaseService;
         m_Tool = toolService;
         info = levelInfo;
 
         levelNameTxt.text = info.levelName;
         creatorNameTxt.text = $"by : {info.creator}";
+        backgroundImg.sprite = seasonSprites[info.season];
         //difficultyImg
         
         //dailyIcon
