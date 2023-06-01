@@ -102,5 +102,10 @@ namespace UI.Canvas
         {
             m_Tool.ChangeCameraAngle();
         }
+        
+        public void SwapSeason()
+        {
+            m_Tool.SwapSeason();
+        }
     }
 }

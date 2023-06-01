@@ -31,5 +31,7 @@ namespace Archi.Service.Interface
         void ChangeCameraAngle();
         
         void SliderCamera(float value);
+        
+        void SwapSeason();
     }
 }

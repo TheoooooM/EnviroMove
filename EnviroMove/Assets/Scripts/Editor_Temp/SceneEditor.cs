@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 #if UNITY_STANDALONE && !UNITY_EDITOR
@@ -57,6 +58,8 @@ public class SceneEditor
     private Vector2Int firstBlockPosition;
     private Vector2Int[,] gridPositions;
     private readonly int tailleBridge = 4;
+    
+    private int season = 0;
 
     private enum EditorMode
     {
@@ -79,11 +82,15 @@ public class SceneEditor
     private List<int> twoPlusOnePrefabIndex = new() { 29, 30, 48, 49, 87, 88 };
     private List<int> twoByTwoPrefabIndex = new() { 51, 89 };
 
+    private List<VolumeProfile> volumeProfiles;
+    private Volume volume;
+
     #endregion
 
     public void Start()
     {
         size = defaultSize;
+        season = 2;
         new Blocks();
         // blockGrid = new List<List<List<int>>>();
         blocksUsed = new List<string>();
@@ -98,6 +105,11 @@ public class SceneEditor
             var block = Addressables.LoadAssetAsync<GameObject>(blockAddress.Value).WaitForCompletion();
             prefabs[(int)blockAddress.Key] = block;
         }
+        volume = Camera.main.transform.GetChild(0).GetComponent<Volume>();
+        volumeProfiles = new List<VolumeProfile>();
+        volumeProfiles.Add(Addressables.LoadAssetAsync<VolumeProfile>("PP_Automne").WaitForCompletion());
+        volumeProfiles.Add(Addressables.LoadAssetAsync<VolumeProfile>("PP_Hiver").WaitForCompletion());
+        volumeProfiles.Add(Addressables.LoadAssetAsync<VolumeProfile>("PP_Printemps").WaitForCompletion());
 
         _camera = Camera.main;
         parent = new GameObject();
@@ -166,6 +178,7 @@ public class SceneEditor
                 3 => Enums.Side.left,
                 _ => blockVerticalRotationGrid[posX, 0, posZ]
             };
+            block.transform.name = "Block" + x + "" + 0 + "" + z;
         }
 
         firstBlockPosition = new Vector2Int(posX, posZ);
@@ -1251,6 +1264,7 @@ public class SceneEditor
         }
 
         block.transform.parent = parent.transform;
+        block.name = "Block" + x + y + z;
         if (directionGrid[x, y, z] != Enums.Side.none)
         {
             var directionBlock = Object.Instantiate(prefabs[11], new Vector3(x, y, z), Quaternion.identity);
@@ -1695,5 +1709,133 @@ public class SceneEditor
     public void ChangeMoveCamera()
     {
         isMoveCamera = !isMoveCamera;
+    }
+    
+    public void SwapSeason()
+    {
+        if (season == 2)
+        {
+            season = 0;
+        }
+        else
+        {
+            season++;
+        }
+        
+        switch (season)
+        {
+            case 0:
+                Autumn();
+                break;
+            case 1:
+                Winter();
+                break;
+            case 2:
+                Spring();
+                break;
+        }
+    }
+
+    private void Autumn()
+    {
+        volume.profile = volumeProfiles[0];
+        
+        for (int i = 0; i < blockGrid.GetLength(0); i++)
+        {
+            for (int j = 0; j < blockGrid.GetLength(1); j++)
+            {
+                for (int k = 0; k < blockGrid.GetLength(2); k++)
+                {
+                    if (blockGrid[i, j, k] == (int)Enums.blockType.M1_Block1 || blockGrid[i, j, k] == (int)Enums.blockType.ground)
+                    {
+                        blockGrid[i, j, k] = (int)Enums.blockType.M3_Block1;
+                        ReplaceBlock(i, j, k);
+                    }
+                    else if (blockGrid[i, j, k] == (int)Enums.blockType.M1_Caillou)
+                    {
+                        blockGrid[i, j, k] = (int)Enums.blockType.M3_Caillou;
+                        ReplaceBlock(i, j, k);
+                    }
+                }
+            }
+        }
+    }
+
+    
+
+    private void Winter()
+    {
+        volume.profile = volumeProfiles[1];
+        
+        for (int i = 0; i < blockGrid.GetLength(0); i++)
+        {
+            for (int j = 0; j < blockGrid.GetLength(1); j++)
+            {
+                for (int k = 0; k < blockGrid.GetLength(2); k++)
+                {
+                    if (blockGrid[i, j, k] == (int)Enums.blockType.M3_Block1)
+                    {
+                        blockGrid[i, j, k] = (int)Enums.blockType.M2_Block1;
+                        ReplaceBlock(i, j, k);
+                    }
+                    else if (blockGrid[i, j, k] == (int)Enums.blockType.M3_Caillou)
+                    {
+                        blockGrid[i, j, k] = (int)Enums.blockType.M2_Caillou;
+                        ReplaceBlock(i, j, k);
+                    }
+                }
+            }
+        }
+    }
+
+    private void Spring()
+    {
+        volume.profile = volumeProfiles[2];
+        
+        for (int i = 0; i < blockGrid.GetLength(0); i++)
+        {
+            for (int j = 0; j < blockGrid.GetLength(1); j++)
+            {
+                for (int k = 0; k < blockGrid.GetLength(2); k++)
+                {
+                    if (blockGrid[i, j, k] == (int)Enums.blockType.M2_Block1)
+                    {
+                        blockGrid[i, j, k] = (int)Enums.blockType.M1_Block1;
+                        ReplaceBlock(i, j, k);
+                    }
+                    else if (blockGrid[i, j, k] == (int)Enums.blockType.M2_Caillou)
+                    {
+                        blockGrid[i, j, k] = (int)Enums.blockType.M1_Caillou;
+                        ReplaceBlock(i, j, k);
+                    }
+                }
+            }
+        }
+    }
+    
+    private void ReplaceBlock(int i, int j, int k)
+    {
+        var block = GameObject.Find("Block" + i + j + k);
+        Object.Destroy(block);
+        var blockPrefab = Object.Instantiate(prefabs[blockGrid[i, j, k]], new Vector3(i, j, k),
+            Quaternion.identity);
+        blockPrefab.name = "Block" + i + j + k;
+        blockPrefab.transform.parent = parent.transform;
+        blockPrefab.transform.Rotate(blockVerticalRotationGrid[i, j, k] switch
+            {
+                Enums.Side.forward => 0,
+                Enums.Side.right => 90,
+                Enums.Side.back => 180,
+                Enums.Side.left => 270,
+                _ => 0
+            }, 0
+            , blockHorizontalRotationGrid[i, j, k] switch
+            {
+                Enums.Side.forward => 0,
+                Enums.Side.right => 90,
+                Enums.Side.back => 180,
+                Enums.Side.left => 270,
+                _ => 0
+            });
     }
 }
