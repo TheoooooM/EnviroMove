@@ -83,8 +83,8 @@ namespace Archi.Service
             throw new System.NotImplementedException();
         }
 
-        public void GenerateLoadingScreen(string loadingName, float loadingMaxValue)
-        {
+        public void GenerateLoadingScreen(string loadingName, float loadingMaxValue) {
+            if (loadingScreen == null) return;
             loadingScreen.gameObject.SetActive(true);
             loadingScreen.SetLoader(loadingName, loadingMaxValue);
         }
