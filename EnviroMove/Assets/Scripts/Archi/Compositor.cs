@@ -7,15 +7,13 @@ using Archi.Service.Interface;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Attributes;
-using Unity.VisualScripting;
+using Levels;
+using UI;
 using UnityEngine.AddressableAssets;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
 
-public class Compositor : MonoBehaviour
-{
-
+public class Compositor : MonoBehaviour {
+    [SerializeField] private LevelSO tutorial = null;
     protected struct DependenceInfos
     {
         public object obj;
@@ -24,7 +22,8 @@ public class Compositor : MonoBehaviour
 
     protected Dictionary<Type, IService> servicesDictionnary = new();
     protected Dictionary<Type, List<DependenceInfos>> fieldDependenciesDictionnary = new();
-
+    private LevelData dataToTest;
+    
     private void Awake()
     {
        InitCompositor().Forget();
@@ -37,14 +36,13 @@ public class Compositor : MonoBehaviour
         if(!Compose()) Debug.LogError("Can't Compose");
     }
 
-    bool Compose()
-    {
-        //Debug.Log("Compose");
+    bool Compose() {
+        PlayerPrefs.DeleteKey("HasMadeTutorial");
+
         CreateServices();
         ResoleDepencencies();
         InitializeServices();
         SceneManager.LoadScene("MainMenu");
-        
         return true;
     }
 
