@@ -321,13 +321,13 @@ namespace Levels
             }
         }
 
-      // public void SetAt(IBoardable boardable, Vector3Int position)
-      // {
-      //    if (position.x >= _board.GetLength(0)) return;
-      //    if (position.y >= _board.GetLength(1)) return;
-      //    if (position.z >= _board.GetLength(2)) return;
-      //    _board[position.x, position.y, position.z] = boardable;
-      // }
+      public void SetAt(IBoardable boardable, Vector3Int position)
+      {
+         if (position.x >= _board.GetLength(0)) return;
+         if (position.y >= _board.GetLength(1)) return;
+         if (position.z >= _board.GetLength(2)) return;
+         _board[position.x, position.y, position.z] = boardable;
+      }
 
         void SetBoardable(IBoardable boardable, Vector3Int boardPos, Enums.Side side = Enums.Side.none)
         {
@@ -359,10 +359,10 @@ namespace Levels
             _board[position.x, position.y, position.z].SetPosition(position);
         }
 
-        public void SetAt(IBoardable boardable, Vector3Int position)
-        {
-            _board[position.x, position.y, position.z] = boardable;
-        }
+        // public void SetAt(IBoardable boardable, Vector3Int position)
+        // {
+        //     _board[position.x, position.y, position.z] = boardable;
+        // }
         
         public Vector3Int GetPosition(IBoardable boardable)
         {
