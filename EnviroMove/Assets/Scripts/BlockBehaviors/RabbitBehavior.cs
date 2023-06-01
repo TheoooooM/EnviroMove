@@ -12,18 +12,20 @@ namespace BlockBehaviors
         private Vector3Int secondPos;
 
         [SerializeField] private GameObject rabbitMesh;
+        [SerializeField] private Collider rabbitCollider;
         [Space]
         [SerializeField] private GameObject hole1;
         [SerializeField] private GameObject hole2;
-        [Space] [SerializeField] private GameObject vfxDebug;
-        [Space] [SerializeField] private GameObject vfxDig;
+        [Space] 
+        [SerializeField] private GameObject vfxDebug;
+         [SerializeField] private GameObject vfxDig;
 
         private Dictionary<IBoardable, Vector3Int> boardableEnters = new();
 
         private void Start()
         {
             vfxDebug.SetActive(false);
-            vfxDig.SetActive(false);
+            //vfxDig.SetActive(false);
         }
 
         public override void Select()
@@ -46,18 +48,23 @@ namespace BlockBehaviors
                 vfxDig.SetActive(true);
                 _animator.SetTrigger("Dig");
                 tempPos = pos + Vector3Int.up;
+                CreateTunnel(tempPos);
+                
             }
         }
 
         public void CreateTunnel(Vector3Int tunnelPos)
         {
-            //vfxDig.SetActive(false);
-            boardMaster.SetAt(this, tunnelPos);
+            hole2.transform.position = boardMaster.GetWorldPos(tunnelPos) + hole2.transform.localPosition;
             hole1.SetActive(true);
             hole2.SetActive(true);
-            
+            //vfxDig.SetActive(false);
+            rabbitCollider.enabled = false;
+            boardMaster.SetAt(this, tunnelPos);
+
+
             secondPos = tunnelPos;
-            hole2.transform.position = boardMaster.GetWorldPos(tunnelPos) + hole2.transform.localPosition;
+
             rabbitMesh.SetActive(false);
             isInteractable = false;
             tunnelSet = true;

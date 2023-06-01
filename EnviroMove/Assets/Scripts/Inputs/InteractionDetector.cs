@@ -10,7 +10,7 @@ namespace Inputs
         
         private IInteractable selectEntity;
 
-        public bool isActive;
+        public bool isActive =true;
 
         private void Awake()
         {

@@ -134,8 +134,8 @@ namespace Levels
 
       private void StartBoard(Vector2 side)
       {
-         InteractionDetector.Instance.isActive = true;
          Inputs.Inputs.Instance.OnTouch -= StartBoard;
+         InteractionDetector.Instance.isActive = true;
          _player.GetComponent<Player>().Move();
       }
 
@@ -234,6 +234,9 @@ namespace Levels
 
       public void SetAt(IBoardable boardable, Vector3Int position)
       {
+         if (position.x >= _board.GetLength(0)) return;
+         if (position.y >= _board.GetLength(1)) return;
+         if (position.z >= _board.GetLength(2)) return;
          _board[position.x, position.y, position.z] = boardable;
       }
 

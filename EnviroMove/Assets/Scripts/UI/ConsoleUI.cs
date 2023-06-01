@@ -44,19 +44,19 @@ public class ConsoleUI : MonoBehaviour
         switch (type)
         {
             case LogType.Assert:
-                logString = "<color=red>" + logString + "</color>";
+                logString = "<color=red>" + logString +"\n" + stackTrace +  "</color>";
                 break;
             case LogType.Log:
-                logString = "<color=white>" + logString + "</color>";
+                logString = "<color=white>" + logString +"\n" + stackTrace +  "</color>";
                 break;
             case LogType.Warning:
-                logString = "<color=yellow>" + logString + "</color>";
+                logString = "<color=yellow>" + logString +"\n" + stackTrace +  "</color>";
                 break;
             case LogType.Exception:
-                logString = "<color=red>" + logString + "</color>";
+                logString = "<color=red>" + logString +"\n" + stackTrace +  "</color>";
                 break;
             case LogType.Error:
-                logString = "<color=red>" + logString + "</color>";
+                logString = "<color=red>" + logString + "\n" + stackTrace +  "</color>";
                 break;
         }
         myLog = myLog + "\n" + logString;

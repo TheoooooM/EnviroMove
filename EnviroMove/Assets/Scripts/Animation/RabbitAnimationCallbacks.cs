@@ -9,7 +9,7 @@ namespace Animation
         
         public void Dig()
         {
-            _rabbit.CreateTunnel(_rabbit.tempPos);
+            //_rabbit.CreateTunnel(_rabbit.tempPos);
         }
     }
 }
