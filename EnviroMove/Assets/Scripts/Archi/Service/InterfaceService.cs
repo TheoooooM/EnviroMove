@@ -5,6 +5,7 @@ using Attributes;
 using UI;
 using UI.Canvas;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using static AdresseHelper;
 using Object = UnityEngine.Object;
@@ -83,10 +84,10 @@ namespace Archi.Service
             throw new System.NotImplementedException();
         }
 
-        public void GenerateLoadingScreen(string loadingName, float loadingMaxValue) {
+        public void GenerateLoadingScreen(string loadingName, float loadingMaxValue, UnityAction action) {
             if (loadingScreen == null) return;
             loadingScreen.gameObject.SetActive(true);
-            loadingScreen.SetLoader(loadingName, loadingMaxValue);
+            loadingScreen.SetLoader(loadingName, loadingMaxValue, action);
         }
 
         public void UpdateLoadingScreen(float progressValue)
@@ -94,9 +95,8 @@ namespace Archi.Service
             throw new System.NotImplementedException();
         }
 
-        public void HideLoadingScreen()
-        {
-            loadingScreen.gameObject.SetActive(false);
+        public void HideLoadingScreen() {
+            loadingScreen.UnLoadLoadingScreen();
         }
 
         /// <summary>
