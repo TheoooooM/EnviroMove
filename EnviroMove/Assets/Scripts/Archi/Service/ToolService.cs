@@ -184,6 +184,11 @@ namespace Archi.Service
         {
             sceneEditor.PlaceCaillou();
         }
+        
+        public void PlaceBreakable()
+        {
+            sceneEditor.PlaceBreakable();
+        }
         #endregion
     }
 }

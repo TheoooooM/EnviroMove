@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8016364444471623819}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.074, z: 0}
+  m_LocalPosition: {x: 0, y: 0.795, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4886,6 +4886,8 @@ GameObject:
   - component: {fileID: 27062755424692387}
   - component: {fileID: 1889561683744174123}
   - component: {fileID: 9128012202155133416}
+  - component: {fileID: 2807415547914346013}
+  - component: {fileID: 8980585855765353761}
   m_Layer: 0
   m_Name: P_PumpkinBounce
   m_TagString: Untagged
@@ -4901,7 +4903,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8177268917446376139}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.36, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9770,6 +9772,34 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &2807415547914346013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8177268917446376139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a2023647ffd45f8a6e9dfc08d2d8581, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tags: 
+  moveSpeed: 1
+  cooldown: 1
+--- !u!65 &8980585855765353761
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8177268917446376139}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.4442799, y: 1.2543678, z: 1.4942799}
+  m_Center: {x: 0, y: 0.17163189, z: 0}
 --- !u!1001 &8334357724880240085
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9805,7 +9835,7 @@ PrefabInstance:
     - target: {fileID: 286724624280598899, guid: 164e42e5602b2af408722213cc652b02,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.36
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 286724624280598899, guid: 164e42e5602b2af408722213cc652b02,
         type: 3}

@@ -323,6 +323,8 @@ public class Enums
         SM_BorderVfinal_Inside,
         M2_Caillou,
         M3_Caillou,
+        P_EGGbounce,
+        P_PumpkinBounce,
     }
 
     public enum MajorCanvas

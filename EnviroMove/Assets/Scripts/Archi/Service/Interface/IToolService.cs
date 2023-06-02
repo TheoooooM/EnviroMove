@@ -37,5 +37,7 @@ namespace Archi.Service.Interface
         void PlaceGrass();
         
         void PlaceCaillou();
+        
+        void PlaceBreakable();
     }
 }
