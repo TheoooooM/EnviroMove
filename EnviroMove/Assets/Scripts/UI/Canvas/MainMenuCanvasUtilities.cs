@@ -648,7 +648,7 @@ namespace UI.Canvas
             m_thisInterface.GenerateLoadingScreen("oui", 3, () => {
                 SceneManager.sceneLoaded += DrawRoadMap;
                 ChangeScene("RoadMap");
-            });*/
+            });
             
             isLevelSelectionOpen = open;
             if(open) playerTrans.gameObject.SetActive(false);
