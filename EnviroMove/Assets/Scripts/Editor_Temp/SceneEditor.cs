@@ -665,7 +665,7 @@ public class SceneEditor
     {
         if (newground == null) return null;
         var newPanelStart = Object.Instantiate(prefabs[13], posOfnewPanelStart, Quaternion.identity);
-        blockGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = 13;
+        // blockGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = 13;
         newPanelStart.transform.parent = parent.transform;
         newPanelStart.transform.Rotate(0, rotation, 0);
         var newGoGridPos = newGo.transform.position;
@@ -678,6 +678,8 @@ public class SceneEditor
             _ => blockHorizontalRotationGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z]
         };
         newGo.transform.Rotate(0, rotation, 0);
+        directionGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z] = blockHorizontalRotationGrid
+            [(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z];
         blockHorizontalRotationGrid
             [(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = rotation switch
         {
