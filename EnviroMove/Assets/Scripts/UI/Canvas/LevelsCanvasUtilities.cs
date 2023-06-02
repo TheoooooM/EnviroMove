@@ -42,8 +42,6 @@ namespace UI.Canvas
         {
             m_Level.LoadLevel(dataToTest);
             SceneManager.sceneLoaded -= AsyncTestLevel;
-            
         }
-
     }
 }
