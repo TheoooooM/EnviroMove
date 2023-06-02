@@ -78,7 +78,7 @@ public class SceneEditor
     public float cameraSpeed = 0.5f;
 
     private List<int> twoByOnePrefabIndex = new() { 24, 26, 27, 28, 43, 46, 47, 81, 82, 84, 85, 86 };
-    private List<int> threeByOnePrefabIndex = new() { 25, 95 };
+    private List<int> threeByOnePrefabIndex = new() { 25 };
     private List<int> twoPlusOnePrefabIndex = new() { 29, 30, 48, 49, 87, 88 };
     private List<int> twoByTwoPrefabIndex = new() { 51, 89 };
 
