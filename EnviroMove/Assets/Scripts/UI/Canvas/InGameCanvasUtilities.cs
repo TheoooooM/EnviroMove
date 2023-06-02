@@ -9,6 +9,7 @@ namespace UI.Canvas
     {
         [ServiceDependency] private ILevelService m_level;
         [ServiceDependency] private IInterfaceService m_thisInterface;
+        [ServiceDependency] private IToolService m_tool;
         [SerializeField] private GameObject playingCanvas;
         [SerializeField] private GameObject pauseCanvas;
 
@@ -33,7 +34,7 @@ namespace UI.Canvas
         }
 
         public void Pause() {
-            canvasGO.SetMLevel(m_level, m_thisInterface);
+            canvasGO.SetMLevel(m_level, m_thisInterface, m_tool);
             Time.timeScale = 0;
             pauseCanvas.SetActive(true);
             playingCanvas.SetActive(false);
