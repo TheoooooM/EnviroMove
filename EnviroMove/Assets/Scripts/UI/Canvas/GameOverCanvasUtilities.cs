@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Text;
 using Archi.Service.Interface;
 using Attributes;
 using DG.Tweening;
@@ -19,9 +20,19 @@ namespace UI.Canvas
         [SerializeField] private Button editLevelButton = null;
         [SerializeField] private MenuType menuType = MenuType.GameOver;
         private LevelSO nextLevel = null;
+        private int currentLevelID = 0;
         
         public override void Init() {
             nextLevel = m_thisInterface.GetNextLevelSO();
+            currentLevelID = m_thisInterface.GetCurrentLevelID();
+            StringBuilder levelFinished = new StringBuilder(PlayerPrefs.GetString("LevelFinish", "000000000000000"));
+            if (menuType == MenuType.Win) {
+                if (levelFinished[currentLevelID] == '0') PlayerPrefs.SetInt("GoldReward", PlayerPrefs.GetInt("GoldReward", 0) + 300);
+                else PlayerPrefs.SetInt("GoldReward", PlayerPrefs.GetInt("GoldReward", 0) + 100);
+                levelFinished[currentLevelID] = '1';
+                PlayerPrefs.SetString("LevelFinish", levelFinished.ToString());
+            }
+            
             nextLevelButton.gameObject.SetActive(nextLevel != null);
             editLevelButton.gameObject.SetActive(m_thisInterface.GetTargetPage() == PageDirection.Create);
             // editLevelButton.gameObject.SetActive(true);
@@ -56,7 +67,7 @@ namespace UI.Canvas
         /// </summary>
         public void LoadNextLevel() {
             Time.timeScale = 1;
-            m_thisInterface.SetNextLevelSO(nextLevel.Nextlevel);
+            m_thisInterface.SetNextLevelSO(nextLevel.Nextlevel, nextLevel.Id);
             dataTemp = (LevelData)nextLevel.LevelData;
             m_thisInterface.GenerateLoadingScreen("Load Level", 1, () => {
                 SceneManager.sceneLoaded += AsyncTestLevel;

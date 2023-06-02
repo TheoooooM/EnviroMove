@@ -62,6 +62,8 @@ namespace UI.Canvas
         [SerializeField] private CanvasGroup rewardGroup = null;
         [SerializeField] private Image rewardImg = null;
         [SerializeField] private TextMeshProUGUI rewardTxt = null;
+        [SerializeField] private List<Sprite> goldRewardSprite = new();
+        [SerializeField] private TextMeshProUGUI goldTxt = null;
         public bool isInReward = false;
         private int stageReward = 0;
 
@@ -121,8 +123,18 @@ namespace UI.Canvas
             LaunchAllAnimation();
             UpdatePlayerSkin();
             InitSkinSize();
-        }
 
+            if (PlayerPrefs.GetInt("GoldReward", 0) > 0) {
+                StartCoroutine(WaitForReward());
+            }
+        }
+        
+        private IEnumerator WaitForReward() {
+            yield return new WaitForSeconds(1.5f);
+            GetRewards(RewardType.Gold, $"{PlayerPrefs.GetInt("GoldReward")} golds", PlayerPrefs.GetInt("GoldReward"));
+            PlayerPrefs.SetInt("GoldReward", 0);
+        }
+        
         #region SetPage
         /// <summary>
         /// Initialize the position of the player based on the last position while the game was open
@@ -280,6 +292,8 @@ namespace UI.Canvas
             MoveCurrentPageWithInput();
             ChangeBottomBarButtonSize();
             UpdateTimeOffers();
+            
+            goldTxt.text = PlayerPrefs.GetInt("Gold", 0).ToString();
             createMenuTransform.localPosition = new Vector3(0, -mainMenuTransform.sizeDelta.y, 0);
         }
 
@@ -507,7 +521,7 @@ namespace UI.Canvas
         }
         public void LoadLevelData(LevelSO data) {
             UnLoad3DWorld();
-            m_thisInterface.SetNextLevelSO(data.Nextlevel);
+            m_thisInterface.SetNextLevelSO(data.Nextlevel, data.Id);
             dataToTest = (LevelData)data.LevelData;
             m_thisInterface.GenerateLoadingScreen("Load Level", 1, () => {
                 SceneManager.sceneLoaded += AsyncTestLevel;
@@ -525,13 +539,35 @@ namespace UI.Canvas
         /// <summary>
         /// Open the reward panel and show the reward on screen
         /// </summary>
-        public void GetRewards(Sprite sprite, string rewardName) {
+        public void GetRewards(RewardType type, string rewardName, int rewardID = 0) {
             Sequence rewardSequence = DOTween.Sequence();
             rewardGroup.gameObject.SetActive(true);
 
             rewardSequence.Append(rewardGroup.DOFade(1, popUpAnimationDuration).OnComplete(() => stageReward = 1));
             rewardSequence.AppendInterval(popUpAnimationDuration);
-            rewardImg.sprite = sprite;
+
+            switch (type) {
+                case RewardType.Gold:
+                    rewardImg.sprite =  rewardID switch {
+                        400 => goldRewardSprite[0],
+                        1300 => goldRewardSprite[1],
+                        6600 => goldRewardSprite[2],
+                        14000 => goldRewardSprite[3],
+                        30000 => goldRewardSprite[4],
+                        62000 => goldRewardSprite[5],
+                        _ => goldRewardSprite[3]
+                    };
+                    PlayerPrefs.SetInt("Gold", PlayerPrefs.GetInt("Gold", 0) + rewardID);
+                    break;
+                
+                case RewardType.Skin:
+                    //rewardImg.sprite = rewardSprite[rewardID];
+                    break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+
             rewardTxt.text = rewardName;
             rewardSequence.Append(rewardImg.rectTransform.DOScale(1, popUpAnimationDuration).SetEase(Ease.OutBack).OnComplete(() => stageReward = 2));
             rewardSequence.Append(rewardTxt.rectTransform.DOScale(1, popUpAnimationDuration).SetEase(Ease.OutBack).OnComplete(() => stageReward = 3));
@@ -760,4 +796,8 @@ public enum MovementDirection {
 
 public enum PageDirection {
     Shop, Home, Community, Search, LevelSelection_Spring, LevelSelection_Autumn, LevelSelection_Winter, Create
+}
+
+public enum RewardType {
+    Gold, Skin
 }
