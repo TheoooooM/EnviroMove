@@ -7,4 +7,7 @@ public class LevelSO : ScriptableObject {
 
     [SerializeField] private LevelSO nextLevel = null;
     public LevelSO Nextlevel => nextLevel;
+
+    [SerializeField] private int id = 0;
+    public int Id => id;
 }
