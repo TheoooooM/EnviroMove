@@ -29,6 +29,7 @@ namespace Archi.Service
         }
 
         public Level LoadLevel(LevelData data, GameObject levelContainer = null) {
+            Inputs.Inputs.Instance.enabled = false;
             m_Interface.DrawCanvas(Enums.MajorCanvas.inGame);
             Level level;
             if (levelContainer) level = levelContainer.AddComponent<Level>();
@@ -41,6 +42,7 @@ namespace Archi.Service
             level.levelData = data;
             level.GenerateLevel(data);
             currentDataLevel = data;
+            Inputs.Inputs.Instance.enabled = true;
             return level;
         }
 
