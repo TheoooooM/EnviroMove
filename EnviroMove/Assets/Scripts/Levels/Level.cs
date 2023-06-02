@@ -32,7 +32,7 @@ namespace Levels
         private Vector3Int _destinationPos;
 
         private GameObject _player;
-        
+
         private List<VolumeProfile> volumeProfiles;
         private Volume volume;
 
@@ -61,6 +61,7 @@ namespace Levels
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             _blocksUsed = new();
 
             _board = new IBoardable[data.size.x, data.size.y, data.size.z];
@@ -103,6 +104,29 @@ namespace Levels
             {
                 Enums.blockType type = (Enums.blockType)index;
                 if (type is Enums.blockType.playerEnd or Enums.blockType.empty or Enums.blockType.panelEnd) continue;
+                if (type is Enums.blockType.M1_Block1 or
+                    Enums.blockType.M2_Block1 or
+                    Enums.blockType.M3_Block1 or
+                    Enums.blockType.ground)
+                    type = data.season switch
+                    {
+                        2 => Enums.blockType.M1_Block1,
+                        1 => Enums.blockType.M2_Block1,
+                        0 => Enums.blockType.M3_Block1,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                if (type is Enums.blockType.M1_Caillou or
+                    Enums.blockType.M2_Caillou or
+                    Enums.blockType.M3_Caillou)
+                    type = data.season switch
+                    {
+                        2 => Enums.blockType.M1_Caillou,
+                        1 => Enums.blockType.M2_Caillou,
+                        0 => Enums.blockType.M3_Caillou,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                Debug.Log($"type: {type}");
+
                 string key = Blocks.BlockType[type];
                 if (type == Enums.blockType.playerStart) key = "Player";
                 if (!_blocksUsed.ContainsKey(index))
@@ -153,7 +177,9 @@ namespace Levels
                         {
                             case > 97 and <= 186:
                             {
-                                currentGo = Instantiate(_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]], transform.position + currentPos, Quaternion.identity);
+                                currentGo = Instantiate(
+                                    _blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]],
+                                    transform.position + currentPos, Quaternion.identity);
                                 var prefabIndex = data.blockGrid[currentPos.x, currentPos.y, currentPos.z];
                                 switch (prefabIndex)
                                 {
@@ -193,7 +219,8 @@ namespace Levels
                                         currentGo.transform.position += new Vector3(-.5f, -0.5f, -.5f);
                                         break;
                                     //bottom side
-                                    case >= (int)Enums.blockType.InsideBottom1 and <= (int)Enums.blockType.InsideBottom6:
+                                    case >= (int)Enums.blockType.InsideBottom1
+                                        and <= (int)Enums.blockType.InsideBottom6:
                                         currentGo.transform.Rotate(-90, 0, 90);
                                         currentGo.transform.position += new Vector3(.5f, -0.5f, .5f);
                                         break;
@@ -201,7 +228,8 @@ namespace Levels
 
                                 break;
                             }
-                            case (int)Enums.blockType.M1_Block1 or (int)Enums.blockType.ground or (int)Enums.blockType.M2_Block1 or (int)Enums.blockType.M3_Block1:
+                            case (int)Enums.blockType.M1_Block1 or (int)Enums.blockType.ground
+                                or (int)Enums.blockType.M2_Block1 or (int)Enums.blockType.M3_Block1:
                                 currentGo = Instantiate(
                                     _blocksUsed[data.season switch
                                     {
@@ -209,19 +237,6 @@ namespace Levels
                                         2 => (int)Enums.blockType.M2_Block1,
                                         1 => (int)Enums.blockType.M1_Block1,
                                         _ => (int)Enums.blockType.M3_Block1
-                                    }],
-                                    transform.position + currentPos, quaternion.identity, transform);
-                                currentGo.transform.Rotate(90 * UnityEngine.Random.Range(0, 4),
-                                    90 * UnityEngine.Random.Range(0, 4), 90 * UnityEngine.Random.Range(0, 4));
-                                break;
-                            case (int)Enums.blockType.M1_Caillou or (int)Enums.blockType.M2_Caillou or (int)Enums.blockType.M3_Caillou:
-                                currentGo = Instantiate(
-                                    _blocksUsed[data.season switch
-                                    {
-                                        0 => (int)Enums.blockType.M3_Caillou,
-                                        2 => (int)Enums.blockType.M2_Caillou,
-                                        1 => (int)Enums.blockType.M1_Caillou,
-                                        _ => (int)Enums.blockType.M3_Caillou
                                     }],
                                     transform.position + currentPos, quaternion.identity, transform);
                                 currentGo.transform.Rotate(90 * UnityEngine.Random.Range(0, 4),
