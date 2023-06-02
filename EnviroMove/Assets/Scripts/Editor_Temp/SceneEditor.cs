@@ -78,7 +78,7 @@ public class SceneEditor
     public float cameraSpeed = 0.5f;
 
     private List<int> twoByOnePrefabIndex = new() { 24, 26, 27, 28, 43, 46, 47, 81, 82, 84, 85, 86 };
-    private List<int> threeByOnePrefabIndex = new() { 25, 95 };
+    private List<int> threeByOnePrefabIndex = new() { 25 };
     private List<int> twoPlusOnePrefabIndex = new() { 29, 30, 48, 49, 87, 88 };
     private List<int> twoByTwoPrefabIndex = new() { 51, 89 };
 
@@ -1893,10 +1893,6 @@ public class SceneEditor
                             blockGrid[i, j, k] = (int)Enums.blockType.M3_Block1;
                             ReplaceBlock(i, j, k, true);
                             break;
-                        case (int)Enums.blockType.M1_Caillou:
-                            blockGrid[i, j, k] = (int)Enums.blockType.M3_Caillou;
-                            ReplaceBlock(i, j, k, true);
-                            break;
                         case (int)Enums.blockType.P_EGGbounce:
                             blockGrid[i, j, k] = (int)Enums.blockType.P_PumpkinBounce;
                             ReplaceBlock(i, j, k, false);
@@ -1923,10 +1919,6 @@ public class SceneEditor
                             blockGrid[i, j, k] = (int)Enums.blockType.M2_Block1;
                             ReplaceBlock(i, j, k, true);
                             break;
-                        case (int)Enums.blockType.M3_Caillou:
-                            blockGrid[i, j, k] = (int)Enums.blockType.M2_Caillou;
-                            ReplaceBlock(i, j, k, true);
-                            break;
                         case (int)Enums.blockType.P_PumpkinBounce:
                             blockGrid[i, j, k] = (int)Enums.blockType.P_EGGbounce;
                             ReplaceBlock(i, j, k, false);
@@ -1950,11 +1942,6 @@ public class SceneEditor
                     if (blockGrid[i, j, k] == (int)Enums.blockType.M2_Block1)
                     {
                         blockGrid[i, j, k] = (int)Enums.blockType.M1_Block1;
-                        ReplaceBlock(i, j, k, true);
-                    }
-                    else if (blockGrid[i, j, k] == (int)Enums.blockType.M2_Caillou)
-                    {
-                        blockGrid[i, j, k] = (int)Enums.blockType.M1_Caillou;
                         ReplaceBlock(i, j, k, true);
                     }
                 }
