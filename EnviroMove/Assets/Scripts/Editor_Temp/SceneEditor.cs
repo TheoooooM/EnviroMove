@@ -172,7 +172,13 @@ public class SceneEditor
                 }
 
                 block.transform.SetParent(parent.transform);
-                blockGrid[x, 0, z] = (int)Enums.blockType.M1_Block1;
+                blockGrid[x, 0, z] = season switch
+                {
+                    0 => (int)Enums.blockType.M3_Block1,
+                    1 => (int)Enums.blockType.M2_Block1,
+                    2 => (int)Enums.blockType.M1_Block1,
+                    _ => blockGrid[x, 0, z]
+                };
                 //random rotation
                 var randomRotation = Random.Range(0, 4);
                 block.transform.Rotate(0, 0, randomRotation * 90);
