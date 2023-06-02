@@ -14,7 +14,8 @@ namespace Archi.Service.Interface
 
         public void SetTargetPage(PageDirection page, float value);
         public PageDirection GetTargetPage();
-        public void SetNextLevelSO(LevelSO nextLevel);
+        public void SetNextLevelSO(LevelSO nextLevel, int currentLevelID);
         public LevelSO GetNextLevelSO();
+        public int GetCurrentLevelID();
     }
 }

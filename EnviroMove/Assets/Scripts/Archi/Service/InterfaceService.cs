@@ -21,6 +21,7 @@ namespace Archi.Service
         [DependeOnService] private IInterfaceService m_interface;
 
         private LevelSO nextLevel = null;
+        private int currentLevelID = 0;
         private PageDirection pageDirection = PageDirection.Home;
         private float pageValue = 0f;
 
@@ -114,15 +115,16 @@ namespace Archi.Service
         /// </summary>
         /// <returns></returns>
         public PageDirection GetTargetPage() => pageDirection;
-
         /// <summary>
         /// Set the next level
         /// </summary>
         /// <param name="nextLevel"></param>
-        public void SetNextLevelSO(LevelSO nextLevel) {
+        public void SetNextLevelSO(LevelSO nextLevel, int currentLevelID) {
             this.nextLevel = nextLevel;
+            this.currentLevelID = currentLevelID;
         }
 
         public LevelSO GetNextLevelSO() => nextLevel;
+        public int GetCurrentLevelID() => currentLevelID;
     }
 }

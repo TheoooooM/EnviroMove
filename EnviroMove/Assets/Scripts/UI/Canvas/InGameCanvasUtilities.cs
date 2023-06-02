@@ -1,5 +1,6 @@
 ﻿using Archi.Service.Interface;
 using Attributes;
+using DG.Tweening;
 using UnityEngine;
 
 namespace UI.Canvas
@@ -14,9 +15,9 @@ namespace UI.Canvas
         [SerializeField] private GameObject pressToStartText;
         [SerializeField] private GameOverCanvasUtilities canvasGO = null;
 
-        private void Start()
-        {
+        private void Start() {
             Inputs.Inputs.Instance.OnTouch += HideStartText;
+            pressToStartText.transform.DOPunchScale(new Vector3(0.1f, 0.1f, 0.1f), 0.5f, 1).SetLoops(-1).SetAutoKill(false);
         }
 
         private void HideStartText(Vector2 side)

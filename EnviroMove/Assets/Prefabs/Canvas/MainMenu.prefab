@@ -14860,8 +14860,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 1700}
+  m_AnchoredPosition: {x: 0, y: -8.094}
+  m_SizeDelta: {x: 0, y: 2516.186}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3710126518819535371
 GameObject:
@@ -18556,6 +18556,14 @@ MonoBehaviour:
   rewardGroup: {fileID: 6018493409787485446}
   rewardImg: {fileID: 5626804577178527874}
   rewardTxt: {fileID: 4558095733579251193}
+  goldRewardSprite:
+  - {fileID: -391992402, guid: 0ab1fdb2c70ea424788a71866b2f4586, type: 3}
+  - {fileID: -1778516295, guid: 5428ba2733b1eaa449c3dbf1b3420736, type: 3}
+  - {fileID: 265061703, guid: 5428ba2733b1eaa449c3dbf1b3420736, type: 3}
+  - {fileID: 1941240582, guid: 5428ba2733b1eaa449c3dbf1b3420736, type: 3}
+  - {fileID: -945042819, guid: 5428ba2733b1eaa449c3dbf1b3420736, type: 3}
+  - {fileID: 859369273, guid: 5428ba2733b1eaa449c3dbf1b3420736, type: 3}
+  goldTxt: {fileID: 3277193630652465289}
   isInReward: 0
   levelSelectionTransform: {fileID: 2589918662474629983}
   seasonViewportTransform: {fileID: 7904738598468778844}
@@ -25005,10 +25013,10 @@ RectTransform:
   m_Father: {fileID: 4055445090548152791}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 250}
-  m_SizeDelta: {x: 1300, y: 500}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 112.5}
+  m_SizeDelta: {x: 0, y: 225}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &308503073088917381
 CanvasRenderer:
@@ -25040,15 +25048,16 @@ MonoBehaviour:
       m_Calls: []
   m_text: XXX GOLDS
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e1a3dc2fe79db4f4c8a76c39b0d685b2, type: 2}
+  m_sharedMaterial: {fileID: -2382364860690013273, guid: e1a3dc2fe79db4f4c8a76c39b0d685b2,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4293261051
+  m_fontColor: {r: 0.9843137, g: 0.9647059, b: 0.8980392, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -25065,8 +25074,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
-  m_fontSizeBase: 150
+  m_fontSize: 200
+  m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -25101,7 +25110,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 100, y: 0, z: 100, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -27066,10 +27075,10 @@ RectTransform:
   m_Father: {fileID: 4055445090548152791}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 800, y: 800}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -925}
+  m_SizeDelta: {x: 850, y: 850}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5620366902072414056
 CanvasRenderer:
@@ -27101,7 +27110,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: de41929475acabe4197a59b917b9e65d, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -28407,12 +28416,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 105
+  m_fontSize: 110
   m_fontSizeBase: 105
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 110
   m_fontStyle: 1
   m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
@@ -28443,7 +28452,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 35, y: 0, z: 35, w: 0}
+  m_margin: {x: 50, y: 0, z: 25, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -29209,10 +29218,10 @@ MonoBehaviour:
       - m_Target: {fileID: 2571987851534749092}
         m_TargetAssemblyTypeName: UI.Canvas.MainMenuCanvasUtilities, Assembly-CSharp
         m_MethodName: GoBuyCurrency
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 7796121803993084404}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.ScrollRect, UnityEngine.UI
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -32101,14 +32110,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4528302, g: 0.37892073, b: 0.2798149, a: 1}
+  m_Color: {r: 0.9137255, g: 0.9137255, b: 0.9137255, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -423716344, guid: 5428ba2733b1eaa449c3dbf1b3420736, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -34620,7 +34629,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 37046996}
+  m_AnchoredPosition: {x: 0, y: 45466130}
   m_SizeDelta: {x: 0, y: 3007}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &3594761718698860756
@@ -35245,6 +35254,16 @@ PrefabInstance:
       propertyPath: menu
       value: 
       objectReference: {fileID: 2571987851534749092}
+    - target: {fileID: 6090692023436437188, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: rewardName
+      value: 14 000 golds
+      objectReference: {fileID: 0}
+    - target: {fileID: 6090692023436437188, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: rewardValue
+      value: 14000
+      objectReference: {fileID: 0}
     - target: {fileID: 6766330569142019165, guid: 46a90b7832ff779419d5dccdd48c3a05,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -35255,6 +35274,12 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9152314924581675986, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1941240582, guid: 5428ba2733b1eaa449c3dbf1b3420736,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46a90b7832ff779419d5dccdd48c3a05, type: 3}
 --- !u!224 &1367790686618367200 stripped
@@ -36281,6 +36306,11 @@ PrefabInstance:
       propertyPath: menu
       value: 
       objectReference: {fileID: 2571987851534749092}
+    - target: {fileID: 6090692023436437188, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: rewardValue
+      value: 1300
+      objectReference: {fileID: 0}
     - target: {fileID: 6766330569142019165, guid: 46a90b7832ff779419d5dccdd48c3a05,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -36291,6 +36321,12 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9152314924581675986, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1778516295, guid: 5428ba2733b1eaa449c3dbf1b3420736,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46a90b7832ff779419d5dccdd48c3a05, type: 3}
 --- !u!224 &734705507730731235 stripped
@@ -36436,6 +36472,16 @@ PrefabInstance:
       propertyPath: menu
       value: 
       objectReference: {fileID: 2571987851534749092}
+    - target: {fileID: 6090692023436437188, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: rewardName
+      value: 30 000 golds
+      objectReference: {fileID: 0}
+    - target: {fileID: 6090692023436437188, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: rewardValue
+      value: 30000
+      objectReference: {fileID: 0}
     - target: {fileID: 6766330569142019165, guid: 46a90b7832ff779419d5dccdd48c3a05,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -36446,6 +36492,12 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9152314924581675986, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -945042819, guid: 5428ba2733b1eaa449c3dbf1b3420736,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46a90b7832ff779419d5dccdd48c3a05, type: 3}
 --- !u!224 &1044507531764702460 stripped
@@ -37742,6 +37794,16 @@ PrefabInstance:
       propertyPath: menu
       value: 
       objectReference: {fileID: 2571987851534749092}
+    - target: {fileID: 6090692023436437188, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: rewardName
+      value: 6600 golds
+      objectReference: {fileID: 0}
+    - target: {fileID: 6090692023436437188, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: rewardValue
+      value: 6600
+      objectReference: {fileID: 0}
     - target: {fileID: 6766330569142019165, guid: 46a90b7832ff779419d5dccdd48c3a05,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -37752,6 +37814,12 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9152314924581675986, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 265061703, guid: 5428ba2733b1eaa449c3dbf1b3420736,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46a90b7832ff779419d5dccdd48c3a05, type: 3}
 --- !u!224 &4001085503287800021 stripped
@@ -38784,6 +38852,16 @@ PrefabInstance:
       propertyPath: menu
       value: 
       objectReference: {fileID: 2571987851534749092}
+    - target: {fileID: 6090692023436437188, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: rewardName
+      value: 400 golds
+      objectReference: {fileID: 0}
+    - target: {fileID: 6090692023436437188, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: rewardValue
+      value: 400
+      objectReference: {fileID: 0}
     - target: {fileID: 6766330569142019165, guid: 46a90b7832ff779419d5dccdd48c3a05,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -39660,6 +39738,16 @@ PrefabInstance:
       propertyPath: menu
       value: 
       objectReference: {fileID: 2571987851534749092}
+    - target: {fileID: 6090692023436437188, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: rewardName
+      value: 62 000 golds
+      objectReference: {fileID: 0}
+    - target: {fileID: 6090692023436437188, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: rewardValue
+      value: 62000
+      objectReference: {fileID: 0}
     - target: {fileID: 6766330569142019165, guid: 46a90b7832ff779419d5dccdd48c3a05,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -39670,6 +39758,12 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9152314924581675986, guid: 46a90b7832ff779419d5dccdd48c3a05,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 859369273, guid: 5428ba2733b1eaa449c3dbf1b3420736,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46a90b7832ff779419d5dccdd48c3a05, type: 3}
 --- !u!224 &6749468628494508880 stripped
