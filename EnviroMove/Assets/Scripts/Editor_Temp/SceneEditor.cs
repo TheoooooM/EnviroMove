@@ -854,8 +854,9 @@ public class SceneEditor
             case "directionBlock":
             {
                 var position2 = hitRay.transform.position;
-                directionGrid[(int)position2.x, (int)position2.y,
+                directionGrid[(int)position2.x, (int)position2.y - 1,
                     (int)position2.z] = Enums.Side.none;
+                Debug.Log("Deleted direction at:" + position2); 
                 Object.Destroy(hitRay.transform.gameObject);
                 return;
             }
@@ -1236,6 +1237,7 @@ public class SceneEditor
             {
                 Debug.Log("Direction block instantiated" + x + y + z);
                 InstantiateDirectionPrefab(x, y, z);
+                Debug.Log("Instantiated direction block at:" + x + y + z);
             }
 
             switch (blockGrid[x, y, z])
