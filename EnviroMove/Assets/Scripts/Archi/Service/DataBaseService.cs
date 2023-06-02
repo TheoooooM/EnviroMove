@@ -179,10 +179,9 @@ namespace Archi.Service
             TextWriter tw = new StreamWriter($"{levelPath}{data.id}.json");
             tw.WriteLine((string)data);
             tw.Close();
-
-            var info = new LevelInfo(levelName, data.id, data.creator, currentLevelPath, Random.Range(0,50), 0, 0, 0, 0, data.season, false,
-                false, Random.Range(0, 100));
-            GenerateInfoLevel(new LevelInfo(levelName, data.id, data.creator, currentLevelPath));
+            
+            GenerateInfoLevel(new LevelInfo(levelName, data.creator, data.id, currentLevelPath, Random.Range(0,50), 0, 0, 0, 0, data.season, false,
+                    false, Random.Range(0, 100)));
         }
 
         void GenerateInfoLevel(LevelInfo info)
