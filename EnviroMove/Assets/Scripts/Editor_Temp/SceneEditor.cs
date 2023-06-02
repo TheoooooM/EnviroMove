@@ -561,9 +561,12 @@ public class SceneEditor
             case 13:
                 var rotation = 0;
                 if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] == 0 ||
-                    position.x % (tileSize.y + tailleBridge) != 0 || position.x % (tileSize.y + tailleBridge) != 5 ||
-                    position.z % (tileSize.y + tailleBridge) != 0 || position.z % (tileSize.y + tailleBridge) != 11)
+                    position.x % (tileSize.x + tailleBridge) != 0 && position.x % (tileSize.x + tailleBridge) != 5 &&
+                    position.z % (tileSize.y + tailleBridge) != 0 && position.z % (tileSize.y + tailleBridge) != 11)
                 {
+                    Debug.Log("Bridge can't be placed here, position.x % (tileSize.x + tailleBridge)" +
+                              position.x % (tileSize.x + tailleBridge) + " position.z % (tileSize.y + tailleBridge)" +
+                              position.z % (tileSize.y + tailleBridge));
                     Object.Destroy(newGo);
                     return true;
                 }
@@ -711,7 +714,7 @@ public class SceneEditor
     {
         switch (position.x % (tileSize.x + tailleBridge))
         {
-            //left x = 0, right = 5, back = 0, forward = 15
+            //left x = 0, right = 5, back = 0, forward = 11
             case 0:
                 newground = Object.Instantiate(prefabs[season switch
                     {
