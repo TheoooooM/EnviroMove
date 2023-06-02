@@ -560,7 +560,9 @@ public class SceneEditor
                 break;
             case 13:
                 var rotation = 0;
-                if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] == 0)
+                if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] == 0 ||
+                    position.x % (tileSize.y + tailleBridge) != 0 || position.x % (tileSize.y + tailleBridge) != 5 ||
+                    position.z % (tileSize.y + tailleBridge) != 0 || position.z % (tileSize.y + tailleBridge) != 11)
                 {
                     Object.Destroy(newGo);
                     return true;
