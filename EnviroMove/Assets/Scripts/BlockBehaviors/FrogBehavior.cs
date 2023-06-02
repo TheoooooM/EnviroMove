@@ -9,6 +9,7 @@ namespace BlockBehaviors
 
         [SerializeField] private GameObject tongue;
         [SerializeField] private float tongueSpeed = 3;
+        [SerializeField] private Animator _animator;
         private Vector3Int tonguePos;
         private basicDelegate onTongueMoveFinish;
 
@@ -25,6 +26,7 @@ namespace BlockBehaviors
                 onTongueMoveFinish += Grab;
                 tongue.SetActive(true);
                 StartCoroutine(Cooldown());
+                _animator.SetTrigger("Grab");
                 Grab();
             }
             
@@ -78,12 +80,13 @@ namespace BlockBehaviors
 
         private void ResetTongue()
         {
+            onTongueMoveFinish -= ResetTongue;
             sideBoardPosition = Vector3Int.zero;
+            _animator.SetTrigger("Withdraw");
             sideSet = false;
             isInteractable = true;
             tonguePos = boardPos;
             tongue.SetActive(false);
-            onTongueMoveFinish -= ResetTongue;
         }
 
 
