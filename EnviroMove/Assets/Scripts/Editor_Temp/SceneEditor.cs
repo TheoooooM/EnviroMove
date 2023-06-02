@@ -142,9 +142,7 @@ public class SceneEditor
     private void PlaceDefaultGround()
     {
         var posX = (tileSize.x + tailleBridge) * (size.x / (tileSize.x + tailleBridge) / 2);
-        Debug.Log(posX);
         var posZ = (tileSize.y + tailleBridge) * (size.z / (tileSize.y + tailleBridge) / 2);
-        Debug.Log(posZ);
         MakePlatform(posX, posZ);
 
         blocksUsed.Add("M1_Block1");
@@ -414,7 +412,7 @@ public class SceneEditor
 
     private void StoreBlockData(Vector3 position)
     {
-        if (selectedPrefabIndex == 11) return;
+        if (selectedPrefabIndex == (int)Enums.blockType.directionBlock) return;
         //if the prefab is in the twoByTwo list, add one block to the right and one block to the bottom and one block to the bottom right
         if (twoByTwoPrefabIndex.Contains(selectedPrefabIndex))
         {
@@ -554,14 +552,19 @@ public class SceneEditor
                 };
                 newGo.name = "Block" + position.x + position.y + position.z;
                 break;
-            case 11:
+            case (int)Enums.blockType.directionBlock:
                 directionGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
                 newGo.name = "directionBlock";
                 break;
             case 13:
                 var rotation = 0;
-                if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] == 0)
+                if (blockGrid[(int)position.x, (int)position.y - 1, (int)position.z] == 0 ||
+                    position.x % (tileSize.x + tailleBridge) != 0 && position.x % (tileSize.x + tailleBridge) != 5 &&
+                    position.z % (tileSize.y + tailleBridge) != 0 && position.z % (tileSize.y + tailleBridge) != 11)
                 {
+                    Debug.Log("Bridge can't be placed here, position.x % (tileSize.x + tailleBridge)" +
+                              position.x % (tileSize.x + tailleBridge) + " position.z % (tileSize.y + tailleBridge)" +
+                              position.z % (tileSize.y + tailleBridge));
                     Object.Destroy(newGo);
                     return true;
                 }
@@ -711,7 +714,7 @@ public class SceneEditor
     {
         switch (position.x % (tileSize.x + tailleBridge))
         {
-            //left x = 0, right = 5, back = 0, forward = 15
+            //left x = 0, right = 5, back = 0, forward = 11
             case 0:
                 newground = Object.Instantiate(prefabs[season switch
                     {
@@ -854,8 +857,11 @@ public class SceneEditor
             case "directionBlock":
             {
                 var position2 = hitRay.transform.position;
+                Debug.Log("Direction before:" + directionGrid[(int)position2.x, (int)position2.y,
+                    (int)position2.z]);
                 directionGrid[(int)position2.x, (int)position2.y,
                     (int)position2.z] = Enums.Side.none;
+                Debug.Log("Deleted direction at:" + position2); 
                 Object.Destroy(hitRay.transform.gameObject);
                 return;
             }
@@ -1236,6 +1242,7 @@ public class SceneEditor
             {
                 Debug.Log("Direction block instantiated" + x + y + z);
                 InstantiateDirectionPrefab(x, y, z);
+                Debug.Log("Instantiated direction block at:" + x + y + z);
             }
 
             switch (blockGrid[x, y, z])
@@ -1270,6 +1277,7 @@ public class SceneEditor
             default:
                 throw new ArgumentOutOfRangeException();
         }
+        block.name = "directionBlock";
     }
 
     private void InstantiateBlock(int x, int y, int z)
