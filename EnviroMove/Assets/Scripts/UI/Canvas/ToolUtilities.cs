@@ -12,6 +12,7 @@ namespace UI.Canvas
         [ServiceDependency] private IToolService m_Tool;
         [ServiceDependency] private IDataBaseService m_data;
         [ServiceDependency] private ILevelService m_level;
+        [ServiceDependency] private IInterfaceService m_thisInterface;
         [SerializeField] private TMP_InputField inputField;
 
         private LevelData dataToTest;
@@ -71,12 +72,14 @@ namespace UI.Canvas
             m_Tool.SwitchMode(index);
         }
         
-        public void TestLevel(string sceneName)
-        {
-            dataToTest = m_Tool.GetDataCreation();
-            SceneManager.sceneLoaded += AsyncTestLevel;
-            m_Tool.DesactivateTool();
-            ChangeScene(sceneName);
+        public void TestLevel(string sceneName) {
+            m_thisInterface.GenerateLoadingScreen("", 1, () => {
+                dataToTest = m_Tool.GetDataCreation();
+                SceneManager.sceneLoaded += AsyncTestLevel;
+                m_Tool.DesactivateTool();
+                ChangeScene(sceneName);
+            });
+            
             
             //throw new NotImplementedException();
             /*

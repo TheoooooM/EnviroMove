@@ -10,7 +10,6 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -63,6 +62,7 @@ namespace UI.Canvas
         [SerializeField] private Image rewardImg = null;
         [SerializeField] private TextMeshProUGUI rewardTxt = null;
         [SerializeField] private List<Sprite> goldRewardSprite = new();
+        [SerializeField] private List<Sprite> skinRewardSprite = new();
         [SerializeField] private TextMeshProUGUI goldTxt = null;
         public bool isInReward = false;
         private int stageReward = 0;
@@ -423,7 +423,6 @@ namespace UI.Canvas
         private Vector3 GetTargetPosition(bool isMainPage = true) {
             return isMainPage ? new Vector3(mainMenuTransform.sizeDelta.x * pageID, isInCreateMenu ? mainMenuTransform.sizeDelta.y : 0, 0) : new Vector3(movePanelXValue * levelSelectionID, 0, 0);
         }
-        
 
         /// <summary>
         /// Move to a certain season
@@ -540,7 +539,7 @@ namespace UI.Canvas
         /// <summary>
         /// Open the reward panel and show the reward on screen
         /// </summary>
-        public void GetRewards(RewardType type, string rewardName, int rewardID = 0) {
+        public void GetRewards(RewardType type, string rewardName, int rewardID = 0, int goldCost = 0) {
             Sequence rewardSequence = DOTween.Sequence();
             rewardGroup.gameObject.SetActive(true);
 
@@ -562,15 +561,24 @@ namespace UI.Canvas
                     break;
                 
                 case RewardType.Skin:
-                    //rewardImg.sprite = rewardSprite[rewardID];
+                    AddSkin(rewardID);
+
+                    rewardImg.sprite = rewardID switch {
+                        1 => skinRewardSprite[0],
+                        2 => skinRewardSprite[1],
+                        5 => skinRewardSprite[2],
+                        _ => throw new ArgumentOutOfRangeException(nameof(rewardID))
+                    };
                     break;
-                
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
+            
+            if(goldCost > 0) PlayerPrefs.SetInt("Gold", PlayerPrefs.GetInt("Gold", 0) - goldCost);
 
             rewardTxt.text = rewardName;
-            rewardSequence.Append(rewardImg.rectTransform.DOScale(1, popUpAnimationDuration).SetEase(Ease.OutBack).OnComplete(() => stageReward = 2));
+            rewardSequence.Append(rewardImg.rectTransform.DOScale(1, popUpAnimationDuration).SetEase(Ease.OutBack).OnComplete(() => {
+                stageReward = 2;
+                rewardImg.rectTransform.DOPunchScale(new Vector3(0.1f, 0.1f, 0.1f), 1, 1).SetLoops(-1).SetAutoKill(false);
+            }));
             rewardSequence.Append(rewardTxt.rectTransform.DOScale(1, popUpAnimationDuration).SetEase(Ease.OutBack).OnComplete(() => stageReward = 3));
             isInReward = true;
         }
@@ -579,6 +587,7 @@ namespace UI.Canvas
         /// Close the reward panel
         /// </summary>
         private void CloseRewardPanel() {
+            rewardImg.rectTransform.DOKill();
             rewardImg.rectTransform.localScale = Vector3.zero;
             rewardTxt.rectTransform.localScale = Vector3.zero;
             rewardGroup.DOFade(0, popUpAnimationDuration).OnComplete(() => rewardGroup.gameObject.SetActive(false));
@@ -613,15 +622,33 @@ namespace UI.Canvas
         /// </summary>
         /// <param name="open"></param>
         private void OpenCloseCampaign(bool open) {
-
-            m_thisInterface.GenerateLoadingScreen("oui", 3, () => {
-                SceneManager.sceneLoaded += DrawRoadMap;
-                ChangeScene("RoadMap");
-            });
+            isLevelSelectionOpen = open;
+            if(open) playerTrans.gameObject.SetActive(false);
+            
+            if (isLevelSelectionOpen) {
+                m_thisInterface.GenerateLoadingScreen("Selection Level", 1, () => {
+                    levelSelectionTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude).OnComplete(() => {
+                        m_thisInterface.HideLoadingScreen(); 
+                    });
+                });
+            }
+            else {
+                m_thisInterface.GenerateLoadingScreen("Selection Level", 1, () => {
+                    levelSelectionTransform.DOScale(Vector3.zero, popUpAnimationDuration).OnComplete(() => {
+                        m_thisInterface.HideLoadingScreen();
+                        playerTrans.gameObject.SetActive(true);
+                    });
+                });
+            }
             
             
             
             return;
+            
+            m_thisInterface.GenerateLoadingScreen("oui", 3, () => {
+                SceneManager.sceneLoaded += DrawRoadMap;
+                ChangeScene("RoadMap");
+            });
             
             isLevelSelectionOpen = open;
             if(open) playerTrans.gameObject.SetActive(false);
@@ -784,7 +811,7 @@ namespace UI.Canvas
         /// <param name="addValue"></param>
         public void ChangeCurrentSkin(int addValue) {
             int currentSkin = PlayerPrefs.GetInt("PlayerSkin", 0);
-            String skins = PlayerPrefs.GetString("Skins", "012");
+            String skins = PlayerPrefs.GetString("Skins", "0346");
             currentSkin += addValue;
             var index = 0;
             while (!skins.Contains($"{currentSkin}"))
@@ -803,10 +830,10 @@ namespace UI.Canvas
         
         public void AddSkin(int index)
         {
-            var currentSkins = PlayerPrefs.GetString("Skins", "012");
-            if (!currentSkins.Contains((char)index))
+            var currentSkins = PlayerPrefs.GetString("Skins", "0346");
+            if (!currentSkins.Contains($"{index}"))
             {
-                currentSkins += (char)index;
+                currentSkins += $"{index}";
                 PlayerPrefs.SetString("Skins", currentSkins);
                 Debug.Log("Now Skins : " + currentSkins);
             }

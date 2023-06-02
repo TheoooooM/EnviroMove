@@ -26,19 +26,17 @@ namespace UI.Canvas
             nextLevel = m_thisInterface.GetNextLevelSO();
             currentLevelID = m_thisInterface.GetCurrentLevelID();
             StringBuilder levelFinished = new StringBuilder(PlayerPrefs.GetString("LevelFinish", "000000000000000"));
-            if (menuType == MenuType.Win) {
+            if (menuType == MenuType.Win && m_thisInterface.GetTargetPage() != PageDirection.Create) {
                 if (levelFinished[currentLevelID] == '0') PlayerPrefs.SetInt("GoldReward", PlayerPrefs.GetInt("GoldReward", 0) + 300);
                 else PlayerPrefs.SetInt("GoldReward", PlayerPrefs.GetInt("GoldReward", 0) + 100);
                 levelFinished[currentLevelID] = '1';
                 PlayerPrefs.SetString("LevelFinish", levelFinished.ToString());
             }
-            
-            nextLevelButton.gameObject.SetActive(nextLevel != null);
-            editLevelButton.gameObject.SetActive(m_thisInterface.GetTargetPage() == PageDirection.Create);
             // editLevelButton.gameObject.SetActive(true);
         }
 
         public void EditLevel() {
+            Time.timeScale = 1;
             StartCoroutine(WaitForAction(() => {
                 m_tool.OpenLevel(m_level.GetCurrentLevelData());
             }));
@@ -75,9 +73,11 @@ namespace UI.Canvas
             });
         }
 
-        public void SetMLevel(ILevelService m_levelUp , IInterfaceService interfaceService) {
+        public void SetMLevel(ILevelService m_levelUp , IInterfaceService interfaceService, IToolService tool) {
             m_level = m_levelUp;
             m_thisInterface = interfaceService;
+            m_tool = tool;
+            if(editLevelButton != null) editLevelButton.gameObject.SetActive(m_thisInterface.GetTargetPage() == PageDirection.Create);
         }
 
         /// <summary>
