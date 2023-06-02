@@ -194,7 +194,7 @@ public class SceneEditor
                     3 => Enums.Side.down,
                     _ => blockVerticalRotationGrid[posX, 0, posZ]
                 };
-                block.transform.name = "Block" + x + "" + 0 + "" + z;
+                block.transform.name = "Block (" + x + ", 0, " + z + ")";
             }
         }
 
@@ -320,7 +320,7 @@ public class SceneEditor
         for (var x = posX; x < posX + tileSize.x; x++)
         for (var z = posZ; z < posZ + tileSize.y; z++)
         {
-            Object.Destroy(parent.transform.Find(x + " " + 0 + " " + z).gameObject);
+            Object.Destroy(parent.transform.Find("Block (" + x + ", " + 0 + ", " + z).gameObject);
             blockGrid[x, 0, z] = 0;
             blockHorizontalRotationGrid[x, 0, z] = Enums.Side.none;
             blockVerticalRotationGrid[x, 0, z] = Enums.Side.none;
@@ -550,7 +550,7 @@ public class SceneEditor
                     3 => Enums.Side.left,
                     _ => blockVerticalRotationGrid[(int)position.x, (int)position.y, (int)position.z]
                 };
-                newGo.name = "Block" + position.x + position.y + position.z;
+                newGo.name = "Block (" + position.x + ", " + position.y + ", " + position.z + ")";
                 break;
             case (int)Enums.blockType.directionBlock:
                 directionGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
@@ -729,7 +729,7 @@ public class SceneEditor
                 blockGrid[(int)position.x - i, (int)position.y - 1, (int)position.z] = 1;
                 rotation = 270;
                 directionGrid[(int)position.x - i, (int)position.y - 1, (int)position.z] = Enums.Side.left;
-                newground.transform.name = "Block" + (position.x - i) + 0 + position.z;
+                newground.transform.name = "Block (" + (position.x - i) + ", " + 0 + ", " + position.z;
                 break;
             case 5:
                 newground = Object.Instantiate(prefabs[season switch
@@ -744,7 +744,7 @@ public class SceneEditor
                 blockGrid[(int)position.x + i, (int)position.y - 1, (int)position.z] = 1;
                 rotation = 90;
                 directionGrid[(int)position.x + i, (int)position.y - 1, (int)position.z] = Enums.Side.right;
-                newground.transform.name = "Block" + (position.x + i) + 0 + position.z;
+                newground.transform.name = "Block (" + (position.x + i) + ", " + 0 + ", " + position.z;
                 break;
             default:
                 switch (position.z % (tileSize.y + tailleBridge))
@@ -762,7 +762,7 @@ public class SceneEditor
                         blockGrid[(int)position.x, (int)position.y - 1, (int)position.z - i] = 1;
                         rotation = 180;
                         directionGrid[(int)position.x, (int)position.y - 1, (int)position.z - i] = Enums.Side.back;
-                        newground.transform.name = "Block" + position.x + 0 + (position.z - i);
+                        newground.transform.name = "Block (" + position.x + ", " + 0 + ", " + (position.z - i);
                         break;
                     case 11:
                         newground = Object.Instantiate(prefabs[season switch
@@ -778,7 +778,7 @@ public class SceneEditor
                         rotation = 0;
                         directionGrid[(int)position.x, (int)position.y - 1, (int)position.z + i] =
                             Enums.Side.forward;
-                        newground.transform.name = "Block" + position.x + 0 + (position.z + i);
+                        newground.transform.name = "Block (" + position.x + ", " + 0 + ", " + (position.z + i);
                         break;
                 }
 
@@ -832,14 +832,6 @@ public class SceneEditor
         newGo = Object.Instantiate(selectedPrefab, position, Quaternion.identity);
         newGo.transform.parent = parent.transform;
         return false;
-    }
-
-    private void DragToChangeDirectionGrid()
-    {
-        ChangeCameraAngle();
-        ToggleLevelElements();
-        if (_camera.orthographic == false) return;
-        // TODO CONNECT DOTS
     }
 
     private void Delete()
@@ -1945,13 +1937,13 @@ public class SceneEditor
 
     private void ReplaceBlock(int i, int j, int k)
     {
-        var block = GameObject.Find("Block" + i + j + k);
+        var block = GameObject.Find("Block (" + i + ", " + j + ", " + k + ")");
         Object.Destroy(block);
         var blockPrefab = Object.Instantiate(prefabs[blockGrid[i, j, k]], new Vector3(i, j, k),
             Quaternion.identity);
         blockPrefab.transform.Rotate(90 * Random.Range(0, 4),
             90 * Random.Range(0, 4), 90 * Random.Range(0, 4));
-        blockPrefab.name = "Block" + i + j + k;
+        blockPrefab.name = "Block (" + i + ", " + j + ", " + k + ")";
         blockPrefab.transform.parent = parent.transform;
     }
 }
