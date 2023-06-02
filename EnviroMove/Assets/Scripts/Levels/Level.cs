@@ -115,16 +115,6 @@ namespace Levels
                         0 => Enums.blockType.M3_Block1,
                         _ => throw new ArgumentOutOfRangeException()
                     };
-                if (type is Enums.blockType.M1_Caillou or
-                    Enums.blockType.M2_Caillou or
-                    Enums.blockType.M3_Caillou)
-                    type = data.season switch
-                    {
-                        2 => Enums.blockType.M1_Caillou,
-                        1 => Enums.blockType.M2_Caillou,
-                        0 => Enums.blockType.M3_Caillou,
-                        _ => throw new ArgumentOutOfRangeException()
-                    };
                 if (type is Enums.blockType.breakableBlock)
                     type = data.season switch
                     {

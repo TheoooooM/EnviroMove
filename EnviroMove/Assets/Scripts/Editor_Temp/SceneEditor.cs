@@ -1888,13 +1888,8 @@ public class SceneEditor
                 {
                     switch (blockGrid[i, j, k])
                     {
-                        case (int)Enums.blockType.M1_Block1:
-                        case (int)Enums.blockType.ground:
+                        case (int)Enums.blockType.M1_Block1 or (int)Enums.blockType.ground:
                             blockGrid[i, j, k] = (int)Enums.blockType.M3_Block1;
-                            ReplaceBlock(i, j, k, true);
-                            break;
-                        case (int)Enums.blockType.M1_Caillou:
-                            blockGrid[i, j, k] = (int)Enums.blockType.M3_Caillou;
                             ReplaceBlock(i, j, k, true);
                             break;
                         case (int)Enums.blockType.P_EGGbounce:
@@ -1923,10 +1918,6 @@ public class SceneEditor
                             blockGrid[i, j, k] = (int)Enums.blockType.M2_Block1;
                             ReplaceBlock(i, j, k, true);
                             break;
-                        case (int)Enums.blockType.M3_Caillou:
-                            blockGrid[i, j, k] = (int)Enums.blockType.M2_Caillou;
-                            ReplaceBlock(i, j, k, true);
-                            break;
                         case (int)Enums.blockType.P_PumpkinBounce:
                             blockGrid[i, j, k] = (int)Enums.blockType.P_EGGbounce;
                             ReplaceBlock(i, j, k, false);
@@ -1950,11 +1941,6 @@ public class SceneEditor
                     if (blockGrid[i, j, k] == (int)Enums.blockType.M2_Block1)
                     {
                         blockGrid[i, j, k] = (int)Enums.blockType.M1_Block1;
-                        ReplaceBlock(i, j, k, true);
-                    }
-                    else if (blockGrid[i, j, k] == (int)Enums.blockType.M2_Caillou)
-                    {
-                        blockGrid[i, j, k] = (int)Enums.blockType.M1_Caillou;
                         ReplaceBlock(i, j, k, true);
                     }
                 }
