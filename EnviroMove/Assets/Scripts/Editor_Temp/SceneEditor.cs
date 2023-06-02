@@ -142,9 +142,7 @@ public class SceneEditor
     private void PlaceDefaultGround()
     {
         var posX = (tileSize.x + tailleBridge) * (size.x / (tileSize.x + tailleBridge) / 2);
-        Debug.Log(posX);
         var posZ = (tileSize.y + tailleBridge) * (size.z / (tileSize.y + tailleBridge) / 2);
-        Debug.Log(posZ);
         MakePlatform(posX, posZ);
 
         blocksUsed.Add("M1_Block1");
@@ -414,7 +412,7 @@ public class SceneEditor
 
     private void StoreBlockData(Vector3 position)
     {
-        if (selectedPrefabIndex == 11) return;
+        if (selectedPrefabIndex == (int)Enums.blockType.directionBlock) return;
         //if the prefab is in the twoByTwo list, add one block to the right and one block to the bottom and one block to the bottom right
         if (twoByTwoPrefabIndex.Contains(selectedPrefabIndex))
         {
@@ -554,7 +552,7 @@ public class SceneEditor
                 };
                 newGo.name = "Block" + position.x + position.y + position.z;
                 break;
-            case 11:
+            case (int)Enums.blockType.directionBlock:
                 directionGrid[(int)position.x, (int)position.y, (int)position.z] = Enums.Side.forward;
                 newGo.name = "directionBlock";
                 break;
@@ -857,7 +855,9 @@ public class SceneEditor
             case "directionBlock":
             {
                 var position2 = hitRay.transform.position;
-                directionGrid[(int)position2.x, (int)position2.y - 1,
+                Debug.Log("Direction before:" + directionGrid[(int)position2.x, (int)position2.y,
+                    (int)position2.z]);
+                directionGrid[(int)position2.x, (int)position2.y,
                     (int)position2.z] = Enums.Side.none;
                 Debug.Log("Deleted direction at:" + position2); 
                 Object.Destroy(hitRay.transform.gameObject);
@@ -1275,6 +1275,7 @@ public class SceneEditor
             default:
                 throw new ArgumentOutOfRangeException();
         }
+        block.name = "directionBlock";
     }
 
     private void InstantiateBlock(int x, int y, int z)
