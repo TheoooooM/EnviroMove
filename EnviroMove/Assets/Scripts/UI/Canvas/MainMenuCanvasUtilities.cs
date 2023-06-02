@@ -127,6 +127,7 @@ namespace UI.Canvas
             if (PlayerPrefs.GetInt("GoldReward", 0) > 0) {
                 StartCoroutine(WaitForReward());
             }
+            GameObject.FindWithTag("Splash").SetActive(false);
         }
         
         private IEnumerator WaitForReward() {
@@ -606,30 +607,48 @@ namespace UI.Canvas
         #endregion Button Events
 
         #region OpenClose Panels
+
         /// <summary>
         /// Open or close the selection level panel
         /// </summary>
         /// <param name="open"></param>
         private void OpenCloseCampaign(bool open) {
+
+            m_thisInterface.GenerateLoadingScreen("oui", 3, () => {
+                SceneManager.sceneLoaded += DrawRoadMap;
+                ChangeScene("RoadMap");
+            });
+            
+            
+            
+            return;
+            
             isLevelSelectionOpen = open;
             if(open) playerTrans.gameObject.SetActive(false);
-            
-            m_thisInterface.GenerateLoadingScreen("Open Campaign", 1, () => {
-                if (isLevelSelectionOpen) {
-                    //mainCanvasGroup.DOFade(0, popUpAnimationDuration);
-                    //m_thisInterface.GenerateLoadingScreen("Selection Level", 1);
+
+            if (isLevelSelectionOpen) {
+                m_thisInterface.GenerateLoadingScreen("Selection Level", 1, () => {
                     //Load3DWorldAsync();
-                    levelSelectionTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude).OnComplete(() => {
-                        m_thisInterface.HideLoadingScreen();
-                    });
-                }
-                else {
                     //mainCanvasGroup.DOFade(1, popUpAnimationDuration);
-                    levelSelectionTransform.DOScale(Vector3.zero, popUpAnimationDuration).OnComplete(() => {
-                        m_thisInterface.HideLoadingScreen();
-                        playerTrans.gameObject.SetActive(true);
+                    levelSelectionTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude).OnComplete(() => {
+                        m_thisInterface.HideLoadingScreen(); 
                     });
-                }
+                });
+            }
+            else {
+                mainCanvasGroup.DOFade(1, popUpAnimationDuration);
+                levelSelectionTransform.DOScale(Vector3.zero, popUpAnimationDuration).OnComplete(() => {
+                    m_thisInterface.HideLoadingScreen();
+                    playerTrans.gameObject.SetActive(true);
+                });
+            }
+        }
+
+        private void DrawRoadMap(Scene arg0, LoadSceneMode arg1) {
+            SceneManager.sceneLoaded -= DrawRoadMap;
+            AdresseHelper.LoadAssetWithCallback<GameObject>("IslandSelection", (obj) => {
+                Instantiate(obj);
+                m_thisInterface.HideLoadingScreen();
             });
         }
 
@@ -638,12 +657,13 @@ namespace UI.Canvas
         /// </summary>
         private void Load3DWorldAsync() {
             if (worldObj == null) {
-                AdresseHelper.LoadAssetWithCallback<GameObject>("WorldTest", (obj) => {
+                AdresseHelper.LoadAssetWithCallback<GameObject>("IslandSelection", (obj) => {
                     worldObj = Instantiate(obj);
                     m_thisInterface.HideLoadingScreen();
                 });
                 return;
             }
+
             m_thisInterface.HideLoadingScreen();
         }
 
@@ -651,11 +671,11 @@ namespace UI.Canvas
         /// Unload the 3D World
         /// </summary>
         private void UnLoad3DWorld() {
-            if(worldObj == null) return;
+            if (worldObj == null) return;
             Addressables.Release(worldObj);
             worldObj = null;
         }
-        
+
         /// <summary>
         /// Open or close the panel which contains all the created levels
         /// </summary>
@@ -781,8 +801,6 @@ namespace UI.Canvas
             UpdatePlayerSkin();
         }
         
-        
-
         public void AddSkin(int index)
         {
             var currentSkins = PlayerPrefs.GetString("Skins", "012");
