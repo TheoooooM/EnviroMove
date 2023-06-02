@@ -728,18 +728,24 @@ namespace UI.Canvas
         /// <param name="addValue"></param>
         public void ChangeCurrentSkin(int addValue) {
             int currentSkin = PlayerPrefs.GetInt("PlayerSkin", 0);
-            var skins = PlayerPrefs.GetString("Skins", "012");
+            String skins = PlayerPrefs.GetString("Skins", "012");
             currentSkin += addValue;
-            while (!skins.Contains((char)currentSkin))
+            var index = 0;
+            while (!skins.Contains($"{currentSkin}"))
             {
                 currentSkin+= addValue;
                 if (currentSkin > skinMat.Count - 1) currentSkin = 0;
                 else if (currentSkin < 0) currentSkin = skinMat.Count - 1;
+
+                index++;
+                if (index > 10) throw new ArgumentOutOfRangeException("While Break");
             }
 
             PlayerPrefs.SetInt("PlayerSkin", currentSkin);
             UpdatePlayerSkin();
         }
+        
+        
 
         public void AddSkin(int index)
         {
