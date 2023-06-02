@@ -31,12 +31,13 @@
                 this.id = id;
             }
 
-            public LevelInfo(string levelName, string creator, string id, int like, int weekLike, int carrotAmount,
+            public LevelInfo(string levelName, string creator, string id, string levelFilePath, int like, int weekLike, int carrotAmount,
                 int goldValue, int difficulty, int season, bool wasTrending, bool wasDaysMap, int timesPlay)
             {
                 this.levelName = levelName;
                 this.creator = creator;
                 this.id = id;
+                this.levelFilePath = levelFilePath;
                 this.like = like;
                 this.weekLike = weekLike;
                 this.carrotAmount = carrotAmount;
