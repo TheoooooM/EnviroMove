@@ -125,6 +125,14 @@ namespace Levels
                         0 => Enums.blockType.M3_Caillou,
                         _ => throw new ArgumentOutOfRangeException()
                     };
+                if (type is Enums.blockType.breakableBlock)
+                    type = data.season switch
+                    {
+                        2 => Enums.blockType.P_EGGbounce,
+                        1 => Enums.blockType.P_EGGbounce,
+                        0 => Enums.blockType.P_PumpkinBounce,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
                 Debug.Log($"type: {type}");
 
                 string key = Blocks.BlockType[type];
@@ -229,7 +237,9 @@ namespace Levels
                                 break;
                             }
                             case (int)Enums.blockType.M1_Block1 or (int)Enums.blockType.ground
-                                or (int)Enums.blockType.M2_Block1 or (int)Enums.blockType.M3_Block1:
+                                or (int)Enums.blockType.M2_Block1 or (int)Enums.blockType.M3_Block1
+                                or (int)Enums.blockType.M1_Caillou or (int)Enums.blockType.M2_Caillou
+                                or (int)Enums.blockType.M3_Caillou:
                                 currentGo = Instantiate(
                                     _blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]],
                                     transform.position + currentPos, quaternion.identity, transform);

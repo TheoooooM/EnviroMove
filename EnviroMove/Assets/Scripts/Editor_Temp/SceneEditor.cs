@@ -525,6 +525,17 @@ public class SceneEditor
             _ => selectedPrefabIndex
         };
     }
+    
+    public void PlaceBreakable()
+    {
+        selectedPrefabIndex = season switch
+        {
+            0 => (int)Enums.blockType.P_PumpkinBounce,
+            1 => (int)Enums.blockType.P_EGGbounce,
+            2 => (int)Enums.blockType.P_EGGbounce,
+            _ => selectedPrefabIndex
+        };
+    }
 
     private bool SpecificBlockActions(Vector3 position, GameObject newGo)
     {
@@ -836,6 +847,7 @@ public class SceneEditor
 
         newGo = Object.Instantiate(selectedPrefab, position, Quaternion.identity);
         newGo.transform.parent = parent.transform;
+        newGo.name = newGo.transform.name = "Block (" + position.x + ", " + position.y + ", " + position.z + ")";
         return false;
     }
 
@@ -1034,12 +1046,12 @@ public class SceneEditor
                         (int)hitRayPosition.z])
             {
                 case Enums.Side.forward:
-                    // blockGrid[(int)hitRayPosition.x + 1, (int)hitRayPosition.y,
-                    //     (int)hitRayPosition.z] = 0;
-                    // blockHorizontalRotationGrid[(int)hitRayPosition.x + 1, (int)hitRayPosition.y,
-                    //     (int)hitRayPosition.z] = Enums.Side.none;
-                    // blockVerticalRotationGrid[(int)hitRayPosition.x + 1, (int)hitRayPosition.y,
-                    //     (int)hitRayPosition.z] = Enums.Side.none;
+                    blockGrid[(int)hitRayPosition.x + 1, (int)hitRayPosition.y,
+                        (int)hitRayPosition.z] = 0;
+                    blockHorizontalRotationGrid[(int)hitRayPosition.x + 1, (int)hitRayPosition.y,
+                        (int)hitRayPosition.z] = Enums.Side.none;
+                    blockVerticalRotationGrid[(int)hitRayPosition.x + 1, (int)hitRayPosition.y,
+                        (int)hitRayPosition.z] = Enums.Side.none;
 
                     blockGrid[(int)hitRayPosition.x + 2, (int)hitRayPosition.y,
                         (int)hitRayPosition.z] = 0;
@@ -1050,12 +1062,12 @@ public class SceneEditor
 
                     break;
                 case Enums.Side.right:
-                    // blockGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
-                    //     (int)hitRayPosition.z + 1] = 0;
-                    // blockHorizontalRotationGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
-                    //     (int)hitRayPosition.z + 1] = Enums.Side.none;
-                    // blockVerticalRotationGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
-                    //     (int)hitRayPosition.z + 1] = Enums.Side.none;
+                    blockGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
+                        (int)hitRayPosition.z + 1] = 0;
+                    blockHorizontalRotationGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
+                        (int)hitRayPosition.z + 1] = Enums.Side.none;
+                    blockVerticalRotationGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
+                        (int)hitRayPosition.z + 1] = Enums.Side.none;
 
                     blockGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
                         (int)hitRayPosition.z + 2] = 0;
@@ -1066,12 +1078,12 @@ public class SceneEditor
 
                     break;
                 case Enums.Side.back:
-                    // blockGrid[(int)hitRayPosition.x - 1, (int)hitRayPosition.y,
-                    //     (int)hitRayPosition.z] = 0;
-                    // blockHorizontalRotationGrid[(int)hitRayPosition.x - 1, (int)hitRayPosition.y,
-                    //     (int)hitRayPosition.z] = Enums.Side.none;
-                    // blockVerticalRotationGrid[(int)hitRayPosition.x - 1, (int)hitRayPosition.y,
-                    //     (int)hitRayPosition.z] = Enums.Side.none;
+                    blockGrid[(int)hitRayPosition.x - 1, (int)hitRayPosition.y,
+                        (int)hitRayPosition.z] = 0;
+                    blockHorizontalRotationGrid[(int)hitRayPosition.x - 1, (int)hitRayPosition.y,
+                        (int)hitRayPosition.z] = Enums.Side.none;
+                    blockVerticalRotationGrid[(int)hitRayPosition.x - 1, (int)hitRayPosition.y,
+                        (int)hitRayPosition.z] = Enums.Side.none;
 
                     blockGrid[(int)hitRayPosition.x - 2, (int)hitRayPosition.y,
                         (int)hitRayPosition.z] = 0;
@@ -1082,12 +1094,12 @@ public class SceneEditor
 
                     break;
                 case Enums.Side.left:
-                    // blockGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
-                    //     (int)hitRayPosition.z + 1] = 0;
-                    // blockHorizontalRotationGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
-                    //     (int)hitRayPosition.z + 1] = Enums.Side.none;
-                    // blockVerticalRotationGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
-                    //     (int)hitRayPosition.z + 1] = Enums.Side.none;
+                    blockGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
+                        (int)hitRayPosition.z + 1] = 0;
+                    blockHorizontalRotationGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
+                        (int)hitRayPosition.z + 1] = Enums.Side.none;
+                    blockVerticalRotationGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
+                        (int)hitRayPosition.z + 1] = Enums.Side.none;
 
                     blockGrid[(int)hitRayPosition.x, (int)hitRayPosition.y, (int)hitRayPosition.z + 2] = 0;
                     blockHorizontalRotationGrid[(int)hitRayPosition.x, (int)hitRayPosition.y,
@@ -1284,6 +1296,7 @@ public class SceneEditor
         var block = Object.Instantiate(prefabs[prefabIndex], new Vector3(x, y, z),
             Quaternion.identity);
         block.transform.parent = parent.transform;
+        block.name = block.transform.name = "Block (" + x + ", " + y + ", " + z + ")";
         switch (prefabIndex)
         {
             case (int)Enums.blockType.ground or (int)Enums.blockType.M1_Block1 or (int)Enums.blockType.M2_Block1
@@ -1390,7 +1403,6 @@ public class SceneEditor
                 break;
         }
 
-        block.name = block.transform.name = "Block (" + x + ", " + y + ", " + z + ")";
         if (directionGrid[x, y, z] != Enums.Side.none)
         {
             var directionBlock = Object.Instantiate(prefabs[11], new Vector3(x, y, z), Quaternion.identity);
@@ -1874,16 +1886,21 @@ public class SceneEditor
             {
                 for (int k = 0; k < blockGrid.GetLength(2); k++)
                 {
-                    if (blockGrid[i, j, k] == (int)Enums.blockType.M1_Block1 ||
-                        blockGrid[i, j, k] == (int)Enums.blockType.ground)
+                    switch (blockGrid[i, j, k])
                     {
-                        blockGrid[i, j, k] = (int)Enums.blockType.M3_Block1;
-                        ReplaceBlock(i, j, k);
-                    }
-                    else if (blockGrid[i, j, k] == (int)Enums.blockType.M1_Caillou)
-                    {
-                        blockGrid[i, j, k] = (int)Enums.blockType.M3_Caillou;
-                        ReplaceBlock(i, j, k);
+                        case (int)Enums.blockType.M1_Block1:
+                        case (int)Enums.blockType.ground:
+                            blockGrid[i, j, k] = (int)Enums.blockType.M3_Block1;
+                            ReplaceBlock(i, j, k, true);
+                            break;
+                        case (int)Enums.blockType.M1_Caillou:
+                            blockGrid[i, j, k] = (int)Enums.blockType.M3_Caillou;
+                            ReplaceBlock(i, j, k, true);
+                            break;
+                        case (int)Enums.blockType.P_EGGbounce:
+                            blockGrid[i, j, k] = (int)Enums.blockType.P_PumpkinBounce;
+                            ReplaceBlock(i, j, k, false);
+                            break;
                     }
                 }
             }
@@ -1900,15 +1917,20 @@ public class SceneEditor
             {
                 for (int k = 0; k < blockGrid.GetLength(2); k++)
                 {
-                    if (blockGrid[i, j, k] == (int)Enums.blockType.M3_Block1)
+                    switch (blockGrid[i, j, k])
                     {
-                        blockGrid[i, j, k] = (int)Enums.blockType.M2_Block1;
-                        ReplaceBlock(i, j, k);
-                    }
-                    else if (blockGrid[i, j, k] == (int)Enums.blockType.M3_Caillou)
-                    {
-                        blockGrid[i, j, k] = (int)Enums.blockType.M2_Caillou;
-                        ReplaceBlock(i, j, k);
+                        case (int)Enums.blockType.M3_Block1:
+                            blockGrid[i, j, k] = (int)Enums.blockType.M2_Block1;
+                            ReplaceBlock(i, j, k, true);
+                            break;
+                        case (int)Enums.blockType.M3_Caillou:
+                            blockGrid[i, j, k] = (int)Enums.blockType.M2_Caillou;
+                            ReplaceBlock(i, j, k, true);
+                            break;
+                        case (int)Enums.blockType.P_PumpkinBounce:
+                            blockGrid[i, j, k] = (int)Enums.blockType.P_EGGbounce;
+                            ReplaceBlock(i, j, k, false);
+                            break;
                     }
                 }
             }
@@ -1928,26 +1950,34 @@ public class SceneEditor
                     if (blockGrid[i, j, k] == (int)Enums.blockType.M2_Block1)
                     {
                         blockGrid[i, j, k] = (int)Enums.blockType.M1_Block1;
-                        ReplaceBlock(i, j, k);
+                        ReplaceBlock(i, j, k, true);
                     }
                     else if (blockGrid[i, j, k] == (int)Enums.blockType.M2_Caillou)
                     {
                         blockGrid[i, j, k] = (int)Enums.blockType.M1_Caillou;
-                        ReplaceBlock(i, j, k);
+                        ReplaceBlock(i, j, k, true);
                     }
                 }
             }
         }
     }
 
-    private void ReplaceBlock(int i, int j, int k)
+    private void ReplaceBlock(int i, int j, int k, bool randomiseRotation)
     {
         var block = GameObject.Find("Block (" + i + ", " + j + ", " + k + ")");
+        var blockRotation = block.transform.rotation;
         Object.Destroy(block);
         var blockPrefab = Object.Instantiate(prefabs[blockGrid[i, j, k]], new Vector3(i, j, k),
             Quaternion.identity);
-        blockPrefab.transform.Rotate(90 * Random.Range(0, 4),
-            90 * Random.Range(0, 4), 90 * Random.Range(0, 4));
+        if (randomiseRotation)
+        {
+            blockPrefab.transform.Rotate(90 * Random.Range(0, 4),
+                90 * Random.Range(0, 4), 90 * Random.Range(0, 4));
+        }
+        else
+        {
+            blockPrefab.transform.rotation = blockRotation;
+        }
         blockPrefab.name = "Block (" + i + ", " + j + ", " + k + ")";
         blockPrefab.transform.parent = parent.transform;
     }

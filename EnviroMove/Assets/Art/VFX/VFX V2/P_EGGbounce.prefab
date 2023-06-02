@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 4376364904548193596}
   - component: {fileID: 2497243182036383629}
   - component: {fileID: 5751716568644947396}
+  - component: {fileID: -4750584311572666054}
+  - component: {fileID: 7422972538818043099}
   m_Layer: 0
   m_Name: P_EGGbounce
   m_TagString: Untagged
@@ -26,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7594190750891300180}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.95, y: 1.196, z: 9.51}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4877,6 +4879,34 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-4750584311572666054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7594190750891300180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a2023647ffd45f8a6e9dfc08d2d8581, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tags: 
+  moveSpeed: 1
+  cooldown: 1
+--- !u!65 &7422972538818043099
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7594190750891300180}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.4802718, y: 2.0202718, z: 2.4202719}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8585930706190380820
 GameObject:
   m_ObjectHideFlags: 0
@@ -4903,7 +4933,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8585930706190380820}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.074, z: 0}
+  m_LocalPosition: {x: 0, y: 0.818, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9795,7 +9825,7 @@ PrefabInstance:
     - target: {fileID: 3283984581723392903, guid: 37343116b66244c4ca62dc2352440844,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.196
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3283984581723392903, guid: 37343116b66244c4ca62dc2352440844,
         type: 3}

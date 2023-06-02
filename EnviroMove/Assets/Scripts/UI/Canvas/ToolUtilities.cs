@@ -117,5 +117,10 @@ namespace UI.Canvas
         {
             m_Tool.PlaceCaillou();
         }
+        
+        public void PlaceBreakable()
+        {
+            m_Tool.PlaceBreakable();
+        }
     }
 }
