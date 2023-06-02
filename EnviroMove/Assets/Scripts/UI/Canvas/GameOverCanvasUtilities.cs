@@ -19,9 +19,9 @@ namespace UI.Canvas
         
         public override void Init() {
             nextLevel = m_thisInterface.GetNextLevelSO();
-            if(nextLevelButton != null) nextLevelButton.gameObject.SetActive(nextLevel != null && menuType == MenuType.Win);
-            //if(editLevelButton != null) editLevelButton.gameObject.SetActive(m_thisInterface.GetTargetPage() == PageDirection.Create);
-            if(editLevelButton != null) editLevelButton.gameObject.SetActive(true);
+            nextLevelButton.gameObject.SetActive(nextLevel != null);
+            editLevelButton.gameObject.SetActive(m_thisInterface.GetTargetPage() == PageDirection.Create);
+            // editLevelButton.gameObject.SetActive(true);
         }
 
         public void EditLevel() {
