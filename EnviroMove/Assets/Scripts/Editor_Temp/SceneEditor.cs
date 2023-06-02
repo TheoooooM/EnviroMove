@@ -1402,6 +1402,11 @@ public class SceneEditor
         }
     }
 
+    private void DeleteWholeTile(int posX, int posZ)
+    {
+        
+    }
+
     public void CleanScene()
     {
         foreach (Transform child in parent.transform) Object.Destroy(child.gameObject);
