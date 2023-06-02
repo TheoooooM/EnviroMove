@@ -49,12 +49,15 @@ namespace Archi.Service
 
         public void ShowTool()
         {
-            LoadScene("Tool");
-            sceneLoaded += OnLoadSceneCompleted;
+            m_Interface.GenerateLoadingScreen("Lood tool", 1, () => {
+                LoadScene("Tool");
+                sceneLoaded += OnLoadSceneCompleted;
+            });
         }
 
         private void OnLoadSceneCompleted(Scene scene, LoadSceneMode mode)
         {
+            m_Interface.HideLoadingScreen();
             m_Interface.DrawCanvas(Enums.MajorCanvas.tool);
             sceneEditor ??= new SceneEditor();
             SetObjectDependencies(sceneEditor);
@@ -91,11 +94,12 @@ namespace Archi.Service
         }
 
         private LevelData dataLoaded;
-        public void OpenLevel(LevelData data)
-        {
-            dataLoaded = data;
-            LoadScene("Tool");
-            sceneLoaded += OnLoadSceneCompleted;
+        public void OpenLevel(LevelData data) {
+            m_Interface.GenerateLoadingScreen("Lood tool", 1, () => {
+                dataLoaded = data;
+                LoadScene("Tool");
+                sceneLoaded += OnLoadSceneCompleted;
+            });
         }
         
         public void TestLevel()

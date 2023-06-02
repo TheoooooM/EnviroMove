@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 namespace Archi.Service.Interface
 {
@@ -7,7 +8,7 @@ namespace Archi.Service.Interface
 
         public void GeneratePopUp(string title, string message, Sprite icon = null);
 
-        void GenerateLoadingScreen(string loadingName, float loadingMaxValue);
+        void GenerateLoadingScreen(string loadingName, float loadingMaxValue, UnityAction action);
         void UpdateLoadingScreen(float progressValue);
         void HideLoadingScreen();
 

@@ -110,6 +110,7 @@ namespace UI.Canvas
         /// Initialize all the data for the script
         /// </summary>
         public override void Init() {
+            Time.timeScale = 1;
             var saver = GetComponentInChildren<SaveTester>();
             if (saver){ saver.m_Database = m_Data; }
 
@@ -508,8 +509,10 @@ namespace UI.Canvas
             UnLoad3DWorld();
             m_thisInterface.SetNextLevelSO(data.Nextlevel);
             dataToTest = (LevelData)data.LevelData;
-            SceneManager.sceneLoaded += AsyncTestLevel;
-            ChangeScene("InGame");
+            m_thisInterface.GenerateLoadingScreen("Load Level", 1, () => {
+                SceneManager.sceneLoaded += AsyncTestLevel;
+                ChangeScene("InGame");
+            });
         }
 
         private void AsyncTestLevel(Scene arg0, LoadSceneMode arg1) {
@@ -573,18 +576,25 @@ namespace UI.Canvas
         /// <param name="open"></param>
         private void OpenCloseCampaign(bool open) {
             isLevelSelectionOpen = open;
-            playerTrans.gameObject.SetActive(!isLevelSelectionOpen);
+            if(open) playerTrans.gameObject.SetActive(false);
             
-            if (isLevelSelectionOpen) {
-                //mainCanvasGroup.DOFade(0, popUpAnimationDuration);
-                //m_thisInterface.GenerateLoadingScreen("Selection Level", 1);
-                //Load3DWorldAsync();
-                levelSelectionTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude);
-            }
-            else {
-                //mainCanvasGroup.DOFade(1, popUpAnimationDuration);
-                levelSelectionTransform.DOScale(Vector3.zero, popUpAnimationDuration);
-            }
+            m_thisInterface.GenerateLoadingScreen("Open Campaign", 1, () => {
+                if (isLevelSelectionOpen) {
+                    //mainCanvasGroup.DOFade(0, popUpAnimationDuration);
+                    //m_thisInterface.GenerateLoadingScreen("Selection Level", 1);
+                    //Load3DWorldAsync();
+                    levelSelectionTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude).OnComplete(() => {
+                        m_thisInterface.HideLoadingScreen();
+                    });
+                }
+                else {
+                    //mainCanvasGroup.DOFade(1, popUpAnimationDuration);
+                    levelSelectionTransform.DOScale(Vector3.zero, popUpAnimationDuration).OnComplete(() => {
+                        m_thisInterface.HideLoadingScreen();
+                        playerTrans.gameObject.SetActive(true);
+                    });
+                }
+            });
         }
 
         /// <summary>
