@@ -228,6 +228,14 @@ namespace Levels
 
                                 break;
                             }
+                            case (int)Enums.blockType.M1_Block1 or (int)Enums.blockType.ground
+                                or (int)Enums.blockType.M2_Block1 or (int)Enums.blockType.M3_Block1:
+                                currentGo = Instantiate(
+                                    _blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]],
+                                    transform.position + currentPos, quaternion.identity, transform);
+                                currentGo.transform.Rotate(90 * UnityEngine.Random.Range(0, 4),
+                                    90 * UnityEngine.Random.Range(0, 4), 90 * UnityEngine.Random.Range(0, 4));
+                                break;
                             default:
                                 currentGo = Instantiate(
                                     _blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]],
