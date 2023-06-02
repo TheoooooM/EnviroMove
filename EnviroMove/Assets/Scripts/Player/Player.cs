@@ -32,6 +32,10 @@ public class Player : MonoBehaviour, IBoardable
     public bool CanBlockInteract() => !_isDead;
 
     [SerializeField] private Animator _animator;
+    [Header("VFX")]
+    [SerializeField] private GameObject deathVFX;
+    [SerializeField] private GameObject walkVFX;
+    [Space]
     [SerializeField] private List<Material> skinMat = new();
     public Material GetMat(int id) => skinMat[id];
 
@@ -40,6 +44,11 @@ public class Player : MonoBehaviour, IBoardable
 
     private void Awake() {
         countDownText.gameObject.SetActive(false);
+    }
+
+    private void Start()
+    {
+        deathVFX.SetActive(false);
     }
 
     public void Move()
@@ -53,6 +62,7 @@ public class Player : MonoBehaviour, IBoardable
             transform.rotation = Quaternion.LookRotation(Enums.SideVector3(_lastDir), Vector3.up);
             _moving = true;
             _animator.SetTrigger("Walk");
+            walkVFX.SetActive(true);
             //_board.Move(this, nextPos);
             MoveToPoint(movePosition, moveSpeed, false, true);
         }
@@ -63,6 +73,8 @@ public class Player : MonoBehaviour, IBoardable
     {
         _animator.ResetTrigger("Walk");
         _animator.SetTrigger("Death");
+        walkVFX.SetActive(false);
+        deathVFX.SetActive(true);
         StopCoroutineAction();
         enabled = false;
     }
@@ -84,6 +96,7 @@ public class Player : MonoBehaviour, IBoardable
     public void Grab(Vector3 newPos, float speed = 0)
     {
         _animator.SetTrigger("Grab");
+        walkVFX.SetActive(false);
         MoveToPoint(newPos, speed);
     }
 

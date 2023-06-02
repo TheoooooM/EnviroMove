@@ -6,13 +6,24 @@ namespace BlockBehaviors
     public class PenguinBehavior : BlockBehavior, IInteractable
     {
         [SerializeField] private Animator _animator;
+        [Space]
+        [SerializeField] private GameObject iceVFX;
+        [SerializeField] private GameObject previewVFX;
         
         private bool isInteractible = true;
 
         public bool IsInteractible() => isInteractible;
-        
-        public void Select() { }
-        public void Deselect(IBoardable releaseBoardable) { }
+
+        public void Select()
+        {
+            previewVFX.SetActive(true);
+        }
+
+        public void Deselect(IBoardable releaseBoardable)
+        {
+            previewVFX.SetActive(false);
+            
+        }
 
         public void Swipe(Enums.Side side)
         {
@@ -24,6 +35,7 @@ namespace BlockBehaviors
         {
             transform.rotation = Quaternion.LookRotation(Enums.SideVector3(Enums.InverseSide(side)), Vector3.up);
             _animator.SetTrigger("Slide");
+            iceVFX.SetActive(false);
             Move(side);
             onMoveFinish += () => Move(side);
         }

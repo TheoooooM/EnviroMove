@@ -10,6 +10,11 @@ namespace BlockBehaviors
         [SerializeField] private GameObject tongue;
         [SerializeField] private float tongueSpeed = 3;
         [SerializeField] private Animator _animator;
+
+        [Header("VFX")]
+        [SerializeField] private GameObject castVFX;
+        [SerializeField] private GameObject grabVFX;
+        
         private Vector3Int tonguePos;
         private basicDelegate onTongueMoveFinish;
 
@@ -24,9 +29,10 @@ namespace BlockBehaviors
                 isInteractable = false;
                 tonguePos = boardPos;
                 onTongueMoveFinish += Grab;
-                tongue.SetActive(true);
+                //tongue.SetActive(true);
                 StartCoroutine(Cooldown());
                 _animator.SetTrigger("Grab");
+                castVFX.SetActive(true);
                 Grab();
             }
             
@@ -50,6 +56,7 @@ namespace BlockBehaviors
                 if (tags.Contains(Enums.BlockTag.FrogGrabbable) && neighboor.CanBlockInteract())
                 {
                     neighboor.StopCoroutineAction();
+                    grabVFX.SetActive(true);
                     neighboor.MoveToPoint(boardMaster.GetWorldPos(sideBoardPosition), tongueSpeed);
                     boardMaster.Move(neighboor, sideBoardPosition);
                     WithdrawTongue();
@@ -83,10 +90,12 @@ namespace BlockBehaviors
             onTongueMoveFinish -= ResetTongue;
             sideBoardPosition = Vector3Int.zero;
             _animator.SetTrigger("Withdraw");
+            castVFX.SetActive(false);
+            grabVFX.SetActive(false);
             sideSet = false;
             isInteractable = true;
             tonguePos = boardPos;
-            tongue.SetActive(false);
+            //tongue.SetActive(false);
         }
 
 
