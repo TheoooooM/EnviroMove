@@ -48,5 +48,21 @@
                 this.wasDaysMap = wasDaysMap;
                 this.timesPlay = timesPlay;
             }
+            public LevelInfo(string levelName, string creator, string id, int like, int weekLike, int carrotAmount,
+                int goldValue, int difficulty, int season, bool wasTrending, bool wasDaysMap, int timesPlay)
+            {
+                this.levelName = levelName;
+                this.creator = creator;
+                this.id = id;
+                this.like = like;
+                this.weekLike = weekLike;
+                this.carrotAmount = carrotAmount;
+                this.goldValue = goldValue;
+                this.difficulty = difficulty;
+                this.season = season;
+                this.wasTrending = wasTrending;
+                this.wasDaysMap = wasDaysMap;
+                this.timesPlay = timesPlay;
+            }
         }
     }
