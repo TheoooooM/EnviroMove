@@ -203,7 +203,26 @@ namespace Levels
                             }
                             case (int)Enums.blockType.M1_Block1 or (int)Enums.blockType.ground or (int)Enums.blockType.M2_Block1 or (int)Enums.blockType.M3_Block1:
                                 currentGo = Instantiate(
-                                    _blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]],
+                                    _blocksUsed[data.season switch
+                                    {
+                                        0 => (int)Enums.blockType.M3_Block1,
+                                        2 => (int)Enums.blockType.M2_Block1,
+                                        1 => (int)Enums.blockType.M1_Block1,
+                                        _ => (int)Enums.blockType.M3_Block1
+                                    }],
+                                    transform.position + currentPos, quaternion.identity, transform);
+                                currentGo.transform.Rotate(90 * UnityEngine.Random.Range(0, 4),
+                                    90 * UnityEngine.Random.Range(0, 4), 90 * UnityEngine.Random.Range(0, 4));
+                                break;
+                            case (int)Enums.blockType.M1_Caillou or (int)Enums.blockType.M2_Caillou or (int)Enums.blockType.M3_Caillou:
+                                currentGo = Instantiate(
+                                    _blocksUsed[data.season switch
+                                    {
+                                        0 => (int)Enums.blockType.M3_Caillou,
+                                        2 => (int)Enums.blockType.M2_Caillou,
+                                        1 => (int)Enums.blockType.M1_Caillou,
+                                        _ => (int)Enums.blockType.M3_Caillou
+                                    }],
                                     transform.position + currentPos, quaternion.identity, transform);
                                 currentGo.transform.Rotate(90 * UnityEngine.Random.Range(0, 4),
                                     90 * UnityEngine.Random.Range(0, 4), 90 * UnityEngine.Random.Range(0, 4));
