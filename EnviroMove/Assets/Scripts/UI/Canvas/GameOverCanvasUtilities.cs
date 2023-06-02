@@ -25,9 +25,7 @@ namespace UI.Canvas
         }
 
         public void EditLevel() {
-            m_thisInterface.GenerateLoadingScreen("Load Level", 1, () => {
-                m_tool.OpenLevel(m_level.GetCurrentLevelData());
-            });
+            m_tool.OpenLevel(m_level.GetCurrentLevelData());
         }
 
         private LevelData dataTemp;

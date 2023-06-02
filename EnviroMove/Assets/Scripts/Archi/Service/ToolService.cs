@@ -95,7 +95,7 @@ namespace Archi.Service
 
         private LevelData dataLoaded;
         public void OpenLevel(LevelData data) {
-            m_Interface.GenerateLoadingScreen("Lood tool", 1, () => {
+            m_Interface.GenerateLoadingScreen("Load tool", 1, () => {
                 dataLoaded = data;
                 LoadScene("Tool");
                 sceneLoaded += OnLoadSceneCompleted;
