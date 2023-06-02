@@ -702,9 +702,10 @@ public class SceneEditor
         var transform = parent.transform.Find("Block (" + vector3.x + ", " + 1 + ", " + vector3.z + ")");
         if (transform != null)
         {
+            Debug.Log("Block (" + vector3.x + ", " + 1 + ", " + vector3.z + ") found");
             return transform.gameObject;
         }
-
+        Debug.Log("Block (" + vector3.x + ", " + 1 + ", " + vector3.z + ") not found");
         return null;
     }
 
@@ -1357,7 +1358,6 @@ public class SceneEditor
                         block.transform.position += new Vector3(.5f, -0.5f, .5f);
                         break;
                 }
-
                 break;
             default:
                 switch (blockHorizontalRotationGrid[x, y, z])
@@ -1393,7 +1393,7 @@ public class SceneEditor
                 break;
         }
 
-        block.name = "Block" + x + y + z;
+        block.name = block.transform.name = "Block (" + x + ", " + y + ", " + z + ")";
         if (directionGrid[x, y, z] != Enums.Side.none)
         {
             var directionBlock = Object.Instantiate(prefabs[11], new Vector3(x, y, z), Quaternion.identity);
