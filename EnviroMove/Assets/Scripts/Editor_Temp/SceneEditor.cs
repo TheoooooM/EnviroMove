@@ -59,7 +59,7 @@ public class SceneEditor
     private Vector2Int[,] gridPositions;
     private readonly int tailleBridge = 4;
 
-    private int season = 0;
+    private int season = -1;
 
     private enum EditorMode
     {
@@ -90,7 +90,7 @@ public class SceneEditor
     public void Start()
     {
         size = defaultSize;
-        season = 2;
+        if (season == -1) season = 2;
         new Blocks();
         // blockGrid = new List<List<List<int>>>();
         blocksUsed = new List<string>();
@@ -111,7 +111,7 @@ public class SceneEditor
         volumeProfiles.Add(Addressables.LoadAssetAsync<VolumeProfile>("PP_Automne").WaitForCompletion());
         volumeProfiles.Add(Addressables.LoadAssetAsync<VolumeProfile>("PP_Hiver").WaitForCompletion());
         volumeProfiles.Add(Addressables.LoadAssetAsync<VolumeProfile>("PP_Printemps").WaitForCompletion());
-
+        volume.profile = volumeProfiles[season];
         _camera = Camera.main;
         parent = new GameObject();
         parent.transform.position = Vector3.zero;
