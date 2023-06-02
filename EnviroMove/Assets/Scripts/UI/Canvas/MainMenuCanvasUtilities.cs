@@ -728,11 +728,29 @@ namespace UI.Canvas
         /// <param name="addValue"></param>
         public void ChangeCurrentSkin(int addValue) {
             int currentSkin = PlayerPrefs.GetInt("PlayerSkin", 0);
+            var skins = PlayerPrefs.GetString("Skins", "012");
             currentSkin += addValue;
-            if (currentSkin > skinMat.Count - 1) currentSkin = 0;
-            else if (currentSkin < 0) currentSkin = skinMat.Count - 1;
+            while (!skins.Contains((char)currentSkin))
+            {
+                currentSkin+= addValue;
+                if (currentSkin > skinMat.Count - 1) currentSkin = 0;
+                else if (currentSkin < 0) currentSkin = skinMat.Count - 1;
+            }
+
             PlayerPrefs.SetInt("PlayerSkin", currentSkin);
             UpdatePlayerSkin();
+        }
+
+        public void AddSkin(int index)
+        {
+            var currentSkins = PlayerPrefs.GetString("Skins", "012");
+            if (!currentSkins.Contains((char)index))
+            {
+                currentSkins += (char)index;
+                PlayerPrefs.SetString("Skins", currentSkins);
+                Debug.Log("Now Skins : " + currentSkins);
+            }
+            
         }
 
         private void UpdatePlayerSkin() {
