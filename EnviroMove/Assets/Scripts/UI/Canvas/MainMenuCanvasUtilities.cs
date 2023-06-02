@@ -614,14 +614,14 @@ namespace UI.Canvas
         /// <param name="open"></param>
         private void OpenCloseCampaign(bool open) {
 
-            m_thisInterface.GenerateLoadingScreen("oui", 3, () => {
+            /*m_thisInterface.GenerateLoadingScreen("oui", 3, () => {
                 SceneManager.sceneLoaded += DrawRoadMap;
                 ChangeScene("RoadMap");
-            });
+            });*/
             
             
             
-            return;
+           // return;
             
             isLevelSelectionOpen = open;
             if(open) playerTrans.gameObject.SetActive(false);
