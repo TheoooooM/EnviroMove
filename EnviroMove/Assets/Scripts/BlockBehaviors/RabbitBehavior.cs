@@ -45,6 +45,7 @@ namespace BlockBehaviors
             if (topblock == null)
             {
                 Debug.Log("Dig");
+                tags.Remove(Enums.BlockTag.FrogGrabbable);
                 vfxDig.SetActive(true);
                 _animator.SetTrigger("Dig");
                 tempPos = pos + Vector3Int.up;
@@ -103,6 +104,9 @@ namespace BlockBehaviors
             boardable.MoveToPoint(boardMaster.GetWorldPos(newPos), 0, true);
             boardable.SetPosition(newPos);
             boardMaster.SetAt(boardable, newPos);
+            
+            boardMaster.RemoveBoardable(this);
+            gameObject.SetActive(false);
         }
     }
 }
