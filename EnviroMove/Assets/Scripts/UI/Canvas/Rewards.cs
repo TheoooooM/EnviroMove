@@ -9,6 +9,8 @@ public class Rewards : MonoBehaviour {
     [SerializeField] private int rewardValue = 0;
     [SerializeField] private int goldCost = 0;
     [SerializeField] private GameObject notBuyable = null;
+    [SerializeField] private GameObject alreadyBuyTxt = null;
+    [SerializeField] private GameObject noMoneyTxt = null;
     private Button btn = null;
 
     private void Awake() => btn = GetComponent<Button>();
@@ -21,10 +23,14 @@ public class Rewards : MonoBehaviour {
         if (RewardType == RewardType.Skin && PlayerPrefs.GetString("Skins", "0346").Contains($"{rewardValue}")) {
             btn.interactable = false;
             notBuyable.SetActive(true);
+            alreadyBuyTxt.SetActive(true);
+            noMoneyTxt.SetActive(false);
         }
         else {
-            btn.interactable = PlayerPrefs.GetInt("Gold", 0) < goldCost;
+            btn.interactable = PlayerPrefs.GetInt("Gold", 0) > goldCost;
             notBuyable.SetActive(PlayerPrefs.GetInt("Gold", 0) < goldCost);
+            alreadyBuyTxt.SetActive(false);
+            noMoneyTxt.SetActive(PlayerPrefs.GetInt("Gold", 0) < goldCost);
         }
     }
 }

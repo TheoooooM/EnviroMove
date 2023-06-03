@@ -35,6 +35,7 @@ namespace Archi.Service
             {Enums.MajorCanvas.tool, "ToolCanvas"},
             {Enums.MajorCanvas.levels, "LevelsCanvas"},
             {Enums.MajorCanvas.toolLevels, "LevelSelectorCanvas"},
+            {Enums.MajorCanvas.RoadMap, "IslandSelection"},
         };
 
         protected override void Initialize()
@@ -72,11 +73,17 @@ namespace Archi.Service
             var go = Object.Instantiate(canvas);
             var canvasUtilities = go.GetComponent<CanvasUtilities>();
             if(!canvasUtilities) canvasUtilities = go.GetComponentInChildren<CanvasUtilities>();
-            if (canvasUtilities is MainMenuCanvasUtilities) {
-                canvasUtilities.GetComponentInChildren<MainMenuCanvasUtilities>().InitValue(pageDirection, pageValue);
-                canvasUtilities.GetComponentInChildren<MainMenuCanvasUtilities>().mainCanvas.worldCamera = Camera.main;
-            }
             SetObjectDependencies(canvasUtilities);
+            switch (canvasUtilities) {
+                case MainMenuCanvasUtilities:
+                    canvasUtilities.GetComponentInChildren<MainMenuCanvasUtilities>().InitValue(pageDirection, pageValue);
+                    canvasUtilities.GetComponentInChildren<MainMenuCanvasUtilities>().mainCanvas.worldCamera = Camera.main;
+                    break;
+                
+                case LevelSelectionCanvasUtilities:
+                    canvasUtilities.GetComponentInChildren<LevelSelectionCanvasUtilities>().InitValue(pageDirection);
+                    break;
+            }
             canvasUtilities.Init();
         }
 
