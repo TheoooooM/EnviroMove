@@ -90,10 +90,27 @@ namespace UI.Canvas
         public void GoToMainMenu(string sceneName) {
             Time.timeScale = 1;
             
+            string sceneDirection = m_thisInterface.GetTargetPage() switch {
+                PageDirection.LevelSelection_Spring => "RoadMap",
+                PageDirection.LevelSelection_Autumn => "RoadMap",
+                PageDirection.LevelSelection_Winter => "RoadMap",
+                _ => "MainMenu"
+            };
+            
             m_thisInterface.GenerateLoadingScreen("Load Level", 1, () => {
-                //SceneManager.sceneLoaded += AsyncTestLevel;
-                ChangeSceneWithClouds(sceneName, m_thisInterface);
+                if(sceneDirection == "RoadMap") SceneManager.sceneLoaded += DrawRoadMap;
+                ChangeSceneWithClouds(sceneDirection, m_thisInterface);
             });
+        }
+        
+        /// <summary>
+        /// Draw the roadmap
+        /// </summary>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        private void DrawRoadMap(Scene arg0, LoadSceneMode arg1) {
+            SceneManager.sceneLoaded -= DrawRoadMap;
+            m_thisInterface.DrawCanvas(Enums.MajorCanvas.RoadMap);
         }
         
         /// <summary>

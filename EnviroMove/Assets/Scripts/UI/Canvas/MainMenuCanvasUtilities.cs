@@ -24,11 +24,11 @@ namespace UI.Canvas
 
         [SerializeField] private float animationDuration = 0.5f;
         [SerializeField] private float popUpAnimationDuration = 0.25f;
-
+        [SerializeField] private float animationAmplitude = 1.25f;
+        
         [Header("Base Viewport Information")]
         public UnityEngine.Canvas mainCanvas = null;
         [SerializeField] private RectTransform mainMenuTransform = null;
-        [SerializeField] private CanvasGroup mainCanvasGroup = null;
 
         [Header("- Home Panel Information")]
         [SerializeField] private TextMeshProUGUI playerName = null;
@@ -67,17 +67,6 @@ namespace UI.Canvas
         public bool isInReward = false;
         private int stageReward = 0;
 
-        [Header("- LevelSelection Panel Information- ")]
-        [SerializeField] private RectTransform levelSelectionTransform = null;
-        [SerializeField] private RectTransform seasonViewportTransform = null;
-        [SerializeField] private RectTransform maskLevelSelectionTransform = null;
-        [SerializeField] private Vector2 minMaxlevelSelectionXValue = new();
-        [SerializeField] private float movePanelXValue = 1820;
-        [SerializeField] private float animationAmplitude = 1.25f;
-        private GameObject worldObj = null;
-        private bool isLevelSelectionOpen = false;
-        private int levelSelectionID = 0;
-        
         [Header("- LevelCreate Panel Information- ")]
         [SerializeField] private RectTransform createMenuTransform = null;
         [SerializeField] private RectTransform moreLevelCreatedTransform = null;
@@ -90,6 +79,7 @@ namespace UI.Canvas
 
         [Header("Username Information")]
         [SerializeField] private GameObject usernameGam = null;
+        [SerializeField] private Button applyUsernameBtn = null;
         [SerializeField] private TMP_InputField usernameInputField;
         private bool isInUsername = false;
 
@@ -103,7 +93,9 @@ namespace UI.Canvas
         [SerializeField] private Transform playerTrans = null;
         [SerializeField] private AnimationCurve playerSizeCurve = null;
         [SerializeField] private List<Material> skinMat = new();
-        
+        [SerializeField] private List<Sprite> banners = new();
+        [SerializeField] private Image bannerImg = null;
+
         [Header("DoTween Information")]
         [SerializeField] private float waitTimeShop = 0.4f;
         [SerializeField] private float timeToGoToShop = 0.75f;
@@ -113,6 +105,7 @@ namespace UI.Canvas
         /// </summary>
         public override void Init() {
             Time.timeScale = 1;
+            SetBanner();
             var saver = GetComponentInChildren<SaveTester>();
             if (saver){ saver.m_Database = m_Data; }
 
@@ -151,7 +144,6 @@ namespace UI.Canvas
                 case PageDirection.Home:
                     pageID = 0;
                     isInCreateMenu = false;
-                    isLevelSelectionOpen = false;
                     break;
                 
                 case PageDirection.Community:
@@ -163,43 +155,15 @@ namespace UI.Canvas
                     pageID = -2;
                     break;
                 
-                case PageDirection.LevelSelection_Spring:
-                    pageID = 0;
-                    levelSelectionID = 0;
-                    isInCreateMenu = false;
-                    isLevelSelectionOpen = true;
-                    levelSelectionTransform.localScale = new Vector3(1, 1, 1);
-                    playerTrans.gameObject.SetActive(false);
-                    break;
-                
-                case PageDirection.LevelSelection_Autumn:
-                    pageID = 0;
-                    levelSelectionID = -1;
-                    isInCreateMenu = false;
-                    isLevelSelectionOpen = true;
-                    levelSelectionTransform.localScale = new Vector3(1, 1, 1);
-                    playerTrans.gameObject.SetActive(false);
-                    break;
-                
-                case PageDirection.LevelSelection_Winter:
-                    pageID = 0;
-                    levelSelectionID = -2;
-                    isInCreateMenu = false;
-                    isLevelSelectionOpen = true;
-                    levelSelectionTransform.localScale = new Vector3(1, 1, 1);
-                    playerTrans.gameObject.SetActive(false);
-                    break;
-                
                 case PageDirection.Create:
                     pageID = 0;
                     isInCreateMenu = true;
-                    isLevelSelectionOpen = false;
                     break;
                 
-                default: throw new ArgumentOutOfRangeException(nameof(pageDirection), pageDirection, null);
+                default:
+                    break;
             }
             viewportTransform.localPosition = GetTargetPosition();
-            seasonViewportTransform.localPosition = GetTargetPosition(false);
         }
 
         /// <summary>
@@ -213,17 +177,7 @@ namespace UI.Canvas
                 1 => PageDirection.Shop,
                 _ => PageDirection.Home
             };
-            if (pageDirection == PageDirection.Home) {
-                if (isLevelSelectionOpen) {
-                    pageDirection = levelSelectionID switch {
-                        0 => PageDirection.LevelSelection_Spring,
-                        -1 => PageDirection.LevelSelection_Autumn,
-                        -2 => PageDirection.LevelSelection_Winter,
-                        _ => PageDirection.LevelSelection_Spring
-                    };
-                }
-            }
-            
+
             float value = pageDirection switch {
                 PageDirection.Shop => shopScrollRect.verticalNormalizedPosition,
                 PageDirection.Community => commuScrollRect.verticalNormalizedPosition,
@@ -239,7 +193,6 @@ namespace UI.Canvas
             isInUsername = true;
             playerTrans.gameObject.SetActive(false);
             usernameGam.SetActive(true);
-            PlayerPrefs.SetInt("HasMadeTutorial", 1);
         }
         #endregion SetPage
         
@@ -289,7 +242,10 @@ namespace UI.Canvas
         private int pageID = 0;
         
         private void Update() {
-            if (isInUsername) return;
+            if (isInUsername) {
+                applyUsernameBtn.interactable = usernameInputField.text != "";
+                return;
+            }
             MoveCurrentPageWithInput();
             ChangeBottomBarButtonSize();
             UpdateTimeOffers();
@@ -297,13 +253,10 @@ namespace UI.Canvas
             goldTxt.text = PlayerPrefs.GetInt("Gold", 0).ToString();
             createMenuTransform.localPosition = new Vector3(0, -mainMenuTransform.sizeDelta.y, 0);
         }
-
-        private RectTransform currentTransform = null;
+        
         private Vector3 viewportStartPosition = new();
-        private int currentID = 0;
         private Vector2 delatPos = new();
         private Vector2 position = new();
-        private Vector2 minMaxViewportValue = new();
         private GameObject openedPanel = null;
 
         /// <summary>
@@ -313,7 +266,6 @@ namespace UI.Canvas
             if (Input.touchCount == 0) {
                 moveDir = MovementDirection.None;
                 viewportTransform.localPosition = Vector3.Lerp(viewportTransform.localPosition, GetTargetPosition(), changeScreenSpeed);
-                seasonViewportTransform.localPosition = Vector3.Lerp(seasonViewportTransform.localPosition, GetTargetPosition(false), changeScreenSpeed);
                 return;
             }
 
@@ -323,11 +275,7 @@ namespace UI.Canvas
             switch (Input.GetTouch(0).phase) {
                 case TouchPhase.Began:
                     InitInputs();
-                    if (isLevelSelectionOpen) {
-                        RectTransformUtility.ScreenPointToLocalPointInRectangle(maskLevelSelectionTransform, position, mainCanvas.worldCamera, out Vector2 rectPos);
-                        if(!maskLevelSelectionTransform.rect.Contains(rectPos)) OpenCloseCampaign(false);
-                    }
-                    else if (isMoreLevelPanelOpen) {
+                    if (isMoreLevelPanelOpen) {
                         RectTransformUtility.ScreenPointToLocalPointInRectangle(maskLevelCreatedTransform, position, mainCanvas.worldCamera, out Vector2 rectPos);
                         if(!maskLevelCreatedTransform.rect.Contains(rectPos)) OpenCloseMoreLevels(false);
                     }
@@ -346,14 +294,14 @@ namespace UI.Canvas
                     if(isInReward || isMoreLevelPanelOpen) return;
                     if (moveDir == MovementDirection.Y) {
                         if (pageID != 0) return;
-                        if (currentTransform.localPosition.y <= 0 && delatPos.y < 0 && !isInCreateMenu) return; 
-                        if (currentTransform.localPosition.y >= mainMenuTransform.sizeDelta.y && delatPos.y > 0 && isInCreateMenu) return;
+                        if (viewportTransform.localPosition.y <= 0 && delatPos.y < 0 && !isInCreateMenu) return; 
+                        if (viewportTransform.localPosition.y >= mainMenuTransform.sizeDelta.y && delatPos.y > 0 && isInCreateMenu) return;
                         
-                        currentTransform.localPosition += new Vector3(0, delatPos.y, 0);
+                        viewportTransform.localPosition += new Vector3(0, delatPos.y, 0);
                         return;
                     }
                     if (isInCreateMenu) return;
-                    currentTransform.localPosition += new Vector3(delatPos.x, 0, 0);
+                    viewportTransform.localPosition += new Vector3(delatPos.x, 0, 0);
                     break;
                 
                 case TouchPhase.Ended:
@@ -363,27 +311,21 @@ namespace UI.Canvas
                     moveDir = MovementDirection.None;
                     
                     if (currentMove == MovementDirection.Y) {
-                        if (Mathf.Abs(currentTransform.localPosition.y - viewportStartPosition.y) < mainMenuTransform.sizeDelta.y / 30f) return;
+                        if (Mathf.Abs(viewportTransform.localPosition.y - viewportStartPosition.y) < mainMenuTransform.sizeDelta.y / 40f) return;
                         isInCreateMenu = !isInCreateMenu;
                         return;
                     }
 
-                    if (Mathf.Abs(currentTransform.localPosition.x - viewportStartPosition.x) < mainMenuTransform.sizeDelta.x / 20f) return;
-                    currentID = (position.x - startPosition.x) switch {
-                        < 0 when currentTransform.localPosition.x > minMaxViewportValue.x => Mathf.Clamp(currentID - 1, -2, 1),
-                        > 0 when currentTransform.localPosition.x < minMaxViewportValue.y => Mathf.Clamp(currentID + 1, -2, 1),
-                        _ => currentID
+                    if (Mathf.Abs(viewportTransform.localPosition.x - viewportStartPosition.x) < mainMenuTransform.sizeDelta.x / 30f) return;
+                    pageID = (position.x - startPosition.x) switch {
+                        < 0 when viewportTransform.localPosition.x > minMaxViewportXValue.x => Mathf.Clamp(pageID - 1, -2, 1),
+                        > 0 when viewportTransform.localPosition.x < minMaxViewportXValue.y => Mathf.Clamp(pageID + 1, -2, 1),
+                        _ => pageID
                     };
-                    if (isLevelSelectionOpen) levelSelectionID = currentID;
-                    else pageID = currentID;
 
                     break;
                 
-                case TouchPhase.Stationary:
-                    if (!hasMove) {
-                        if(isLevelSelectionOpen) currentTransform.localPosition = Vector3.Lerp(currentTransform.localPosition, GetTargetPosition(!isLevelSelectionOpen), changeScreenSpeed);
-                    }
-                    break;
+                case TouchPhase.Stationary: break;
                 case TouchPhase.Canceled: break;
             }
         }
@@ -393,9 +335,6 @@ namespace UI.Canvas
         /// Init the variable for the current page movement
         /// </summary>
         private void InitCurrentMovement() {
-            currentTransform = isLevelSelectionOpen ? seasonViewportTransform : viewportTransform;
-            currentID = isLevelSelectionOpen ? levelSelectionID : pageID;
-            minMaxViewportValue = isLevelSelectionOpen ? minMaxlevelSelectionXValue : minMaxViewportXValue;
             delatPos = Input.GetTouch(0).deltaPosition;
             position = Input.GetTouch(0).position;
         }
@@ -404,7 +343,7 @@ namespace UI.Canvas
         /// </summary>
         private void InitInputs() {
             startPosition = position;
-            viewportStartPosition = currentTransform.localPosition;
+            viewportStartPosition = viewportTransform.localPosition;
             if (openedPanel != null) {
                 openedPanel.transform.DOScale(0, popUpAnimationDuration);
                 StartCoroutine(RemovePanelFromVariable(openedPanel));
@@ -415,24 +354,18 @@ namespace UI.Canvas
         /// </summary>
         /// <returns></returns>
         private bool CantMovePanel() {
-            return (currentTransform.localPosition.x >= minMaxViewportValue.y && delatPos.x > 0) || (currentTransform.localPosition.x <= minMaxViewportValue.x && delatPos.x < 0);
-        }
-        /// <summary>
-        /// Get the target position of the viewport
-        /// </summary>
-        private Vector3 GetTargetPosition(bool isMainPage = true) {
-            return isMainPage ? new Vector3(mainMenuTransform.sizeDelta.x * pageID, isInCreateMenu ? mainMenuTransform.sizeDelta.y : 0, 0) : new Vector3(movePanelXValue * levelSelectionID, 0, 0);
+            return (viewportTransform.localPosition.x >= minMaxViewportXValue.y && delatPos.x > 0) || (viewportTransform.localPosition.x <= minMaxViewportXValue.x && delatPos.x < 0);
         }
 
         /// <summary>
-        /// Move to a certain season
+        /// Get the target position of the viewport
         /// </summary>
-        /// <param name="id"></param>
-        public void MoveToSeason(int id) => levelSelectionID = id;
+        private Vector3 GetTargetPosition() => new(mainMenuTransform.sizeDelta.x * pageID, isInCreateMenu ? mainMenuTransform.sizeDelta.y : 0, 0);
         #endregion Panel Movement Helper
         
         public void SetUsername() {
             if (usernameInputField.text != "") {
+                PlayerPrefs.SetInt("HasMadeTutorial", 1);
                 m_Data.SetUsername(usernameInputField.text);
             }
         } 
@@ -496,31 +429,18 @@ namespace UI.Canvas
         
         #region LoadLevel
         private LevelData dataToTest;
-        public void LoadLevel(string levelName) {
-            UnLoad3DWorld();
-            m_Level.LoadLevel(m_Data.GetLevelByName(levelName));
-        }
+        public void LoadLevel(string levelName) => m_Level.LoadLevel(m_Data.GetLevelByName(levelName));
 
         /// <summary>
         /// Load the level data
         /// </summary>
         /// <param name="data"></param>
         public void LoadLevelData(string data) {
-            UnLoad3DWorld();
-            //m_Level.LoadLevel((LevelData)constantLevels.GetLevel(i));
-            //dataToTest = (LevelData)constantLevels.GetLevel(i);
             dataToTest = (LevelData)data;
             SceneManager.sceneLoaded += AsyncTestLevel;
             ChangeScene("InGame");
-            
-            //throw new NotImplementedException();
-            /*
-            m_Tool.TestLevel();
-            m_Tool.SetServiceState(false);
-            SceneManager.sceneLoaded += (_,_) => m_Tool.TestLevel();*/
         }
         public void LoadLevelData(LevelSO data) {
-            UnLoad3DWorld();
             m_thisInterface.SetNextLevelSO(data.Nextlevel, data.Id);
             dataToTest = (LevelData)data.LevelData;
             m_thisInterface.GenerateLoadingScreen("Load Level", 1, () => {
@@ -616,91 +536,25 @@ namespace UI.Canvas
         #endregion Button Events
 
         #region OpenClose Panels
-
         /// <summary>
         /// Open or close the selection level panel
         /// </summary>
         /// <param name="open"></param>
         private void OpenCloseCampaign(bool open) {
-            isLevelSelectionOpen = open;
-            if(open) playerTrans.gameObject.SetActive(false);
-            
-            if (isLevelSelectionOpen) {
-                m_thisInterface.GenerateLoadingScreen("Selection Level", 1, () => {
-                    levelSelectionTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude).OnComplete(() => {
-                        m_thisInterface.HideLoadingScreen(); 
-                    });
-                });
-            }
-            else {
-                m_thisInterface.GenerateLoadingScreen("Selection Level", 1, () => {
-                    levelSelectionTransform.DOScale(Vector3.zero, popUpAnimationDuration).OnComplete(() => {
-                        m_thisInterface.HideLoadingScreen();
-                        playerTrans.gameObject.SetActive(true);
-                    });
-                });
-            }
-            
-            
-            
-            return;
-            
-            m_thisInterface.GenerateLoadingScreen("oui", 3, () => {
+            m_thisInterface.GenerateLoadingScreen("Roadmap", 3, () => {
                 SceneManager.sceneLoaded += DrawRoadMap;
                 ChangeScene("RoadMap");
             });
-            
-            isLevelSelectionOpen = open;
-            if(open) playerTrans.gameObject.SetActive(false);
-
-            if (isLevelSelectionOpen) {
-                m_thisInterface.GenerateLoadingScreen("Selection Level", 1, () => {
-                    //Load3DWorldAsync();
-                    //mainCanvasGroup.DOFade(1, popUpAnimationDuration);
-                    levelSelectionTransform.DOScale(new Vector3(1, 1, 1), popUpAnimationDuration).SetEase(Ease.OutBack, animationAmplitude).OnComplete(() => {
-                        m_thisInterface.HideLoadingScreen(); 
-                    });
-                });
-            }
-            else {
-                mainCanvasGroup.DOFade(1, popUpAnimationDuration);
-                levelSelectionTransform.DOScale(Vector3.zero, popUpAnimationDuration).OnComplete(() => {
-                    m_thisInterface.HideLoadingScreen();
-                    playerTrans.gameObject.SetActive(true);
-                });
-            }
         }
 
+        /// <summary>
+        /// Draw the roadmap
+        /// </summary>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
         private void DrawRoadMap(Scene arg0, LoadSceneMode arg1) {
             SceneManager.sceneLoaded -= DrawRoadMap;
-            AdresseHelper.LoadAssetWithCallback<GameObject>("IslandSelection", (obj) => {
-                Instantiate(obj);
-                m_thisInterface.HideLoadingScreen();
-            });
-        }
-
-        /// <summary>
-        /// Load the 3D world
-        /// </summary>
-        private void Load3DWorldAsync() {
-            if (worldObj == null) {
-                AdresseHelper.LoadAssetWithCallback<GameObject>("IslandSelection", (obj) => {
-                    worldObj = Instantiate(obj);
-                    m_thisInterface.HideLoadingScreen();
-                });
-                return;
-            }
-
-            m_thisInterface.HideLoadingScreen();
-        }
-
-        /// <summary>
-        /// Unload the 3D World
-        /// </summary>
-        private void UnLoad3DWorld() {
-            if (worldObj == null) return;
-            Addressables.Release(worldObj);
-            worldObj = null;
+            m_thisInterface.DrawCanvas(Enums.MajorCanvas.RoadMap);
         }
 
         /// <summary>
@@ -751,7 +605,6 @@ namespace UI.Canvas
         }
 
         private void OpenTool() {
-            UnLoad3DWorld();
             m_Tool.ShowTool();
         }
         #endregion GoTo Panels
@@ -827,8 +680,8 @@ namespace UI.Canvas
             PlayerPrefs.SetInt("PlayerSkin", currentSkin);
             UpdatePlayerSkin();
         }
-        
-        public void AddSkin(int index)
+
+        private void AddSkin(int index)
         {
             var currentSkins = PlayerPrefs.GetString("Skins", "0346");
             if (!currentSkins.Contains($"{index}"))
@@ -856,6 +709,18 @@ namespace UI.Canvas
         }
         
         #endregion ChangeSkin
+
+        public void ChangeCurrentBanner() {
+            int currentBannerID = PlayerPrefs.GetInt("Banner", 0) + 1;
+            
+            if (currentBannerID > banners.Count - 1) currentBannerID = 0;
+            else if (currentBannerID < 0) currentBannerID = banners.Count - 1;
+            
+            PlayerPrefs.SetInt("Banner", currentBannerID);
+            SetBanner();
+        }
+        
+        private void SetBanner() => bannerImg.sprite = banners[PlayerPrefs.GetInt("Banner", 0)];
     }
 }
 
