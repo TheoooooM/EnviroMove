@@ -335,6 +335,7 @@ public class Enums
         toolLevels,
         levels,
         gameOver,
+        RoadMap,
         winMenu
     }
 
