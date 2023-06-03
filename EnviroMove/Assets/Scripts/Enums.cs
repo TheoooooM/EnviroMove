@@ -325,6 +325,7 @@ public class Enums
         M3_Caillou,
         P_EGGbounce,
         P_PumpkinBounce,
+        P_BounceCadeau,
     }
 
     public enum MajorCanvas
