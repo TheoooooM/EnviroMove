@@ -71,7 +71,7 @@ public class SceneEditor
         verticalRotation
     }
 
-    private EditorMode Mode = EditorMode.create;
+    private EditorMode Mode = EditorMode.moveCamera;
 
     private LevelData curentLevelData;
 
@@ -89,6 +89,7 @@ public class SceneEditor
 
     public void Start()
     {
+        Mode = EditorMode.moveCamera;
         size = defaultSize;
         if (season == -1) season = 2;
         new Blocks();
