@@ -159,8 +159,7 @@ namespace Levels
                         */
                         if (_blocksUsed[data.blockGrid[currentPos.x, currentPos.y, currentPos.z]] == null)
                         {
-                            if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] ==
-                                (int)Enums.blockType.playerEnd) _destinationPos = currentPos;
+                            
                             if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] ==
                                 (int)Enums.blockType.panelEnd)
                                 _cameraMovesSides.Add(currentPos,
@@ -168,6 +167,8 @@ namespace Levels
                             continue;
                         }
 
+                        if (data.blockGrid[currentPos.x, currentPos.y, currentPos.z] == (int)Enums.blockType.playerEnd) _destinationPos = currentPos;
+                        
                         Quaternion rotation = Quaternion.LookRotation(
                             Enums.SideVector3((Enums.Side)data.blockHorizontalRotationGrid[x, y, z]), Vector3.up);
                         GameObject currentGo;
@@ -251,6 +252,7 @@ namespace Levels
                             var mesh = GetComponentInChildren<SkinnedMeshRenderer>();
                             mesh.material = _player.GetComponent<Player>().GetMat(PlayerPrefs.GetInt("PlayerSkin"));
                         }
+                        
 
                         IBoardable currentBoardable = currentGo.GetComponent<IBoardable>();
                         if (currentBoardable == null)
