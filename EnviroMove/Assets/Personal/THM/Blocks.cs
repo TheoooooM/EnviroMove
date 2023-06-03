@@ -198,6 +198,7 @@ public struct Blocks
         { M3_Caillou, "M3_Caillou" }, 
         { P_EGGbounce, "P_EGGbounce"},
         { P_PumpkinBounce, "P_PumpkinBounce"},
+        { P_BounceCadeau, "P_BounceCadeau"},
     };
 
     public static readonly Dictionary<string, Enums.blockType> BlockAdressType = new()

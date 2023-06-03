@@ -71,7 +71,7 @@ public class SceneEditor
         verticalRotation
     }
 
-    private EditorMode Mode = EditorMode.create;
+    private EditorMode Mode = EditorMode.moveCamera;
 
     private LevelData curentLevelData;
 
@@ -89,6 +89,7 @@ public class SceneEditor
 
     public void Start()
     {
+        Mode = EditorMode.moveCamera;
         size = defaultSize;
         if (season == -1) season = 2;
         new Blocks();
@@ -1958,7 +1959,7 @@ public class SceneEditor
                             ReplaceBlock(i, j, k, true);
                             break;
                         case (int)Enums.blockType.P_PumpkinBounce:
-                            blockGrid[i, j, k] = (int)Enums.blockType.P_EGGbounce;
+                            blockGrid[i, j, k] = (int)Enums.blockType.P_BounceCadeau;
                             ReplaceBlock(i, j, k, false);
                             break;
                     }
@@ -1977,10 +1978,16 @@ public class SceneEditor
             {
                 for (int k = 0; k < blockGrid.GetLength(2); k++)
                 {
-                    if (blockGrid[i, j, k] == (int)Enums.blockType.M2_Block1)
+                    switch (blockGrid[i, j, k])
                     {
-                        blockGrid[i, j, k] = (int)Enums.blockType.M1_Block1;
-                        ReplaceBlock(i, j, k, true);
+                        case (int)Enums.blockType.M2_Block1:
+                            blockGrid[i, j, k] = (int)Enums.blockType.M1_Block1;
+                            ReplaceBlock(i, j, k, true);
+                            break;
+                        case (int)Enums.blockType.P_BounceCadeau:
+                            blockGrid[i, j, k] = (int)Enums.blockType.P_EGGbounce;
+                            ReplaceBlock(i, j, k, false);
+                            break;
                     }
                 }
             }
