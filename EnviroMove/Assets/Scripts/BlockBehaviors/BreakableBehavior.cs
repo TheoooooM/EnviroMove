@@ -1,4 +1,5 @@
 ﻿using Interfaces;
+using UnityEngine;
 
 namespace BlockBehaviors
 {
@@ -6,12 +7,17 @@ namespace BlockBehaviors
     {
         private bool _isInteractible = true;
 
+        [SerializeField] private GameObject breakVFX;
+        [SerializeField] private GameObject renderer;
+
 
         public bool IsInteractible() => _isInteractible;
         public override void Select()
         {
             boardMaster.RemoveBoardable(this);
-            Destroy(gameObject);
+            
+            renderer?.SetActive(false);
+            breakVFX?.SetActive(true);
         }
 
         public override void Deselect(IBoardable releaseBoardable){}
