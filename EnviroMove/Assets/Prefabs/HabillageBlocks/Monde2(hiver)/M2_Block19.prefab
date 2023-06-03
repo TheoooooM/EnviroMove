@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3600602173700698807}
   m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 0.535, y: -0.568, z: -1.03}
+  m_LocalPosition: {x: 0.48, y: -0.568, z: -0.55}
   m_LocalScale: {x: 4.8445954, y: 6.2887006, z: 0.67739}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -94,6 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8799658581414522145}
   - component: {fileID: 3353239308003069378}
+  - component: {fileID: -4152848696717695895}
   m_Layer: 0
   m_Name: M2_Block19
   m_TagString: Untagged
@@ -131,6 +132,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 1, z: 2}
   m_Center: {x: 0.5, y: 0, z: -0.5}
+--- !u!114 &-4152848696717695895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6167656157976737092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb9e4c916fa907541939578a5f7cd0bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tags: 
+  moveSpeed: 1
 --- !u!1001 &4303620873891018836
 PrefabInstance:
   m_ObjectHideFlags: 0
