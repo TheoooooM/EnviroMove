@@ -103,7 +103,7 @@ namespace Levels
             foreach (var index in data.blockGrid)
             {
                 Enums.blockType type = (Enums.blockType)index;
-                if (type is Enums.blockType.playerEnd or Enums.blockType.empty or Enums.blockType.panelEnd) continue;
+                if (type is Enums.blockType.empty or Enums.blockType.panelEnd) continue;
                 if (type is Enums.blockType.M1_Block1 or
                     Enums.blockType.M2_Block1 or
                     Enums.blockType.M3_Block1 or
