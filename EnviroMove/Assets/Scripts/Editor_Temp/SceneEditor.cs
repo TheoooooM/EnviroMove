@@ -521,7 +521,9 @@ public class SceneEditor
         var posOfnewGo = newGo.transform.position;
         var rotationGo = (int)newGo.transform.rotation.eulerAngles.y;
         var posToInstantiateNewBorder = new Vector3();
+        var posToInstantiateNewBorder2 = new Vector3();
         var newBorder = new GameObject();
+        var newBorder2 = new GameObject();
         switch (rotationGo)
         {
             case 0:
@@ -533,6 +535,15 @@ public class SceneEditor
                 newBorder.transform.Rotate(-90,-90,0);
                 newBorder.name = "Block (" + (int)posToInstantiateNewBorder.x + ", " + 1 + ", " +
                                  (int)posToInstantiateNewBorder.z + ")";
+                
+                posToInstantiateNewBorder2 = new Vector3(posOfnewGo.x, posOfnewGo.y, posOfnewGo.z + 4);
+                blockGrid[(int)posOfnewGo.x, 1, (int)posOfnewGo.z + 4] = (int)Enums.blockType.InsideBottom1 + (int)(posToInstantiateNewBorder.x % (tileSize.x + tailleBridge));
+                newBorder2 = Object.Instantiate(prefabs[blockGrid[(int)posOfnewGo.x, 1, (int)posOfnewGo.z + 4]],
+                    new Vector3(posToInstantiateNewBorder2.x + .5f,.5f, posToInstantiateNewBorder2.z + .5f), Quaternion.identity);
+                newBorder2.transform.parent = parent.transform;
+                newBorder2.transform.Rotate(-90,0,90);
+                newBorder2.name = "Block (" + (int)posToInstantiateNewBorder2.x + ", " + 1 + ", " +
+                                  (int)posToInstantiateNewBorder2.z + ")";
                 break;
             case 90:
                 posToInstantiateNewBorder = new Vector3(posOfnewGo.x + 1, posOfnewGo.y, posOfnewGo.z);
@@ -542,6 +553,14 @@ public class SceneEditor
                 newBorder.transform.parent = parent.transform;
                 newBorder.transform.Rotate(-90,0,0);
                 newBorder.name = "Block (" + (int)posToInstantiateNewBorder.x + ", " + 1 + ", " + (int)posToInstantiateNewBorder.z + ")";
+                
+                posToInstantiateNewBorder2 = new Vector3(posOfnewGo.x + 4, posOfnewGo.y, posOfnewGo.z);
+                blockGrid[(int)posOfnewGo.x + 4, 1, (int)posOfnewGo.z] = (int)Enums.blockType.InsideLeft1 + (int)(posToInstantiateNewBorder.z % (tileSize.y + tailleBridge));
+                newBorder2 = Object.Instantiate(prefabs[blockGrid[(int)posOfnewGo.x + 4, 1, (int)posOfnewGo.z]],
+                    new Vector3(posToInstantiateNewBorder2.x + .5f,.5f, posToInstantiateNewBorder2.z - .5f), Quaternion.identity);
+                newBorder2.transform.parent = parent.transform;
+                newBorder2.transform.Rotate(-90,180,0);
+                newBorder2.name = "Block (" + (int)posToInstantiateNewBorder2.x + ", " + 1 + ", " + (int)posToInstantiateNewBorder2.z + ")";
                 break;
             case 180:
                 posToInstantiateNewBorder = new Vector3(posOfnewGo.x, posOfnewGo.y, posOfnewGo.z - 1);
@@ -552,6 +571,15 @@ public class SceneEditor
                 newBorder.transform.Rotate(-90,0,90);
                 newBorder.name = "Block (" + (int)posToInstantiateNewBorder.x + ", " + 1 + ", " +
                                  (int)posToInstantiateNewBorder.z + ")";
+                
+                posToInstantiateNewBorder2 = new Vector3(posOfnewGo.x, posOfnewGo.y, posOfnewGo.z - 4);
+                blockGrid[(int)posOfnewGo.x, 1, (int)posOfnewGo.z - 4] = (int)Enums.blockType.InsideTop1 + (int)(posToInstantiateNewBorder.x % (tileSize.x + tailleBridge));
+                newBorder2 = Object.Instantiate(prefabs[blockGrid[(int)posOfnewGo.x, 1, (int)posOfnewGo.z - 4]],
+                    new Vector3(posToInstantiateNewBorder2.x - .5f,.5f, posToInstantiateNewBorder2.z - .5f), Quaternion.identity);
+                newBorder2.transform.parent = parent.transform;
+                newBorder2.transform.Rotate(-90,-90,0);
+                newBorder2.name = "Block (" + (int)posToInstantiateNewBorder2.x + ", " + 1 + ", " +
+                                  (int)posToInstantiateNewBorder2.z + ")";
                 break;
             case 270:
                 posToInstantiateNewBorder = new Vector3(posOfnewGo.x - 1, posOfnewGo.y, posOfnewGo.z);
@@ -561,6 +589,14 @@ public class SceneEditor
                 newBorder.transform.parent = parent.transform;
                 newBorder.transform.Rotate(-90,180,0);
                 newBorder.name = "Block (" + (int)posToInstantiateNewBorder.x + ", " + 1 + ", " + (int)posToInstantiateNewBorder.z + ")";
+                
+                posToInstantiateNewBorder2 = new Vector3(posOfnewGo.x - 4, posOfnewGo.y, posOfnewGo.z);
+                blockGrid[(int)posOfnewGo.x - 4, 1, (int)posOfnewGo.z] = (int)Enums.blockType.InsideRight1 + (int)(posToInstantiateNewBorder.z % (tileSize.y + tailleBridge));
+                newBorder2 = Object.Instantiate(prefabs[blockGrid[(int)posOfnewGo.x - 4, 1, (int)posOfnewGo.z]],
+                    new Vector3(posToInstantiateNewBorder2.x - .5f,.5f, posToInstantiateNewBorder2.z + .5f), Quaternion.identity);
+                newBorder2.transform.parent = parent.transform;
+                newBorder2.transform.Rotate(-90,0,0);
+                newBorder2.name = "Block (" + (int)posToInstantiateNewBorder2.x + ", " + 1 + ", " + (int)posToInstantiateNewBorder2.z + ")";
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -744,6 +780,8 @@ public class SceneEditor
             _ => blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y,
                 (int)posOfnewPanelStart.z]
         };
+        newPanelStart.name = "Block (" + posOfnewPanelStart.x + ", " + posOfnewPanelStart.y + ", " +
+                             posOfnewPanelStart.z + ")";
         return newPanelStart;
     }
 
@@ -1548,7 +1586,7 @@ public class SceneEditor
                 switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
                 {
                     case Enums.Side.forward:
-                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] != 0) break;
                         blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
                         blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
                             Enums.Side.none;
@@ -1562,7 +1600,7 @@ public class SceneEditor
                             Enums.Side.forward;
                         break;
                     case Enums.Side.right:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] != 0) break;
+                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
                         blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 0;
                         blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
                             Enums.Side.none;
@@ -1576,7 +1614,7 @@ public class SceneEditor
                             Enums.Side.forward;
                         break;
                     case Enums.Side.back:
-                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] != 0) break;
                         blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
                         blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
                             Enums.Side.none;
@@ -1590,7 +1628,7 @@ public class SceneEditor
                             Enums.Side.forward;
                         break;
                     case Enums.Side.left:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] != 0) break;
+                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
                         blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 0;
                         blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
                             Enums.Side.none;
@@ -1615,21 +1653,21 @@ public class SceneEditor
                 switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
                 {
                     case Enums.Side.forward:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] != 0) break;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] != 0) break;
                         blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 0;
                         blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
                             Enums.Side.none;
                         blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
                             Enums.Side.none;
 
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 186;
+                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z] = 186;
                         blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
                             Enums.Side.forward;
                         blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
                             Enums.Side.forward;
                         break;
                     case Enums.Side.right:
-                        if (blockGrid[(int)hitPosition.x  - 1, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
+                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
                         blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
                         blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
                             Enums.Side.none;
@@ -1643,7 +1681,7 @@ public class SceneEditor
                             Enums.Side.forward;
                         break;
                     case Enums.Side.back:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] != 0) break;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] != 0) break;
                         blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 0;
                         blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
                             Enums.Side.none;
@@ -1657,7 +1695,7 @@ public class SceneEditor
                             Enums.Side.forward;
                         break;
                     case Enums.Side.left:
-                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
+                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
                         blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
                         blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
                             Enums.Side.none;
@@ -1682,7 +1720,7 @@ public class SceneEditor
                 switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
                 {
                     case Enums.Side.forward:
-                        if (blockGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] != 0) break;
                         // blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
                         // blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
                         //     Enums.Side.none;
@@ -1706,7 +1744,7 @@ public class SceneEditor
                             Enums.Side.forward;
                         break;
                     case Enums.Side.right:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] != 0) break;
+                        if (blockGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
                         // blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 0;
                         // blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
                         //     Enums.Side.none;
@@ -1730,7 +1768,7 @@ public class SceneEditor
                             Enums.Side.forward;
                         break;
                     case Enums.Side.back:
-                        if (blockGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] != 0) break;
                         // blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
                         // blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
                         //     Enums.Side.none;
@@ -1754,7 +1792,7 @@ public class SceneEditor
                             Enums.Side.forward;
                         break;
                     case Enums.Side.left:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] != 0) break;
+                        if (blockGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
                         // blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 0;
                         // blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
                         //     Enums.Side.none;
@@ -1789,7 +1827,7 @@ public class SceneEditor
                 switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
                 {
                     case Enums.Side.forward:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] != 0) break;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] != 0) break;
                         blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 0;
                         blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
                             Enums.Side.none;
@@ -1803,7 +1841,7 @@ public class SceneEditor
                             Enums.Side.none;
                         break;
                     case Enums.Side.right:
-                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
+                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
                         blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
                         blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
                             Enums.Side.none;
@@ -1817,7 +1855,7 @@ public class SceneEditor
                             Enums.Side.none;
                         break;
                     case Enums.Side.back:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] != 0) break;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] != 0) break;
                         blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 0;
                         blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
                             Enums.Side.none;
@@ -1831,7 +1869,7 @@ public class SceneEditor
                             Enums.Side.none;
                         break;
                     case Enums.Side.left:
-                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
+                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] != 0) break;
                         blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
                         blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
                             Enums.Side.none;
