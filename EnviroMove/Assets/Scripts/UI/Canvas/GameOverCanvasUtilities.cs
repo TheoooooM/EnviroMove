@@ -32,6 +32,9 @@ namespace UI.Canvas
                 levelFinished[currentLevelID] = '1';
                 PlayerPrefs.SetString("LevelFinish", levelFinished.ToString());
             }
+            
+            if(nextLevelButton != null) nextLevelButton.gameObject.SetActive(nextLevel != null);
+            if(editLevelButton != null) editLevelButton.gameObject.SetActive(m_thisInterface.GetTargetPage() == PageDirection.Create);
             // editLevelButton.gameObject.SetActive(true);
         }
 
