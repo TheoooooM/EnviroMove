@@ -288,6 +288,7 @@ namespace Levels
                 }
             }
 
+            return default;
             throw new NullReferenceException($"{name} board Doesn't Countain {boardable}");
         }
 
@@ -406,8 +407,9 @@ namespace Levels
         public void RemoveBoardable(IBoardable boardable)
         {
             var pos = GetPosition(boardable);
+            if(pos == default)return;
             _board[pos.x, pos.y, pos.z] = null;
-            Debug.Log($"Remove Boardable At {pos}");
+           // Debug.Log($"Remove Boardable At {pos}");
         }
 
         public Vector3 GetWorldPos(Vector3Int boardPos) => transform.position + boardPos;
