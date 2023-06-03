@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Archi.Service.Interface;
 using Inputs;
 using Interfaces;
 using Levels;
@@ -10,6 +11,7 @@ using UnityEngine;
 delegate void basicDelegate();
 public class Player : MonoBehaviour, IBoardable
 {
+    private IAudioService m_Audio;
     private IBoard _board;
     
     private Vector3Int _boardPos;
@@ -37,6 +39,9 @@ public class Player : MonoBehaviour, IBoardable
     [SerializeField] private GameObject walkVFX;
     [Space]
     [SerializeField] private List<Material> skinMat = new();
+    [Header("Sound")]
+    [SerializeField] private AudioClip walkSound;
+    
     public Material GetMat(int id) => skinMat[id];
 
 
@@ -62,6 +67,7 @@ public class Player : MonoBehaviour, IBoardable
             transform.rotation = Quaternion.LookRotation(Enums.SideVector3(_lastDir), Vector3.up);
             _moving = true;
             _animator.SetTrigger("Walk");
+            if(!m_Audio.IsPlaying(walkSound))m_Audio.StartSound(walkSound, true);
             walkVFX.SetActive(true);
             //_board.Move(this, nextPos);
             MoveToPoint(movePosition, moveSpeed, false, true);
@@ -73,6 +79,8 @@ public class Player : MonoBehaviour, IBoardable
     {
         _animator.ResetTrigger("Walk");
         _animator.SetTrigger("Death");
+        m_Audio.StopSound(walkSound);
+        m_Audio.StopSound(walkSound);
         walkVFX.SetActive(false);
         deathVFX.SetActive(true);
         StopCoroutineAction();
@@ -96,6 +104,7 @@ public class Player : MonoBehaviour, IBoardable
     public void Grab(Vector3 newPos, float speed = 0)
     {
         _animator.SetTrigger("Grab");
+        m_Audio.StopSound(walkSound);
         walkVFX.SetActive(false);
         MoveToPoint(newPos, speed);
     }
@@ -111,34 +120,37 @@ public class Player : MonoBehaviour, IBoardable
     {
         yield return new WaitForEndOfFrame();
         var magnitude = Vector3.Distance(transform.position, newPos);
-            var startMagnitude = magnitude;
-            bool haveTransi = false;
-            var step = speed * Time.deltaTime;
-            while (magnitude> step)
+        var startMagnitude = magnitude;
+        bool haveTransi = false;
+        var step = speed * Time.deltaTime;
+        while (magnitude > step)
+        {
+            step = speed * Time.deltaTime;
+            transform.position += (newPos - transform.position).normalized * step;
+            magnitude -= step;
+            if (finishMove && magnitude <= startMagnitude / 2 && !haveTransi)
             {
-                step = speed * Time.deltaTime;
-                transform.position += (newPos - transform.position).normalized * step;
-                magnitude -= step;
-                if (finishMove && magnitude <= startMagnitude / 2 && !haveTransi)
-                {
-                    haveTransi = true;
-                    _board.Move(this, nextPos);
-                    //Debug.Break();
-                    nextPos = default;
-                }
-                yield return new WaitForEndOfFrame();
+                haveTransi = true;
+                _board.Move(this, nextPos);
+                //Debug.Break();
+                nextPos = default;
             }
-            transform.position = newPos;
-            _moving = false;
-            _actionCoroutine = null;
-            _onMoveFinish?.Invoke();
-            _onMoveFinish = null;
-            if(_actionCoroutine == null) Move();
+
+            yield return new WaitForEndOfFrame();
+        }
+        transform.position = newPos;
+        _moving = false;
+        _actionCoroutine = null;
+        _onMoveFinish?.Invoke();
+        _onMoveFinish = null;
+        if (_actionCoroutine == null) Move();
     }
-    public void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board)
+
+    public void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board, IAudioService soundService)
     {
         _boardPos = boardPos;
         _board = board;
+        m_Audio = soundService;
     }
 
     public void SetPosition(Vector3Int newBoardPos)

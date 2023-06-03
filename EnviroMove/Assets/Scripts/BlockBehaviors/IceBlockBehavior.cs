@@ -9,6 +9,8 @@ namespace BlockBehaviors
     {
         [SerializeField] private ParticleSystem fx;
         [SerializeField] private MeshRenderer mesh;
+        [Space]
+        [SerializeField] AudioClip breakSound;
 
         public override bool TryMoveOn(IBoardable move, Enums.Side commingSide, Vector3Int pos)
         {
@@ -18,6 +20,7 @@ namespace BlockBehaviors
                 boardMaster.RemoveBoardable(this);
                 mesh.enabled = false;
                 fx.Play();
+                m_Audio.PlaySound(breakSound);
                 
                 //Destroy(gameObject);
                 

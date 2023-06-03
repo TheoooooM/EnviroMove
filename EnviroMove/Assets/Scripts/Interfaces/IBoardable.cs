@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Archi.Service.Interface;
 using UnityEngine;
 
 namespace Interfaces
@@ -10,7 +11,7 @@ namespace Interfaces
         public List<Enums.BlockTag> GetTags();
         bool CanBlockInteract();
         
-        public void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board);
+        public void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board, IAudioService soundService);
         public void SetPosition(Vector3Int newBoardPos);
 
         bool TryMoveOn(IBoardable move, Enums.Side commingSide, Vector3Int pos);

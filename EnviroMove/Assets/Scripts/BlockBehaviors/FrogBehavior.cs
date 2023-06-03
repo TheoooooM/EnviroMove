@@ -14,6 +14,9 @@ namespace BlockBehaviors
         [Header("VFX")]
         [SerializeField] private GameObject castVFX;
         [SerializeField] private GameObject grabVFX;
+
+        [Header("VFX")]
+        [SerializeField] AudioClip castSound;
         
         private Vector3Int tonguePos;
         private basicDelegate onTongueMoveFinish;
@@ -32,6 +35,7 @@ namespace BlockBehaviors
                 //tongue.SetActive(true);
                 StartCoroutine(Cooldown());
                 _animator.SetTrigger("Grab");
+                m_Audio.PlaySound(castSound);
                 castVFX.SetActive(true);
                 Grab();
             }

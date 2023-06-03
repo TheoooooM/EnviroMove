@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Archi.Service.Interface;
 using Interfaces;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ namespace BlockBehaviors
     public delegate void BlockDelegate();
     public class BlockBehavior : MonoBehaviour, IBoardable
     {
+        protected IAudioService m_Audio;
+        
         protected Vector3Int boardPos;
         protected Enums.Side boardRotation;
         protected IBoard boardMaster;
@@ -23,12 +26,13 @@ namespace BlockBehaviors
         [SerializeField] protected float moveSpeed = 1f;
         private Coroutine _actionCoroutine;
     
-        public virtual void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board)
+        public virtual void SetOnBoard(Vector3Int boardPos, Enums.Side boardRotation, IBoard board, IAudioService soundService)
         {
             this.boardPos = boardPos;
             if (boardRotation == Enums.Side.none) this.boardRotation = Enums.Side.forward; 
             else this.boardRotation = boardRotation;
             boardMaster = board;
+            m_Audio = soundService;
         }
 
         public void SetPosition(Vector3Int newBoardPos)

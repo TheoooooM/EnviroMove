@@ -19,6 +19,7 @@ namespace Levels
     public class Level : MonoBehaviour, IBoard
     {
         [ServiceDependency] private IInterfaceService m_interface;
+        [ServiceDependency] private IAudioService m_sound;
 
         public LevelDelegate onFinishGenerate;
 
@@ -123,7 +124,6 @@ namespace Levels
                         0 => Enums.blockType.P_PumpkinBounce,
                         _ => throw new ArgumentOutOfRangeException()
                     };
-                Debug.Log($"type: {type}");
 
                 string key = Blocks.BlockType[type];
                 if (type == Enums.blockType.playerStart) key = "Player";
@@ -258,7 +258,7 @@ namespace Levels
                         if (currentBoardable == null)
                             throw new MissingMemberException($"{currentGo.name} isn't Boardable");
                         currentBoardable.SetOnBoard(currentPos, (Enums.Side)data.blockHorizontalRotationGrid[x, y, z],
-                            this);
+                            this, m_sound);
                         _board[currentPos.x, currentPos.y, currentPos.z] = currentBoardable;
                         onFinishGenerate += currentBoardable.StartBoard;
                     }

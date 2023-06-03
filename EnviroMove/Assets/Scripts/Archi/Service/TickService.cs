@@ -30,6 +30,7 @@ namespace Archi.Service
         }
         public event Action OnUpdate;
         
+
         public void StopTime(bool time = true, bool update = true)
         {
             if(time) Time.timeScale = 0;

@@ -14,6 +14,8 @@ namespace BlockBehaviors
         [SerializeField] private List<GameObject> directionFX = new();
         [SerializeField] private GameObject vfxDebug;
         [SerializeField] private Transform mesh;
+        [Space] 
+        [SerializeField] private AudioClip swipeSound;
 
 
         private void Start()
@@ -58,6 +60,7 @@ namespace BlockBehaviors
             Vector3Int lastBoardPos = boardPos;
             if (boardMaster.TryMove(boardPos, side, out Vector3 newPos)) {
                 UpdateNeighboor(lastBoardPos);
+                m_Audio.PlaySound(swipeSound);
                 StartCoroutine(MoveToPosition(newPos, moveSpeed));
             }
         }
