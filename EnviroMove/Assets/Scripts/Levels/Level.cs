@@ -98,7 +98,7 @@ namespace Levels
             }*/
 
             _blocksUsed.Add((int)Enums.blockType.empty, null);
-            _blocksUsed.Add((int)Enums.blockType.playerEnd, null);
+           // _blocksUsed.Add((int)Enums.blockType.playerEnd, null);
             _blocksUsed.Add((int)Enums.blockType.panelEnd, null);
             foreach (var index in data.blockGrid)
             {
