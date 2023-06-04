@@ -28,17 +28,27 @@ namespace UI.Canvas {
         [SerializeField] private List<RectTransform> springButtonTransform = new();
         [SerializeField] private List<RectTransform> autumnButtonTransform = new();
         [SerializeField] private List<RectTransform> winterButtonTransform = new();
-
+        [SerializeField] private List<GameObject> startGam = new();
         private Vector3 startPos = new();
 
         /// <summary>
         /// Set the position of the camera at the start
         /// </summary>
         public override void Init() {
-            m_thisInterface.HideLoadingScreen();
+            InitStars();
             AnimateButtons();
+            m_thisInterface.HideLoadingScreen();
         }
 
+        private void InitStars() {
+            string levels = PlayerPrefs.GetString("LevelFinish", "000000000000000");
+            
+            for (var index = 0; index < startGam.Count; index++) {
+                startGam[index].SetActive(levels[index] == '1');
+                startGam[index].transform.DOPunchScale(new Vector3(.2f, .2f, .2f), .5f, 1).SetLoops(-1);
+            }
+        }
+        
         private void AnimateButtons() {
             Sequence spring = DOTween.Sequence();
             spring.SetLoops(-1).SetAutoKill(false);

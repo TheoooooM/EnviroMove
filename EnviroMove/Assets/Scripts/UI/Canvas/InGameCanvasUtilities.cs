@@ -10,7 +10,7 @@ namespace UI.Canvas
         [ServiceDependency] private ILevelService m_level;
         [ServiceDependency] private IInterfaceService m_thisInterface;
         [ServiceDependency] private IToolService m_tool;
-        [ServiceDependency] protected IAudioService m_thisAudio;
+        [ServiceDependency] private IAudioService m_thisAudio;
         [SerializeField] private GameObject playingCanvas;
         [SerializeField] private GameObject pauseCanvas;
 
@@ -35,7 +35,7 @@ namespace UI.Canvas
         }
 
         public void Pause() {
-            canvasGO.SetMLevel(m_level, m_thisInterface, m_tool);
+            canvasGO.SetMLevel(m_level, m_thisInterface, m_tool, m_thisAudio);
             Time.timeScale = 0;
             pauseCanvas.SetActive(true);
             playingCanvas.SetActive(false);
