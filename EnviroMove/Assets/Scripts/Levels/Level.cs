@@ -116,7 +116,10 @@ namespace Levels
                         0 => Enums.blockType.M3_Block1,
                         _ => throw new ArgumentOutOfRangeException()
                     };
-                if (type is Enums.blockType.breakableBlock)
+                if (type is Enums.blockType.breakableBlock or 
+                    Enums.blockType.P_EGGbounce or 
+                    Enums.blockType.P_BounceCadeau or 
+                    Enums.blockType.P_PumpkinBounce)
                     type = data.season switch
                     {
                         2 => Enums.blockType.P_EGGbounce,
