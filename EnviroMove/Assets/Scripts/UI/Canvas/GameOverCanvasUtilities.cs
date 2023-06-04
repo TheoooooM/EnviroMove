@@ -34,7 +34,7 @@ namespace UI.Canvas
                 PlayerPrefs.SetString("LevelFinish", levelFinished.ToString());
             }
             
-            if(nextLevelButton != null) nextLevelButton.gameObject.SetActive(nextLevel != null);
+            if(nextLevelButton != null) nextLevelButton.gameObject.SetActive(nextLevel != null && menuType == MenuType.Win);
             if(editLevelButton != null) editLevelButton.gameObject.SetActive(m_thisInterface.GetTargetPage() == PageDirection.Create);
             // editLevelButton.gameObject.SetActive(true);
         }
