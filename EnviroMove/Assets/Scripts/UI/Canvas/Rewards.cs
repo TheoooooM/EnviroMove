@@ -15,7 +15,13 @@ public class Rewards : MonoBehaviour {
 
     private void Awake() => btn = GetComponent<Button>();
 
-    public void SetRewards() => menu.GetRewards(RewardType, rewardName, rewardValue, goldCost);
+    public void SetRewards() {
+        string text = goldCost > 0 ? $"ARE YOU SUR YOU WANT TO BUY THE SKIN <color=black>{rewardName}</color> WHICH COST <color=yellow>{goldCost} GOLDS</color> ?" : 
+                                     $"Are you sure you want to pay some money to get {rewardValue} golds";
+        menu.ShowPopUp(text, () => {
+            menu.GetRewards(RewardType, rewardName, rewardValue, goldCost);
+        });
+    }
 
     private void Update() {
         if (goldCost == 0) return;
