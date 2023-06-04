@@ -6,9 +6,11 @@ namespace BlockBehaviors
     public class PenguinBehavior : BlockBehavior, IInteractable
     {
         [SerializeField] private Animator _animator;
-        [Space]
+        [Header("VFX")]
         [SerializeField] private GameObject iceVFX;
         [SerializeField] private GameObject previewVFX;
+        [Header("Sound")]
+        [SerializeField] AudioClip slideSound ;
         
         private bool isInteractible = true;
 
@@ -35,6 +37,7 @@ namespace BlockBehaviors
         {
             transform.rotation = Quaternion.LookRotation(Enums.SideVector3(Enums.InverseSide(side)), Vector3.up);
             _animator.SetTrigger("Slide");
+            m_Audio.PlaySound(slideSound);
             iceVFX.SetActive(false);
             Move(side);
             onMoveFinish += () => Move(side);

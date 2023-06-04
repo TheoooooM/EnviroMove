@@ -21,6 +21,7 @@ public class SceneEditor
     #region Variables
 
     [ServiceDependency] public IDataBaseService m_Data;
+    [ServiceDependency] public IAudioService m_Sound;
 
     private GameObject[] prefabs;
 
@@ -88,8 +89,17 @@ public class SceneEditor
     
     private int blockToRemenberForRotation = -1;
 
+    private AudioClip placeSound;
+    private AudioClip removeSound;
+
     #endregion
 
+    public SceneEditor()
+    {
+        placeSound = Addressables.LoadAsset<AudioClip>("PlaceBlockSound").Result;
+        removeSound = Addressables.LoadAsset<AudioClip>("RemoveBlockSound").Result;
+    }
+    
     public void Start()
     {
         Mode = EditorMode.moveCamera;

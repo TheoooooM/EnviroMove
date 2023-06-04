@@ -15,6 +15,7 @@ namespace UI.Canvas
         [ServiceDependency] private IToolService m_tool;
         [ServiceDependency] private ILevelService m_level;
         [ServiceDependency] private IInterfaceService m_thisInterface;
+        [ServiceDependency] private IAudioService m_thisAudio;
 
         [SerializeField] private Button nextLevelButton = null;
         [SerializeField] private Button editLevelButton = null;
@@ -40,6 +41,7 @@ namespace UI.Canvas
 
         public void EditLevel() {
             Time.timeScale = 1;
+            m_thisAudio.StopSounds();
             StartCoroutine(WaitForAction(() => {
                 m_tool.OpenLevel(m_level.GetCurrentLevelData());
             }));
@@ -48,6 +50,7 @@ namespace UI.Canvas
         private LevelData dataTemp;
         public void Replay(bool fromPause) {
             StartCoroutine(WaitForAction(() => {
+                m_thisAudio.StopSounds();
                 Time.timeScale = 1;
                 dataTemp = m_level.GetCurrentLevelData();
                 m_thisInterface.GenerateLoadingScreen("Load Level", 1, () => {
@@ -89,7 +92,7 @@ namespace UI.Canvas
         /// <param name="sceneName"></param>
         public void GoToMainMenu(string sceneName) {
             Time.timeScale = 1;
-            
+            m_thisAudio.StopSounds();
             string sceneDirection = m_thisInterface.GetTargetPage() switch {
                 PageDirection.LevelSelection_Spring => "RoadMap",
                 PageDirection.LevelSelection_Autumn => "RoadMap",

@@ -11,6 +11,7 @@ namespace Archi.Service
     public class LevelService : Service, ILevelService
     {
         [DependeOnService] private IInterfaceService m_Interface;
+        [DependeOnService] private IAudioService m_Sound;
 
         private LevelData currentDataLevel;
 
