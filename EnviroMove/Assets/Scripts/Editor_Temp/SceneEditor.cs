@@ -523,7 +523,7 @@ public class SceneEditor
         selectedPrefabIndex = season switch
         {
             0 => (int)Enums.blockType.P_PumpkinBounce,
-            1 => (int)Enums.blockType.P_EGGbounce,
+            1 => (int)Enums.blockType.P_BounceCadeau,
             2 => (int)Enums.blockType.P_EGGbounce,
             _ => selectedPrefabIndex
         };
