@@ -64,6 +64,10 @@ namespace UI.Canvas
         [SerializeField] private List<Sprite> goldRewardSprite = new();
         [SerializeField] private List<Sprite> skinRewardSprite = new();
         [SerializeField] private TextMeshProUGUI goldTxt = null;
+        [SerializeField] private ParticleSystem rewardFX = null;
+        [SerializeField] private  Sprite goldSprite = null;
+        [SerializeField] private  Sprite skinSprite = null;
+        [SerializeField] private RectTransform rotatingFx = null;
         public bool isInReward = false;
         private int stageReward = 0;
 
@@ -507,10 +511,18 @@ namespace UI.Canvas
 
             rewardTxt.text = rewardName;
             rewardSequence.Append(rewardImg.rectTransform.DOScale(1, popUpAnimationDuration).SetEase(Ease.OutBack).OnComplete(() => {
+                rotatingFx.DOScale(1, popUpAnimationDuration).SetEase(Ease.OutBack).OnComplete((() => {
+                    rotatingFx.DOPunchScale(new Vector3(.5f, .5f, .5f), 1, 1).SetLoops(-1).SetAutoKill(false);
+                    rotatingFx.DORotate(new Vector3(0, 0, 10f), .3f).SetLoops(-1, LoopType.Incremental).SetEase(Ease.Linear);
+                }));
                 stageReward = 2;
+                rewardFX.textureSheetAnimation.SetSprite(0, type == RewardType.Gold ? goldSprite : skinSprite);
+                rewardFX.gameObject.SetActive(true);
                 rewardImg.rectTransform.DOPunchScale(new Vector3(0.1f, 0.1f, 0.1f), 1, 1).SetLoops(-1).SetAutoKill(false);
             }));
-            rewardSequence.Append(rewardTxt.rectTransform.DOScale(1, popUpAnimationDuration).SetEase(Ease.OutBack).OnComplete(() => stageReward = 3));
+            rewardSequence.Append(rewardTxt.rectTransform.DOScale(1, popUpAnimationDuration).SetEase(Ease.OutBack).OnComplete(() => {
+                stageReward = 3;
+            }));
             isInReward = true;
         }
 
@@ -519,8 +531,11 @@ namespace UI.Canvas
         /// </summary>
         private void CloseRewardPanel() {
             rewardImg.rectTransform.DOKill();
+            rotatingFx.DORewind();
+            rotatingFx.DOKill();
             rewardImg.rectTransform.localScale = Vector3.zero;
             rewardTxt.rectTransform.localScale = Vector3.zero;
+            rotatingFx.localScale = Vector3.zero;
             rewardGroup.DOFade(0, popUpAnimationDuration).OnComplete(() => rewardGroup.gameObject.SetActive(false));
             isInReward = false;
             stageReward = 0;

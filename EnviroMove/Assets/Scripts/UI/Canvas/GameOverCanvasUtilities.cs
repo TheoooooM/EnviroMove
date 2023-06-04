@@ -79,10 +79,11 @@ namespace UI.Canvas
             });
         }
 
-        public void SetMLevel(ILevelService m_levelUp , IInterfaceService interfaceService, IToolService tool) {
+        public void SetMLevel(ILevelService m_levelUp , IInterfaceService interfaceService, IToolService tool, IAudioService audio) {
             m_level = m_levelUp;
             m_thisInterface = interfaceService;
             m_tool = tool;
+            m_thisAudio = audio;
             if(editLevelButton != null) editLevelButton.gameObject.SetActive(m_thisInterface.GetTargetPage() == PageDirection.Create);
         }
 
