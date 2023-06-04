@@ -53,7 +53,9 @@ public class Compositor : MonoBehaviour {
         AddService<IDataBaseService>(new DataBaseService());
         AddService<ITickService>(new TickService());
         AddService<IInterfaceService>(new InterfaceService());
+        Debug.Log("Create Service Audio");
         AddService<IAudioService>(new AudioService());
+        Debug.Log("Service Audio Created");
     }
 
     void AddService<T>(T service) where  T : IService
