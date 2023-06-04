@@ -14,13 +14,17 @@ namespace UI.Canvas
         [ServiceDependency] private ILevelService m_level;
         [ServiceDependency] private IInterfaceService m_thisInterface;
         [SerializeField] private TMP_InputField inputField;
+        [ServiceDependency] private IAudioService m_thisSound;
 
         private LevelData dataToTest;
+        private AudioClip returnSound;
+        private AudioClip clickSound;
 
-        // public override void Init()
-        // {
-        //     base.Init();
-        // }
+        public override void Init()
+        {
+            AdresseHelper.LoadAssetWithCallback<AudioClip>("ReturnSound", clip => returnSound = clip);
+            AdresseHelper.LoadAssetWithCallback<AudioClip>("ClickSound", clip => clickSound = clip);
+        }
         
         public void LaunchTool()
         {    
@@ -30,13 +34,13 @@ namespace UI.Canvas
 
         public void ReturnButton() {
             // SceneManager.LoadScene(0);
-            // SoundReturn();
+            m_thisSound.PlaySound(returnSound);
             m_Tool.DesactivateTool();
         }
     
         public void ChangePrefab(int index)
         {
-            ClickSound();
+            m_thisSound.PlaySound(clickSound);
             m_Tool.ChangePrefab(index);
         }
 
@@ -47,7 +51,7 @@ namespace UI.Canvas
 
         public void SaveDataOnDevice()
         {
-            ClickSound();
+            m_thisSound.PlaySound(clickSound);
             var data = m_Tool.GetDataCreation();
             Debug.Log((string)data);
             m_data.GenerateDataLevel(data, inputField.text);
@@ -56,14 +60,14 @@ namespace UI.Canvas
 
         public void UpdateData()
         {
-            ClickSound();
+            m_thisSound.PlaySound(clickSound);
             var data = m_Tool.GetDataCreation();
             m_data.UpdateDataLevel((string)data, data.id);
         }
 
         public void SaveDataOnDataBase()
         {
-            ClickSound();
+            m_thisSound.PlaySound(clickSound);
             var data = m_Tool.GetDataCreation();
             if (data.id == null) data.id = m_data.GetUniqueIdentifier();
             m_data.CreateData((string)data, data.id);
@@ -78,12 +82,12 @@ namespace UI.Canvas
         
         public void SwitchMode(int index)
         {
-            ClickSound();
+            m_thisSound.PlaySound(clickSound);
             m_Tool.SwitchMode(index);
         }
         
         public void TestLevel(string sceneName) {
-            ClickSound();
+            m_thisSound.PlaySound(clickSound);
             m_thisInterface.GenerateLoadingScreen("", 1, () => {
                 dataToTest = m_Tool.GetDataCreation();
                 SceneManager.sceneLoaded += AsyncTestLevel;
@@ -101,7 +105,7 @@ namespace UI.Canvas
 
         private void AsyncTestLevel(Scene arg0, LoadSceneMode arg1)
         {
-            ClickSound();
+            m_thisSound.PlaySound(clickSound);
             m_level.LoadLevel(dataToTest);
             SceneManager.sceneLoaded -= AsyncTestLevel;
             
@@ -110,37 +114,37 @@ namespace UI.Canvas
 
         public void ToggleLevelElements()
         {
-            ClickSound();
+            m_thisSound.PlaySound(clickSound);
             m_Tool.ToggleLevelElements();
         }
 
         public void ChangeCameraAngle()
         {
-            ClickSound();
+            m_thisSound.PlaySound(clickSound);
             m_Tool.ChangeCameraAngle();
         }
         
         public void SwapSeason()
         {
-            ClickSound();
+            m_thisSound.PlaySound(clickSound);
             m_Tool.SwapSeason();
         }
         
         public void PlaceGrass()
         {
-            ClickSound();
+            m_thisSound.PlaySound(clickSound);
             m_Tool.PlaceGrass();
         }
         
         public void PlaceCaillou()
         {
-            ClickSound();
+            m_thisSound.PlaySound(clickSound);
             m_Tool.PlaceCaillou();
         }
         
         public void PlaceBreakable()
         {
-            ClickSound();
+            m_thisSound.PlaySound(clickSound);
             m_Tool.PlaceBreakable();
         }
     }

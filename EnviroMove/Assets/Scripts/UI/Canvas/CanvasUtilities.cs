@@ -38,13 +38,7 @@ namespace UI.Canvas
 
         public void SoundReturn()=>m_Audio.PlaySound(returnSound);
 
-        public void ClickSound()
-        {
-            if (m_Audio == null)
-            {
-                return;
-            }
-            m_Audio.PlaySound(clickSound);
-        }
+        public void ClickSound() => m_Audio.PlaySound(clickSound);
+        
     }
 }
