@@ -120,7 +120,7 @@ namespace Levels
                     type = data.season switch
                     {
                         2 => Enums.blockType.P_EGGbounce,
-                        1 => Enums.blockType.P_EGGbounce,
+                        1 => Enums.blockType.P_BounceCadeau,
                         0 => Enums.blockType.P_PumpkinBounce,
                         _ => throw new ArgumentOutOfRangeException()
                     };
