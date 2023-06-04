@@ -1589,14 +1589,11 @@ public class SceneEditor
         Vector3 position = Input.GetTouch(0).position;
         RaycastHit hitRay;
         var ray = _camera.ScreenPointToRay(position);
-        if (!Physics.Raycast(ray, out hitRay)) return;
-        var hitPosition = hitRay.transform.position;
-        if (hitRay.transform.gameObject.transform.name == "Plane") return;
-        if (twoByOnePrefabIndex.Contains(blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z]))
+        if (Physics.Raycast(ray, out hitRay))
         {
-            Debug.Log("Previous rotation: " + blockHorizontalRotationGrid[(int)hitPosition.x,
-                (int)hitPosition.y, (int)hitPosition.z]);
-            switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
+            var hitPosition = hitRay.transform.position;
+            if (hitRay.transform.gameObject.transform.name == "Plane") return;
+            if (twoByOnePrefabIndex.Contains(blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z]))
             {
                 switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
                 {
@@ -1737,11 +1734,8 @@ public class SceneEditor
                         throw new ArgumentOutOfRangeException();
                 }
             }
-        }
 
-        else if (twoByTwoPrefabIndex.Contains(blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z]))
-        {
-            switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
+            if (twoByTwoPrefabIndex.Contains(blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z]))
             {
                 switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
                 {
@@ -1874,11 +1868,8 @@ public class SceneEditor
                         throw new ArgumentOutOfRangeException();
                 }
             }
-        }
 
-        else if (threeByOnePrefabIndex.Contains(blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z]))
-        {
-            switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
+            if (threeByOnePrefabIndex.Contains(blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z]))
             {
                 switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
                 {
@@ -2013,11 +2004,8 @@ public class SceneEditor
                         throw new ArgumentOutOfRangeException();
                 }
             }
-        }
 
-        else if (twoPlusOnePrefabIndex.Contains(blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z]))
-        {
-            switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
+            if (twoPlusOnePrefabIndex.Contains(blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z]))
             {
                 switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
                 {
@@ -2160,11 +2148,11 @@ public class SceneEditor
                         throw new ArgumentOutOfRangeException();
                 }
             }
-        }
-        RotateBlockHorizontal(hitRay);
 
-        hitRay.transform.Rotate(0, -90, 0);
-        RotateInDirectionGridHorizontal(hitRay);
+            hitRay.transform.Rotate(0, -90, 0);
+            RotateInDirectionGridHorizontal(hitRay);
+            RotateBlockHorizontal(hitRay);
+        }
     }
 
     private void RotateBlockHorizontal(RaycastHit hitRay)
