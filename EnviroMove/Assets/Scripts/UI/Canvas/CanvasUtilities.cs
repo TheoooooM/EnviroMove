@@ -8,7 +8,8 @@ namespace UI.Canvas
 {
     public abstract class CanvasUtilities : MonoBehaviour {
         [ServiceDependency] protected IInterfaceService m_Interface;
-        [DependeOnService] private IAudioService m_Audio;
+        [ServiceDependency] private IAudioService m_sound;
+        private IAudioService m_Audio;
 
         private AudioClip returnSound;
         private AudioClip clickSound;
@@ -17,6 +18,11 @@ namespace UI.Canvas
         {
             AdresseHelper.LoadAssetWithCallback<AudioClip>("ReturnSound", clip => returnSound = clip);
             AdresseHelper.LoadAssetWithCallback<AudioClip>("ClickSound", clip => clickSound = clip);
+            m_Audio = m_sound;
+            if (m_Audio == null)
+            {
+                Debug.LogWarning("No audio service found");
+            }
         }
 
         public void ChangeScene(string sceneName) {
