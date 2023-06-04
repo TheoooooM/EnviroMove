@@ -53,6 +53,7 @@ public class Compositor : MonoBehaviour {
         AddService<IDataBaseService>(new DataBaseService());
         AddService<ITickService>(new TickService());
         AddService<IInterfaceService>(new InterfaceService());
+        AddService<IAudioService>(new AudioService());
     }
 
     void AddService<T>(T service) where  T : IService

@@ -16,9 +16,11 @@ namespace BlockBehaviors
         [Space]
         [SerializeField] private GameObject hole1;
         [SerializeField] private GameObject hole2;
-        [Space] 
+        [Header("VFX")] 
         [SerializeField] private GameObject vfxDebug;
-         [SerializeField] private GameObject vfxDig;
+        [SerializeField] private GameObject vfxDig;
+        [Header("Sound")]
+        [SerializeField] AudioClip digSound ;
 
         private Dictionary<IBoardable, Vector3Int> boardableEnters = new();
 
@@ -44,10 +46,10 @@ namespace BlockBehaviors
             var topblock = boardMaster.GetNeighbor(pos, Enums.Side.up, out _);
             if (topblock == null)
             {
-                Debug.Log("Dig");
                 tags.Remove(Enums.BlockTag.FrogGrabbable);
                 vfxDig.SetActive(true);
                 _animator.SetTrigger("Dig");
+                m_Audio.PlaySound(digSound);
                 tempPos = pos + Vector3Int.up;
                 CreateTunnel(tempPos);
                 

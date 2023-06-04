@@ -19,6 +19,7 @@ namespace Archi.Service
         [DependeOnService] private IToolService m_Tool;
         [DependeOnService] private IDataBaseService m_data;
         [DependeOnService] private IInterfaceService m_interface;
+        [DependeOnService] private IAudioService m_Audio;
 
         private LevelSO nextLevel = null;
         private int currentLevelID = 0;
