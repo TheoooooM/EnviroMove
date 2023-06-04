@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6246385900894229860}
   - component: {fileID: 8663694514059729729}
+  - component: {fileID: 806844913277494072}
   m_Layer: 0
   m_Name: P_BounceCadeau
   m_TagString: Untagged
@@ -49,8 +50,22 @@ MonoBehaviour:
   tags: 
   moveSpeed: 1
   cooldown: 1
-  breakVFX: {fileID: 1369451113720716592}
-  renderer: {fileID: 4174946197153905996}
+  breakVFX: {fileID: 7642215004065718693, guid: 03258c14a9bb99e4084531e5753a33a9,
+    type: 3}
+  renderer: {fileID: 2861128604003043084}
+--- !u!65 &806844913277494072
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2861128604003043084}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2928974048841126508
 GameObject:
   m_ObjectHideFlags: 0
@@ -4970,7 +4985,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4174946197153905996}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.41499984, z: 0}
+  m_LocalPosition: {x: 0, y: 0.96899986, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9921,7 +9936,7 @@ PrefabInstance:
     - target: {fileID: 7642215004065718692, guid: 03258c14a9bb99e4084531e5753a33a9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.38
+      value: -0.826
       objectReference: {fileID: 0}
     - target: {fileID: 7642215004065718692, guid: 03258c14a9bb99e4084531e5753a33a9,
         type: 3}
@@ -9975,12 +9990,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03258c14a9bb99e4084531e5753a33a9, type: 3}
---- !u!1 &1369451113720716592 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7642215004065718693, guid: 03258c14a9bb99e4084531e5753a33a9,
-    type: 3}
-  m_PrefabInstance: {fileID: 8723435670697770133}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1369451113720716593 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7642215004065718692, guid: 03258c14a9bb99e4084531e5753a33a9,
