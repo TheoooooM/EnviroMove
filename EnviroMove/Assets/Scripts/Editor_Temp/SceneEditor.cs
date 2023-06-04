@@ -1601,76 +1601,135 @@ public class SceneEditor
                 switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
                 {
                     case Enums.Side.forward:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] is not 0 and not 186 )
+                        
+                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
                         {
-                            Debug.Log("Can't rotate");
-                            break;
+                            blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y,
+                                    (int)hitPosition.z] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.none;
                         }
-                        blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                            Enums.Side.forward;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                            Enums.Side.forward;
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 5)
+                        {
+                            blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideRight1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                            Debug.Log("Placing border block");
+                        }
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z + 1] =
+                                Enums.Side.forward;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
+                                Enums.Side.forward;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 11)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] 
+                                = (int)Enums.blockType.InsideTop1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                            Debug.Log("Placing border block");
+                        }
                         break;
                     case Enums.Side.right:
-                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] is not 0 and not 186)
+                        if(blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] is 0 or 186)
                         {
-                            Debug.Log("Can't rotate");
-                            break;
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z - 1] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
+                                Enums.Side.none;
                         }
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                            Enums.Side.none;
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 
+                                (int)Enums.blockType.InsideBottom1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                            Debug.Log("Placing border block");
+                        }
 
-                        blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.forward;
-                        blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.forward;
+                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.forward;
+                            blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.forward;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 5)
+                        {
+                            blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideRight1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                            Debug.Log("Placing border block");
+                        }
+                        
                         break;
                     case Enums.Side.back:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] is not 0 and not 186)
+                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
                         {
-                            Debug.Log("Can't rotate");
-                            break;
+                            blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y,
+                                    (int)hitPosition.z] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.none;
                         }
-                        blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideLeft1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                            Debug.Log("Placing border block");
+                        }
 
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                            Enums.Side.forward;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                            Enums.Side.forward;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
+                                Enums.Side.forward;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
+                                Enums.Side.forward;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 
+                                (int)Enums.blockType.InsideBottom1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                            Debug.Log("Placing border block");
+                        }
                         break;
                     case Enums.Side.left:
-                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] is not 0 and not 186)
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] is 0 or 186)
                         {
-                            Debug.Log("Can't rotate");
-                            break;
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z + 1] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
+                                Enums.Side.none;
                         }
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                            Enums.Side.none;
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 11)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 
+                                (int)Enums.blockType.InsideTop1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                            Debug.Log("Placing border block");
+                        }
 
-                        blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.forward;
-                        blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.forward;
+                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.forward;
+                            blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.forward;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideLeft1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                            Debug.Log("Placing border block");
+                        }
+                        
                         break;
                     case Enums.Side.none:
                         break;
@@ -1684,60 +1743,127 @@ public class SceneEditor
                 switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
                 {
                     case Enums.Side.forward:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] is not 0 and not 186) break;
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                            Enums.Side.none;
-
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                            Enums.Side.forward;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                            Enums.Side.forward;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z - 1] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 
+                                (int)Enums.blockType.InsideBottom1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                        }
+                        
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z + 1] =
+                                Enums.Side.forward;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
+                                Enums.Side.forward;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 11)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 
+                                (int)Enums.blockType.InsideTop1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                        }
                         break;
                     case Enums.Side.right:
-                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] is not 0 and not 186) break;
-                        blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-
-                        blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.forward;
-                        blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.forward;
+                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y,
+                                    (int)hitPosition.z] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideLeft1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                        }
+                        
+                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.forward;
+                            blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.forward;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 5)
+                        {
+                            blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideRight1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                        }
                         break;
                     case Enums.Side.back:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] is not 0 and not 186) break;
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                            Enums.Side.none;
-
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                            Enums.Side.forward;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                            Enums.Side.forward;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z + 1] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 11)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 
+                                (int)Enums.blockType.InsideTop1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                        }
+                        
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z - 1] =
+                                Enums.Side.forward;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
+                                Enums.Side.forward;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 
+                                (int)Enums.blockType.InsideBottom1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                        }
                         break;
                     case Enums.Side.left:
-                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] is not 0 and not 186) break;
-                        blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
+                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y,
+                                    (int)hitPosition.z] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 5)
+                        {
+                            blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideRight1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                        }
 
-                        blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.forward;
-                        blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.forward;
+                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y,
+                                    (int)hitPosition.z] =
+                                Enums.Side.forward;
+                            blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.forward;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideLeft1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                        }
                         break;
                     case Enums.Side.none:
                         break;
@@ -1751,100 +1877,129 @@ public class SceneEditor
                 switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
                 {
                     case Enums.Side.forward:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] is not 0 and not 186) break;
-                        // blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
-                        // blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                        //     Enums.Side.none;
-                        // blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                        //     Enums.Side.none;
-                        blockGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-
-                        // blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 186;
-                        // blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                        //     Enums.Side.forward;
-                        // blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                        //     Enums.Side.forward;
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] =
-                            Enums.Side.forward;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] =
-                            Enums.Side.forward;
+                        if (blockGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x + 2, (int)hitPosition.y,
+                                    (int)hitPosition.z] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 5)
+                        {
+                            blockGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideLeft1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                        }
+                        
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z + 2] =
+                                Enums.Side.forward;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] =
+                                Enums.Side.forward;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] = 
+                                (int)Enums.blockType.InsideBottom1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                        }
                         break;
                     case Enums.Side.right:
-                        if (blockGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] is not 0 and not 186) break;
-                        // blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 0;
-                        // blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                        //     Enums.Side.none;
-                        // blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                        //     Enums.Side.none;
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] =
-                            Enums.Side.none;
-
-                        // blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
-                        // blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                        //     Enums.Side.forward;
-                        // blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                        //     Enums.Side.forward;
-                        blockGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.forward;
-                        blockVerticalRotationGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.forward;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z - 2] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] = 
+                                (int)Enums.blockType.InsideTop1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                        }
+                        
+                        if (blockGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x + 2, (int)hitPosition.y,
+                                    (int)hitPosition.z] =
+                                Enums.Side.forward;
+                            blockVerticalRotationGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.forward;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideRight1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                        }
                         break;
                     case Enums.Side.back:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] is not 0 and not 186) break;
-                        // blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
-                        // blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                        //     Enums.Side.none;
-                        // blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                        //     Enums.Side.none;
-                        blockGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-
-                        // blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 186;
-                        // blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                        //     Enums.Side.forward;
-                        // blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                        //     Enums.Side.forward;
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] =
-                            Enums.Side.forward;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] =
-                            Enums.Side.forward;
+                        
+                        if (blockGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x - 2, (int)hitPosition.y,
+                                    (int)hitPosition.z] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideRight1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                        }
+                        
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z - 2] =
+                                Enums.Side.forward;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] =
+                                Enums.Side.forward;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 2] = 
+                                (int)Enums.blockType.InsideTop1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                        }
                         break;
                     case Enums.Side.left:
-                        if (blockGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] is not 0 and not 186) break;
-                        // blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 0;
-                        // blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                        //     Enums.Side.none;
-                        // blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                        //     Enums.Side.none;
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] =
-                            Enums.Side.none;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z + 2] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 11)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 2] = 
+                                (int)Enums.blockType.InsideBottom1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                        }
 
-                        // blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
-                        // blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                        //     Enums.Side.forward;
-                        // blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                        //     Enums.Side.forward;
-                        blockGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.forward;
-                        blockVerticalRotationGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.forward;
+                        if (blockGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x - 2, (int)hitPosition.y,
+                                    (int)hitPosition.z] =
+                                Enums.Side.forward;
+                            blockVerticalRotationGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.forward;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 0)
+                        {
+                            blockGrid[(int)hitPosition.x - 2, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideRight1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                        }
                         break;
                     case Enums.Side.none:
                         break;
@@ -1858,60 +2013,152 @@ public class SceneEditor
                 switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
                 {
                     case Enums.Side.forward:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] is not 0 and not 186) break;
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                            Enums.Side.none;
+                        Debug.Log("Forward (int)hitPosition.z % (tileSize.y + tailleBridge) = " + 
+                                  (int)hitPosition.z % (tileSize.y + tailleBridge) +
+                                  " (int)hitPosition.x % (tileSize.x + tailleBridge) = " +
+                                  (int)hitPosition.x % (tileSize.x + tailleBridge));
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z - 1] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 0)
+                        {
+                            Debug.Log("Placing border");
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 
+                                (int)Enums.blockType.InsideBottom1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                        }
 
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                            Enums.Side.none;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z + 1] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 11)
+                        {
+                            Debug.Log("Placing border");
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 
+                                (int)Enums.blockType.InsideTop1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                        }
                         break;
                     case Enums.Side.right:
-                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] is not 0 and not 186) break;
-                        blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
+                        Debug.Log("Right (int)hitPosition.z % (tileSize.y + tailleBridge) = " + 
+                                  (int)hitPosition.z % (tileSize.y + tailleBridge) +
+                                  " (int)hitPosition.x % (tileSize.x + tailleBridge) = " +
+                                  (int)hitPosition.x % (tileSize.x + tailleBridge));
+                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y,
+                                    (int)hitPosition.z] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 0)
+                        {
+                            Debug.Log("Placing border");
+                            blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideLeft1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                        }
 
-                        blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
+                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y,
+                                    (int)hitPosition.z] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 5)
+                        {
+                            Debug.Log("Placing border");
+                            blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideRight1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                        }
                         break;
                     case Enums.Side.back:
-                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] is not 0 and not 186) break;
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
-                            Enums.Side.none;
+                        Debug.Log("Back (int)hitPosition.z % (tileSize.y + tailleBridge) = " + 
+                                  (int)hitPosition.z % (tileSize.y + tailleBridge) +
+                                  " (int)hitPosition.x % (tileSize.x + tailleBridge) = " +
+                                  (int)hitPosition.x % (tileSize.x + tailleBridge));
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z + 1] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 11)
+                        {
+                            Debug.Log("Placing border");
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 
+                                (int)Enums.blockType.InsideTop1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                        }
 
-                        blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
-                            Enums.Side.none;
+                        if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y,
+                                    (int)hitPosition.z - 1] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 0)
+                        {
+                            Debug.Log("Placing border");
+                            blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 
+                                (int)Enums.blockType.InsideBottom1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
+                        }
                         break;
                     case Enums.Side.left:
-                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] is not 0 and not 186) break;
-                        blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
-                        blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
+                        Debug.Log("Left (int)hitPosition.z % (tileSize.y + tailleBridge) = " + 
+                                  (int)hitPosition.z % (tileSize.y + tailleBridge) +
+                                  " (int)hitPosition.x % (tileSize.x + tailleBridge) = " +
+                                  (int)hitPosition.x % (tileSize.x + tailleBridge));
+                        if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
+                            blockHorizontalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y,
+                                    (int)hitPosition.z] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 5)
+                        {
+                            Debug.Log("Placing border");
+                            blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideRight1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                        }
 
-                        blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
-                        blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
-                        blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
-                            Enums.Side.none;
+                        if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
+                        {
+                            blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 186;
+                            blockHorizontalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y,
+                                    (int)hitPosition.z] =
+                                Enums.Side.none;
+                            blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
+                                Enums.Side.none;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 0)
+                        {
+                            Debug.Log("Placing border");
+                            blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideLeft1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
+                        }
                         break;
                     case Enums.Side.none:
                         break;

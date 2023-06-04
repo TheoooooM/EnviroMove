@@ -8,7 +8,7 @@ namespace UI.Canvas
 {
     public abstract class CanvasUtilities : MonoBehaviour {
         [ServiceDependency] protected IInterfaceService m_Interface;
-        [ServiceDependency] private IAudioService m_Audio;
+        [DependeOnService] private IAudioService m_Audio;
 
         private AudioClip returnSound;
         private AudioClip clickSound;
@@ -32,6 +32,13 @@ namespace UI.Canvas
 
         public void SoundReturn()=>m_Audio.PlaySound(returnSound);
 
-        public void ClickSound() => m_Audio.PlaySound(clickSound);
+        public void ClickSound()
+        {
+            if (m_Audio == null)
+            {
+                return;
+            }
+            m_Audio.PlaySound(clickSound);
+        }
     }
 }
