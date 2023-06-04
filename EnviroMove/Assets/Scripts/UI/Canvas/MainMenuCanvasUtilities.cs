@@ -96,6 +96,13 @@ namespace UI.Canvas
         [SerializeField] private List<Sprite> banners = new();
         [SerializeField] private Image bannerImg = null;
 
+        [Header("Pop up")]
+        [SerializeField] private CanvasGroup backgroundPopUp = null;
+        [SerializeField] private Transform popUpTransf = null;
+        [SerializeField] private TextMeshProUGUI popupTXT = null;
+        private bool isInPopUp = false;
+        private UnityAction actions = null;
+        
         [Header("DoTween Information")]
         [SerializeField] private float waitTimeShop = 0.4f;
         [SerializeField] private float timeToGoToShop = 0.75f;
@@ -192,6 +199,7 @@ namespace UI.Canvas
         private void SetPageToUsername() {
             isInUsername = true;
             playerTrans.gameObject.SetActive(false);
+            
             usernameGam.SetActive(true);
         }
         #endregion SetPage
@@ -246,6 +254,9 @@ namespace UI.Canvas
                 applyUsernameBtn.interactable = usernameInputField.text != "";
                 return;
             }
+
+            if (isInPopUp) return;
+            
             MoveCurrentPageWithInput();
             ChangeBottomBarButtonSize();
             UpdateTimeOffers();
@@ -533,6 +544,8 @@ namespace UI.Canvas
         public void GoToPage(int pageID) => StartCoroutine(WaitForAction(() => MoveToPage(pageID)));
         public void OpenEditorTool() => StartCoroutine(WaitForAction(OpenTool));
         public void GoBuyCurrency() => StartCoroutine(WaitForAction(GoToCurrencyPos));
+        public void ApplyPopUpEvent() => StartCoroutine(WaitForAction(ApplyPopUp));
+        public void CancelPopUpEvent() => StartCoroutine(WaitForAction(CancelPopUp));
         #endregion Button Events
 
         #region OpenClose Panels
@@ -721,6 +734,45 @@ namespace UI.Canvas
         }
         
         private void SetBanner() => bannerImg.sprite = banners[PlayerPrefs.GetInt("Banner", 0)];
+        
+        #region PopUp
+        public void ShowPopUp(string text, UnityAction actions) {
+            isInPopUp = true;
+            backgroundPopUp.gameObject.SetActive(true);
+            backgroundPopUp.DOFade(1, .5f);
+            popUpTransf.DOScale(1, .5f).SetEase(Ease.OutBack);
+            
+            this.actions = actions;
+            popupTXT.text = text;
+        }
+
+        private void ApplyPopUp() {
+            isInPopUp = false;
+            actions.Invoke();
+            backgroundPopUp.DOFade(0, .5f).OnComplete((() => {
+                backgroundPopUp.gameObject.SetActive(false);
+            }));
+            popUpTransf.DOScale(0, .5f);
+        }
+
+        private void CancelPopUp() {
+            isInPopUp = false;
+            actions = null;
+            backgroundPopUp.DOFade(0, .5f).OnComplete((() => {
+                backgroundPopUp.gameObject.SetActive(false);
+            }));
+            popUpTransf.DOScale(0, .5f);
+        }
+
+        public void ResetParameterPopup() {
+            StartCoroutine(WaitForAction((() => {
+                ShowPopUp("Are you sure you want to reset all your progress? (your levels won't be deleted)", () => {
+                    PlayerPrefs.DeleteAll();
+                    SetPageToUsername();
+                });
+            })));
+        }
+        #endregion PopUp
     }
 }
 

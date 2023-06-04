@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Archi.Service.Interface;
 using Attributes;
 using DG.Tweening;
@@ -16,6 +17,7 @@ namespace UI.Canvas {
         [SerializeField] private UnityEngine.Canvas springCanvas = null;
         [SerializeField] private UnityEngine.Canvas autumnCanvas = null;
         [SerializeField] private UnityEngine.Canvas winterCanvas = null;
+        [SerializeField] private List<RectTransform> seasonButtons = new();
         
         [SerializeField] private float moveDistance = 2.9f;
         [SerializeField] private float moveTouchSpeed = 0.01f;
@@ -23,13 +25,40 @@ namespace UI.Canvas {
         private Transform cameraTransform = null;
         private int seasonID = -1;
 
+        [SerializeField] private List<RectTransform> springButtonTransform = new();
+        [SerializeField] private List<RectTransform> autumnButtonTransform = new();
+        [SerializeField] private List<RectTransform> winterButtonTransform = new();
+
         private Vector3 startPos = new();
 
         /// <summary>
         /// Set the position of the camera at the start
         /// </summary>
-        public override void Init() => m_thisInterface.HideLoadingScreen();
+        public override void Init() {
+            m_thisInterface.HideLoadingScreen();
+            AnimateButtons();
+        }
 
+        private void AnimateButtons() {
+            Sequence spring = DOTween.Sequence();
+            spring.SetLoops(-1).SetAutoKill(false);
+            foreach (RectTransform rect in springButtonTransform) {
+                spring.Append(rect.DOPunchScale(new Vector3(.05f, .05f, .05f), 1, 1));
+            }
+            
+            Sequence autumn = DOTween.Sequence();
+            autumn.SetLoops(-1).SetAutoKill(false);
+            foreach (RectTransform rect in autumnButtonTransform) {
+                autumn.Append(rect.DOPunchScale(new Vector3(.05f, .05f, .05f), 1, 1));
+            }
+            
+            Sequence winter = DOTween.Sequence();
+            winter.SetLoops(-1).SetAutoKill(false);
+            foreach (RectTransform rect in winterButtonTransform) {
+                winter.Append(rect.DOPunchScale(new Vector3(.05f, .05f, .05f), 1, 1));
+            }
+        }
+        
         public void InitValue(PageDirection dir) {
             cameraTransform = Camera.main.transform;
             seasonID = dir switch {
@@ -46,8 +75,16 @@ namespace UI.Canvas {
         
         private void Update() {
             MoveWithTouch();
+            ChangeButtonSize();
         }
 
+        private void ChangeButtonSize() {
+            for (int i = 0; i < seasonButtons.Count; i++) {
+                seasonButtons[i].sizeDelta = Vector2.Lerp(seasonButtons[i].sizeDelta, i == seasonID + 1 ? new Vector2(400, 400) : new Vector2(300, 300), 0.05f);
+            }
+        }
+        
+        
         private void MoveWithTouch() {
             if (Input.touchCount == 0) {
                 if(cameraTransform != null) cameraTransform.position = Vector3.Lerp(cameraTransform.position, GetTargetDirection(), moveCameraSpeed);
