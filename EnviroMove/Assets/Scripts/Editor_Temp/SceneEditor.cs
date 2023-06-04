@@ -1797,7 +1797,7 @@ public class SceneEditor
                             blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
                                 Enums.Side.forward;
                         }
-                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 11)
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 5)
                         {
                             blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 
                                 (int)Enums.blockType.InsideRight1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
@@ -1844,7 +1844,7 @@ public class SceneEditor
                             blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
                                 Enums.Side.none;
                         }
-                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 11)
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 5)
                         {
                             blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 
                                 (int)Enums.blockType.InsideRight1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
@@ -1886,7 +1886,7 @@ public class SceneEditor
                             blockVerticalRotationGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] =
                                 Enums.Side.none;
                         }
-                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 11)
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 5)
                         {
                             blockGrid[(int)hitPosition.x + 2, (int)hitPosition.y, (int)hitPosition.z] = 
                                 (int)Enums.blockType.InsideLeft1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
@@ -2013,6 +2013,10 @@ public class SceneEditor
                 switch (blockHorizontalRotationGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z])
                 {
                     case Enums.Side.forward:
+                        Debug.Log("Forward (int)hitPosition.z % (tileSize.y + tailleBridge) = " + 
+                                  (int)hitPosition.z % (tileSize.y + tailleBridge) +
+                                  " (int)hitPosition.x % (tileSize.x + tailleBridge) = " +
+                                  (int)hitPosition.x % (tileSize.x + tailleBridge));
                         if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] is 0 or 186)
                         {
                             blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 0;
@@ -2024,6 +2028,7 @@ public class SceneEditor
                         }
                         if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 0)
                         {
+                            Debug.Log("Placing border");
                             blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 
                                 (int)Enums.blockType.InsideBottom1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
                         }
@@ -2039,11 +2044,16 @@ public class SceneEditor
                         }
                         if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 11)
                         {
+                            Debug.Log("Placing border");
                             blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 
                                 (int)Enums.blockType.InsideTop1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
                         }
                         break;
                     case Enums.Side.right:
+                        Debug.Log("Right (int)hitPosition.z % (tileSize.y + tailleBridge) = " + 
+                                  (int)hitPosition.z % (tileSize.y + tailleBridge) +
+                                  " (int)hitPosition.x % (tileSize.x + tailleBridge) = " +
+                                  (int)hitPosition.x % (tileSize.x + tailleBridge));
                         if (blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
                         {
                             blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
@@ -2055,6 +2065,7 @@ public class SceneEditor
                         }
                         if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 0)
                         {
+                            Debug.Log("Placing border");
                             blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 
                                 (int)Enums.blockType.InsideLeft1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
                         }
@@ -2068,13 +2079,18 @@ public class SceneEditor
                             blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
                                 Enums.Side.none;
                         }
-                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 11)
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 5)
                         {
+                            Debug.Log("Placing border");
                             blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 
                                 (int)Enums.blockType.InsideRight1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
                         }
                         break;
                     case Enums.Side.back:
+                        Debug.Log("Back (int)hitPosition.z % (tileSize.y + tailleBridge) = " + 
+                                  (int)hitPosition.z % (tileSize.y + tailleBridge) +
+                                  " (int)hitPosition.x % (tileSize.x + tailleBridge) = " +
+                                  (int)hitPosition.x % (tileSize.x + tailleBridge));
                         if (blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] is 0 or 186)
                         {
                             blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 0;
@@ -2086,6 +2102,7 @@ public class SceneEditor
                         }
                         if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 11)
                         {
+                            Debug.Log("Placing border");
                             blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z + 1] = 
                                 (int)Enums.blockType.InsideTop1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
                         }
@@ -2101,11 +2118,16 @@ public class SceneEditor
                         }
                         if ((int)hitPosition.z % (tileSize.y + tailleBridge) == 0)
                         {
+                            Debug.Log("Placing border");
                             blockGrid[(int)hitPosition.x, (int)hitPosition.y, (int)hitPosition.z - 1] = 
                                 (int)Enums.blockType.InsideBottom1 + (int)hitPosition.x % (tileSize.x + tailleBridge);
                         }
                         break;
                     case Enums.Side.left:
+                        Debug.Log("Left (int)hitPosition.z % (tileSize.y + tailleBridge) = " + 
+                                  (int)hitPosition.z % (tileSize.y + tailleBridge) +
+                                  " (int)hitPosition.x % (tileSize.x + tailleBridge) = " +
+                                  (int)hitPosition.x % (tileSize.x + tailleBridge));
                         if (blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] is 0 or 186)
                         {
                             blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 0;
@@ -2115,8 +2137,9 @@ public class SceneEditor
                             blockVerticalRotationGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] =
                                 Enums.Side.none;
                         }
-                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 11)
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 5)
                         {
+                            Debug.Log("Placing border");
                             blockGrid[(int)hitPosition.x + 1, (int)hitPosition.y, (int)hitPosition.z] = 
                                 (int)Enums.blockType.InsideRight1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
                         }
@@ -2129,6 +2152,12 @@ public class SceneEditor
                                 Enums.Side.none;
                             blockVerticalRotationGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] =
                                 Enums.Side.none;
+                        }
+                        if ((int)hitPosition.x % (tileSize.x + tailleBridge) == 0)
+                        {
+                            Debug.Log("Placing border");
+                            blockGrid[(int)hitPosition.x - 1, (int)hitPosition.y, (int)hitPosition.z] = 
+                                (int)Enums.blockType.InsideLeft1 + (int)hitPosition.z % (tileSize.y + tailleBridge);
                         }
                         break;
                     case Enums.Side.none:
