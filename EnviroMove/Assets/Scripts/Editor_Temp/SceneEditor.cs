@@ -399,7 +399,7 @@ public class SceneEditor
 
     private void InstantiateNewBlock()
     {
-        m_Sound.PlaySound(placeSound);
+        m_Sound?.PlaySound(placeSound);
         Vector3 position = Input.GetTouch(0).position;
         GameObject blockHit = null;
         var ray = _camera.ScreenPointToRay(position);
@@ -1286,7 +1286,7 @@ public class SceneEditor
         blockHorizontalRotationGrid[(int)position1.x, (int)position1.y, (int)position1.z] = Enums.Side.none;
         blockVerticalRotationGrid[(int)position1.x, (int)position1.y, (int)position1.z] = Enums.Side.none;
         Object.Destroy(hitRay.transform.gameObject);
-        m_Sound.PlaySound(removeSound);
+        m_Sound?.PlaySound(removeSound);
     }
 
     public void SaveData(string name)
