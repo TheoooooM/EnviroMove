@@ -23,8 +23,7 @@ namespace BlockBehaviors
 
         public void Deselect(IBoardable releaseBoardable)
         {
-            previewVFX.SetActive(false);
-            
+            if(previewVFX != null) previewVFX.SetActive(false);
         }
 
         public void Swipe(Enums.Side side)
