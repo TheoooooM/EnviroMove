@@ -765,8 +765,8 @@ public class SceneEditor
         if (newground == null) return null;
         var newPanelStart = Object.Instantiate(prefabs[13], posOfnewPanelStart, Quaternion.identity);
         // blockGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = 13;
-        // newPanelStart.transform.parent = parent.transform;
-        // newPanelStart.transform.Rotate(0, rotation, 0);
+        newPanelStart.transform.parent = parent.transform;
+        newPanelStart.transform.Rotate(0, rotation, 0);
         var newGoGridPos = newGo.transform.position;
         blockHorizontalRotationGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z] = rotation switch
         {
@@ -780,16 +780,16 @@ public class SceneEditor
         blockGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z] = 13;
         directionGrid[(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z] = blockHorizontalRotationGrid
             [(int)newGoGridPos.x, (int)newGoGridPos.y, (int)newGoGridPos.z];
-        // blockHorizontalRotationGrid
-        //     [(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = rotation switch
-        // {
-        //     0 => Enums.Side.forward,
-        //     90 => Enums.Side.right,
-        //     180 => Enums.Side.back,
-        //     270 => Enums.Side.left,
-        //     _ => blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y,
-        //         (int)posOfnewPanelStart.z]
-        // };
+        blockHorizontalRotationGrid
+            [(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y, (int)posOfnewPanelStart.z] = rotation switch
+        {
+            0 => Enums.Side.forward,
+            90 => Enums.Side.right,
+            180 => Enums.Side.back,
+            270 => Enums.Side.left,
+            _ => blockHorizontalRotationGrid[(int)posOfnewPanelStart.x, (int)posOfnewPanelStart.y,
+                (int)posOfnewPanelStart.z]
+        };
         newPanelStart.name = "THEOTHERSIDEPANEL";
         return newPanelStart;
     }
